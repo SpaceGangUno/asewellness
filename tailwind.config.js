@@ -14,6 +14,9 @@ export default {
       },
       animation: {
         scroll: 'scroll 20s linear infinite'
+      },
+      backgroundImage: {
+        'gradient-brand': 'linear-gradient(135deg, #4ade80, #38bdf8)'
       }
     },
   },
