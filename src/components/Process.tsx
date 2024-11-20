@@ -1,5 +1,5 @@
 import React from 'react';
-import { Leaf, Droplets, ThermometerSun, Timer } from 'lucide-react';
+import { Leaf, Droplets, ThermometerSun, Timer, ChevronRight } from 'lucide-react';
 
 const steps = [
   {
@@ -31,28 +31,36 @@ export default function Process() {
         <h2 className="text-3xl font-bold text-white text-center mb-6">
           Our Cold Press Process
         </h2>
-        <div className="flex overflow-x-auto pb-4 gap-4 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          {steps.map((step, index) => {
-            const Icon = step.icon;
-            return (
-              <div 
-                key={step.title} 
-                className="flex-shrink-0 w-[280px] snap-center flex items-center space-x-3 bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-emerald-900/30"
-              >
-                <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-emerald-500/20">
-                  <Icon className="h-6 w-6 text-emerald-300" />
+        <div className="relative">
+          <div className="flex overflow-x-auto pb-4 gap-4 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+              return (
+                <div 
+                  key={step.title} 
+                  className="flex-shrink-0 w-[280px] snap-center flex items-center space-x-3 bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-emerald-900/30"
+                >
+                  <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-emerald-500/20">
+                    <Icon className="h-6 w-6 text-emerald-300" />
+                  </div>
+                  <div className="min-w-0">
+                    <h3 className="text-lg font-semibold text-white truncate">
+                      {step.title}
+                    </h3>
+                    <p className="text-sm text-emerald-100 line-clamp-2">
+                      {step.description}
+                    </p>
+                  </div>
                 </div>
-                <div className="min-w-0">
-                  <h3 className="text-lg font-semibold text-white truncate">
-                    {step.title}
-                  </h3>
-                  <p className="text-sm text-emerald-100 line-clamp-2">
-                    {step.description}
-                  </p>
-                </div>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
+          
+          {/* Scroll indicator */}
+          <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center space-x-1 text-emerald-300/80 md:hidden animate-pulse">
+            <ChevronRight className="w-5 h-5" />
+            <ChevronRight className="w-5 h-5 -ml-3" />
+          </div>
         </div>
       </div>
     </section>
