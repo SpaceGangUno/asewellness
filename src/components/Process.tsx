@@ -26,8 +26,8 @@ const steps = [
 
 export default function Process() {
   return (
-    <section id="process" className="relative py-12">
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-emerald-950/40 to-black pointer-events-none" />
+    <section id="process" className="relative py-12 bg-gradient-to-b from-emerald-950/10 via-emerald-900/20 to-emerald-950/10">
+      <div className="absolute inset-0 backdrop-blur-sm bg-black/20" />
       <div className="max-w-7xl mx-auto px-4 relative">
         <h2 className="text-3xl font-bold text-white text-center mb-6">
           Our Cold Press Process
@@ -39,9 +39,9 @@ export default function Process() {
               return (
                 <div 
                   key={step.title} 
-                  className="flex-shrink-0 w-[280px] snap-center flex items-center space-x-3 bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-emerald-900/30"
+                  className="flex-shrink-0 w-[280px] snap-center flex items-center space-x-3 bg-emerald-950/30 backdrop-blur-sm rounded-xl p-4 border border-emerald-400/20 hover:border-emerald-400/30 transition-colors"
                 >
-                  <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-emerald-500/20">
+                  <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-emerald-400/10">
                     <Icon className="h-6 w-6 text-emerald-300" />
                   </div>
                   <div className="min-w-0">
@@ -59,7 +59,7 @@ export default function Process() {
           
           {/* Scroll animation */}
           <div className="absolute bottom-0 left-0 right-0 h-[2px] overflow-hidden md:hidden">
-            <div className="h-full w-[200%] animate-flowRight bg-gradient-to-r from-transparent via-emerald-300/50 to-transparent" />
+            <div className="h-full w-[200%] animate-flowRight bg-gradient-to-r from-transparent via-emerald-400/30 to-transparent" />
           </div>
         </div>
       </div>
