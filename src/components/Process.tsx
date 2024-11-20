@@ -26,38 +26,42 @@ const steps = [
 
 export default function Process() {
   return (
-    <section id="process" className="py-12 sm:py-20 bg-white">
+    <section id="process" className="bg-emerald-900 text-white py-8">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-2xl sm:text-3xl font-bold text-center text-emerald-900 mb-8 sm:mb-12">
-          Our Cold Press Process
-        </h2>
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
-          {steps.map((step, index) => {
-            const Icon = step.icon;
-            return (
-              <div 
-                key={step.title} 
-                className="flex flex-col items-center text-center p-6 rounded-xl bg-emerald-50/50 hover:bg-emerald-50 transition-colors duration-300"
-              >
-                <div className="relative">
-                  <div className="inline-flex p-3 sm:p-4 bg-emerald-100 rounded-full mb-4 sm:mb-5">
-                    <Icon className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-600" />
-                  </div>
-                  {index < steps.length - 1 && (
-                    <div className="hidden lg:block absolute top-1/2 left-[calc(100%+1rem)] w-[calc(100%-2rem)] h-0.5 bg-emerald-100">
-                      <div className="absolute right-0 -top-1 w-2 h-2 bg-emerald-200 rounded-full" />
+        <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+          <h2 className="text-2xl font-bold whitespace-nowrap">
+            Our Cold Press Process
+          </h2>
+          <div className="flex flex-wrap md:flex-nowrap items-center justify-center gap-4 md:gap-8 w-full">
+            {steps.map((step, index) => {
+              const Icon = step.icon;
+              return (
+                <div 
+                  key={step.title} 
+                  className="flex items-center gap-3 group"
+                >
+                  <div className="relative flex-shrink-0">
+                    <div className="p-2 bg-emerald-800 rounded-full group-hover:bg-emerald-700 transition-colors duration-300">
+                      <Icon className="h-5 w-5 text-white" />
                     </div>
-                  )}
+                    {index < steps.length - 1 && (
+                      <div className="hidden md:block absolute top-1/2 left-[calc(100%+0.5rem)] w-4 h-0.5 bg-emerald-800">
+                        <div className="absolute right-0 -top-1 w-1.5 h-1.5 bg-emerald-700 rounded-full" />
+                      </div>
+                    )}
+                  </div>
+                  <div className="flex flex-col">
+                    <h3 className="text-sm font-semibold">
+                      {step.title}
+                    </h3>
+                    <p className="text-xs text-emerald-100 max-w-[150px]">
+                      {step.description}
+                    </p>
+                  </div>
                 </div>
-                <h3 className="text-lg sm:text-xl font-semibold text-emerald-900 mb-2">
-                  {step.title}
-                </h3>
-                <p className="text-sm sm:text-base text-gray-600 leading-relaxed">
-                  {step.description}
-                </p>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
       </div>
     </section>
