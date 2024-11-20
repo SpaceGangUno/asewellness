@@ -29,11 +29,11 @@ export default function Navbar() {
   return (
     <>
       <nav className="fixed w-full bg-emerald-900 z-50 shadow-lg">
-        <div className="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
-          <div className="flex items-center justify-between h-14 sm:h-16">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="flex items-center justify-between h-14">
             <Link to="/" className="flex items-center space-x-2">
-              <LotusIcon className="h-6 w-6 sm:h-8 sm:w-8 text-emerald-300" />
-              <span className="text-xl sm:text-2xl font-bold text-white">Asé Juices</span>
+              <LotusIcon className="h-6 w-6 text-emerald-300" />
+              <span className="text-lg font-bold text-white">Asé Juices</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -100,26 +100,26 @@ export default function Navbar() {
             </div>
 
             {/* Mobile Navigation Controls */}
-            <div className="flex items-center space-x-2 md:hidden">
+            <div className="flex items-center space-x-4 md:hidden">
               <button
                 onClick={() => setIsCartOpen(!isCartOpen)}
-                className="relative p-1.5 text-emerald-100 hover:text-white transition"
+                className="relative p-2 text-emerald-100 hover:text-white transition"
               >
-                <ShoppingCart className="h-5 w-5 sm:h-6 sm:w-6" />
+                <ShoppingCart className="h-6 w-6" />
                 {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-emerald-500 text-white text-xs rounded-full w-4 h-4 sm:w-5 sm:h-5 flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-emerald-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     {itemCount}
                   </span>
                 )}
               </button>
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-1.5 rounded-lg text-emerald-100 hover:text-white focus:outline-none"
+                className="p-2 text-emerald-100 hover:text-white focus:outline-none"
               >
                 {isMobileMenuOpen ? (
-                  <X className="h-5 w-5 sm:h-6 sm:w-6" />
+                  <X className="h-6 w-6" />
                 ) : (
-                  <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
+                  <Menu className="h-6 w-6" />
                 )}
               </button>
             </div>
@@ -127,32 +127,32 @@ export default function Navbar() {
 
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
-            <div className="md:hidden fixed inset-x-0 top-[3.5rem] sm:top-16 h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] bg-emerald-900/95 animate-fade-in overflow-y-auto">
-              <div className="px-4 py-6 space-y-6">
+            <div className="md:hidden fixed inset-x-0 top-14 h-[calc(100vh-3.5rem)] bg-emerald-900/95 animate-fade-in overflow-y-auto">
+              <div className="px-4 py-6 space-y-4">
                 <Link
                   to="/benefits"
-                  className="block text-lg text-center text-emerald-100 hover:text-white transition py-2"
+                  className="block text-lg text-center text-emerald-100 hover:text-white transition py-3"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Benefits
                 </Link>
                 <Link
                   to="/products"
-                  className="block text-lg text-center text-emerald-100 hover:text-white transition py-2"
+                  className="block text-lg text-center text-emerald-100 hover:text-white transition py-3"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Products
                 </Link>
                 <Link
                   to="/process"
-                  className="block text-lg text-center text-emerald-100 hover:text-white transition py-2"
+                  className="block text-lg text-center text-emerald-100 hover:text-white transition py-3"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Our Process
                 </Link>
                 <Link
                   to="/portal"
-                  className="block text-lg text-center text-emerald-100 hover:text-white transition py-2"
+                  className="block text-lg text-center text-emerald-100 hover:text-white transition py-3"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Client Portal
@@ -163,7 +163,7 @@ export default function Navbar() {
 
           {/* Mobile Cart Popup */}
           {isCartOpen && (
-            <div className="md:hidden fixed inset-x-0 top-[3.5rem] sm:top-16 h-[calc(100vh-3.5rem)] sm:h-[calc(100vh-4rem)] bg-white/95 backdrop-blur-sm animate-fade-in overflow-y-auto">
+            <div className="md:hidden fixed inset-x-0 top-14 h-[calc(100vh-3.5rem)] bg-white animate-fade-in overflow-y-auto">
               <div className="p-4">
                 <h3 className="text-lg font-semibold text-brand-dark mb-4">Shopping Cart</h3>
                 {items.length === 0 ? (
