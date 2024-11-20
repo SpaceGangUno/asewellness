@@ -150,7 +150,7 @@ function Products() {
   };
 
   return (
-    <div className="bg-gradient-to-br from-emerald-50 to-cyan-50 py-16">
+    <main className="flex-1 bg-gradient-to-br from-emerald-50 to-cyan-50 py-16">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="mb-12">
           <h2 className="text-4xl font-bold text-emerald-900 mb-4 text-center">Our Products</h2>
@@ -252,7 +252,7 @@ function Products() {
           ))}
         </div>
       </div>
-    </div>
+    </main>
   );
 }
 

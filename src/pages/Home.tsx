@@ -5,10 +5,10 @@ import Process from '../components/Process';
 
 export default function Home() {
   return (
-    <>
+    <main className="flex-1">
       <Hero />
       <Products />
       <Process />
-    </>
+    </main>
   );
 }

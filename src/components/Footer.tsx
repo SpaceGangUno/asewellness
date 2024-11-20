@@ -3,7 +3,7 @@ import { Leaf, Instagram } from 'lucide-react';
 
 export default function Footer() {
   return (
-    <footer className="bg-gradient-brand text-white">
+    <footer className="bg-gradient-brand text-white mt-auto w-full">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-12">
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 sm:gap-10">
           {/* Brand Section */}
@@ -23,7 +23,7 @@ export default function Footer() {
             <ul className="space-y-2.5">
               <li>
                 <a 
-                  href="#products" 
+                  href="/products" 
                   className="text-sm sm:text-base text-white/90 hover:text-white transition inline-block py-1"
                 >
                   Products
@@ -31,7 +31,7 @@ export default function Footer() {
               </li>
               <li>
                 <a 
-                  href="#benefits" 
+                  href="/benefits" 
                   className="text-sm sm:text-base text-white/90 hover:text-white transition inline-block py-1"
                 >
                   Benefits
@@ -39,7 +39,7 @@ export default function Footer() {
               </li>
               <li>
                 <a 
-                  href="#process" 
+                  href="/process" 
                   className="text-sm sm:text-base text-white/90 hover:text-white transition inline-block py-1"
                 >
                   Our Process
