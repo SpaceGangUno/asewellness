@@ -21,10 +21,6 @@ export default function Hero() {
       </div>
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[100svh] flex items-center py-20 sm:py-0">
         <div className="w-full max-w-2xl">
-          <div className="inline-flex items-center px-3 py-1.5 sm:px-4 sm:py-2 rounded-full bg-emerald-500/20 text-emerald-100 mb-4 sm:mb-6 text-sm sm:text-base">
-            <Sparkles className="h-3.5 w-3.5 sm:h-4 sm:w-4 mr-1.5 sm:mr-2" />
-            <span className="line-clamp-1">Transform Your Life with Our Detox Programs</span>
-          </div>
           <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-4 sm:mb-6 tracking-tight">
             Start Your Wellness Journey Today
           </h1>
