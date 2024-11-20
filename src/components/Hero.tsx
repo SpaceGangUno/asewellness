@@ -1,6 +1,6 @@
 import React from 'react';
 import DetoxQuiz from './DetoxQuiz';
-import { Sparkles, Leaf, Battery } from 'lucide-react';
+import { Sparkles, Leaf, Battery, ChevronDown } from 'lucide-react';
 
 const benefits = [
   { icon: Sparkles, text: "Total Body Reset" },
@@ -10,7 +10,7 @@ const benefits = [
 
 export default function Hero() {
   return (
-    <div className="relative min-h-[100svh]">
+    <div className="relative min-h-[85vh]">
       <div className="absolute inset-0">
         <img
           src="https://images.unsplash.com/photo-1622597467836-f3285f2131b8?auto=format&fit=crop&q=80"
@@ -19,9 +19,9 @@ export default function Hero() {
         />
         <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/95 to-emerald-800/70 sm:from-emerald-900/90 sm:to-emerald-800/50" />
       </div>
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[100svh] flex items-center py-24 sm:py-32">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[85vh] flex items-center py-16 sm:py-20">
         <div className="w-full max-w-2xl space-y-8">
-          <div className="space-y-6">
+          <div className="space-y-4">
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight leading-[1.1]">
               Start Your Wellness Journey Today
             </h1>
@@ -47,10 +47,15 @@ export default function Hero() {
             })}
           </div>
 
-          <div className="pt-2">
+          <div>
             <DetoxQuiz />
           </div>
         </div>
+      </div>
+      
+      {/* Scroll Indicator */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70 animate-bounce">
+        <ChevronDown className="w-6 h-6" />
       </div>
     </div>
   );
