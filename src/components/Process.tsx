@@ -31,7 +31,7 @@ export default function Process() {
         <h2 className="text-3xl font-bold text-white text-center mb-6">
           Our Cold Press Process
         </h2>
-        <div className="flex overflow-x-auto pb-4 gap-4 snap-x snap-mandatory hide-scrollbar">
+        <div className="flex overflow-x-auto pb-4 gap-4 snap-x snap-mandatory [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {steps.map((step, index) => {
             const Icon = step.icon;
             return (
@@ -55,15 +55,6 @@ export default function Process() {
           })}
         </div>
       </div>
-      <style jsx>{`
-        .hide-scrollbar {
-          -ms-overflow-style: none;
-          scrollbar-width: none;
-        }
-        .hide-scrollbar::-webkit-scrollbar {
-          display: none;
-        }
-      `}</style>
     </section>
   );
 }
