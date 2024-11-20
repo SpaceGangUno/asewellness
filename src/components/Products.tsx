@@ -45,42 +45,46 @@ export default function Products() {
   };
 
   return (
-    <section id="products" className="py-20 bg-emerald-50">
+    <section id="products" className="py-12 sm:py-20 bg-emerald-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-3xl font-bold text-center text-emerald-900 mb-12">
+        <h2 className="text-2xl sm:text-3xl font-bold text-center text-emerald-900 mb-8 sm:mb-12">
           Our Signature Collection
         </h2>
-        <div className="grid md:grid-cols-3 gap-8">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 lg:gap-8">
           {products.map((product) => (
-            <div key={product.id} className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition">
-              <div className="h-64 overflow-hidden">
+            <div 
+              key={product.id} 
+              className="bg-white rounded-xl shadow-md hover:shadow-lg transition-shadow duration-300 flex flex-col"
+            >
+              <div className="aspect-[4/3] overflow-hidden rounded-t-xl">
                 <img
                   src={product.image}
                   alt={product.name}
-                  className="w-full h-full object-cover transform hover:scale-105 transition"
+                  className="w-full h-full object-cover transform hover:scale-105 transition duration-300"
+                  loading="lazy"
                 />
               </div>
-              <div className="p-6">
-                <h3 className="text-xl font-semibold text-emerald-900 mb-2">{product.name}</h3>
-                <p className="text-gray-600 mb-4">{product.description}</p>
-                <div className="flex justify-between items-center">
+              <div className="p-4 sm:p-6 flex flex-col flex-grow">
+                <h3 className="text-lg sm:text-xl font-semibold text-emerald-900 mb-2">{product.name}</h3>
+                <p className="text-sm sm:text-base text-gray-600 mb-4 flex-grow">{product.description}</p>
+                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center space-y-3 sm:space-y-0">
                   <span className="text-lg font-bold text-emerald-600">${product.price.toFixed(2)}</span>
                   <button
                     onClick={() => handleAddToCart(product)}
-                    className={`flex items-center space-x-2 px-4 py-2 rounded-full transition ${
+                    className={`w-full sm:w-auto flex items-center justify-center space-x-2 px-4 py-2.5 rounded-full text-sm sm:text-base font-medium transition-colors duration-200 ${
                       addedToCart[product.id]
                         ? 'bg-emerald-100 text-emerald-800'
-                        : 'bg-emerald-600 text-white hover:bg-emerald-700'
+                        : 'bg-emerald-600 text-white hover:bg-emerald-700 active:bg-emerald-800'
                     }`}
                   >
                     {addedToCart[product.id] ? (
                       <>
-                        <Check className="h-5 w-5" />
+                        <Check className="h-4 w-4 sm:h-5 sm:w-5" />
                         <span>Added</span>
                       </>
                     ) : (
                       <>
-                        <ShoppingCart className="h-5 w-5" />
+                        <ShoppingCart className="h-4 w-4 sm:h-5 sm:w-5" />
                         <span>Add to Cart</span>
                       </>
                     )}
