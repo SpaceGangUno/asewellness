@@ -4,7 +4,7 @@ import { Sparkles, Leaf, Battery, ChevronDown } from 'lucide-react';
 
 const benefits = [
   { icon: Sparkles, text: "Total Body Reset" },
-  { icon: Leaf, text: "Natural Ingredients" },
+  { icon: Leaf, text: "Raw Ingredients" },
   { icon: Battery, text: "Boost Energy" },
 ];
 
