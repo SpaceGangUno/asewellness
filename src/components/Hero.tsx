@@ -3,7 +3,7 @@ import DetoxQuiz from './DetoxQuiz';
 import { Sparkles, Leaf, Battery } from 'lucide-react';
 
 const benefits = [
-  { icon: Sparkles, text: "Reset Your Body" },
+  { icon: Sparkles, text: "Total Body Reset" },
   { icon: Leaf, text: "Natural Ingredients" },
   { icon: Battery, text: "Boost Energy" },
 ];
