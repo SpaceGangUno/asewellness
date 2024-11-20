@@ -91,13 +91,13 @@ export default function Hero() {
       </div>
       
       <div 
-        className={`absolute bottom-4 left-1/2 -translate-x-1/2 text-white/90 animate-bounce transition-all duration-1000 delay-1000 ${
-          isVisible ? 'opacity-100' : 'opacity-0'
+        className={`fixed right-6 bottom-6 text-white/90 transition-all duration-500 ${
+          isVisible && scrollY < 100 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
         }`}
       >
         <div className="flex flex-col items-center space-y-1">
-          <span className="text-sm font-medium text-emerald-300">Scroll to explore</span>
-          <ChevronDown className="w-5 h-5" />
+          <span className="text-sm font-medium text-emerald-300 whitespace-nowrap">Scroll to explore</span>
+          <ChevronDown className="w-5 h-5 animate-bounce" />
         </div>
       </div>
     </div>
