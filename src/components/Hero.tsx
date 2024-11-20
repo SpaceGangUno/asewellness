@@ -16,19 +16,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="relative min-h-[85vh] overflow-hidden">
-      <div 
-        className="absolute inset-0 transition-transform duration-[2s] ease-out"
-        style={{ transform: isVisible ? 'scale(1)' : 'scale(1.1)' }}
-      >
-        <img
-          src="https://images.unsplash.com/photo-1622597467836-f3285f2131b8?auto=format&fit=crop&q=80"
-          alt="Fresh juices background"
-          className="w-full h-full object-cover object-center"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/95 to-emerald-800/60 backdrop-blur-[2px]" />
-      </div>
-      
+    <div className="relative min-h-[85vh] bg-emerald-900">
       <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[85vh] flex items-center py-12 sm:py-16">
         <div className="w-full max-w-2xl space-y-8">
           <div 
@@ -37,11 +25,11 @@ export default function Hero() {
             }`}
           >
             <h1 className="text-5xl sm:text-6xl font-bold tracking-tight leading-[1.1]">
-              <span className="bg-gradient-to-r from-emerald-200 to-emerald-400 text-transparent bg-clip-text">
+              <span className="text-emerald-200">
                 Natural Wellness Journey
               </span>
             </h1>
-            <p className="text-xl text-emerald-50/90 leading-relaxed max-w-xl font-light">
+            <p className="text-xl text-emerald-100/90 leading-relaxed max-w-xl font-light">
               Experience the power of nature through our premium cold-pressed juices.
             </p>
           </div>
@@ -56,14 +44,14 @@ export default function Hero() {
               return (
                 <div 
                   key={benefit.text} 
-                  className="group relative flex items-center space-x-3 bg-white/10 backdrop-blur-md rounded-xl p-3 transition-all duration-300 hover:bg-white/15 overflow-hidden"
+                  className="group relative flex items-center space-x-3 bg-emerald-800/50 rounded-xl p-3 transition-all duration-300 hover:bg-emerald-800/70 overflow-hidden"
                   style={{ transitionDelay: `${index * 100}ms` }}
                 >
-                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-emerald-500/20 text-emerald-300 group-hover:scale-110 transition-transform duration-300 relative">
+                  <div className="absolute inset-0 bg-gradient-to-r from-emerald-700/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                  <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-emerald-700/30 text-emerald-300 group-hover:scale-110 transition-transform duration-300 relative">
                     <Icon className="h-5 w-5" />
                   </div>
-                  <span className="text-lg text-white/90 font-medium relative">{benefit.text}</span>
+                  <span className="text-lg text-emerald-100 font-medium relative">{benefit.text}</span>
                 </div>
               );
             })}
@@ -80,7 +68,7 @@ export default function Hero() {
       </div>
       
       <div 
-        className={`absolute bottom-6 left-1/2 -translate-x-1/2 text-white/70 animate-bounce transition-all duration-1000 delay-1000 ${
+        className={`absolute bottom-6 left-1/2 -translate-x-1/2 text-emerald-300 animate-bounce transition-all duration-1000 delay-1000 ${
           isVisible ? 'opacity-100' : 'opacity-0'
         }`}
       >
