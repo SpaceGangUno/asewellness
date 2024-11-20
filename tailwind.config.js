@@ -16,7 +16,8 @@ export default {
         scroll: 'scroll 20s linear infinite'
       },
       backgroundImage: {
-        'gradient-brand': 'linear-gradient(135deg, #4ade80, #38bdf8)'
+        'gradient-brand': 'linear-gradient(135deg, #4ade80, #38bdf8)',
+        'gradient-brand-reverse': 'linear-gradient(135deg, #38bdf8, #4ade80)'
       }
     },
   },

@@ -45,7 +45,7 @@ const ProcessCard = ({ step }: { step: typeof steps[0] }) => {
 
 export default function Process() {
   return (
-    <section id="process" className="relative py-12 bg-gradient-to-b from-emerald-950/10 via-emerald-900/20 to-emerald-950/10">
+    <section id="process" className="relative py-12 bg-gradient-brand-reverse">
       <div className="absolute inset-0 backdrop-blur-sm bg-black/20" />
       <div className="max-w-7xl mx-auto px-4 relative">
         <h2 className="text-3xl font-bold text-white text-center mb-6">

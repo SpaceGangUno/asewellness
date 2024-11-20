@@ -78,7 +78,7 @@ export default function Process() {
   return (
     <main className="flex-1">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-br from-emerald-900 to-emerald-700 text-white py-24">
+      <section className="relative bg-gradient-brand-reverse text-white py-24">
         <div className="absolute inset-0 overflow-hidden">
           <img
             src="https://images.unsplash.com/photo-1589367920969-ab8e050bbb04?auto=format&fit=crop&q=80"
@@ -168,7 +168,7 @@ export default function Process() {
       </section>
 
       {/* CTA Section */}
-      <section className="bg-emerald-900 text-white py-20">
+      <section className="bg-gradient-brand-reverse text-white py-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl font-bold mb-6">Experience the Difference</h2>
           <p className="text-emerald-100 text-lg mb-8 max-w-2xl mx-auto">
