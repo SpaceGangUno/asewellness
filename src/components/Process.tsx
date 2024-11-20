@@ -26,8 +26,9 @@ const steps = [
 
 export default function Process() {
   return (
-    <section id="process" className="bg-gradient-to-br from-black/90 via-emerald-950/80 to-black/90 py-8">
-      <div className="max-w-7xl mx-auto px-4">
+    <section id="process" className="relative py-12">
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-emerald-950/40 to-black pointer-events-none" />
+      <div className="max-w-7xl mx-auto px-4 relative">
         <h2 className="text-3xl font-bold text-white text-center mb-6">
           Our Cold Press Process
         </h2>
