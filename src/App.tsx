@@ -22,7 +22,7 @@ function App() {
       <CartProvider>
         <BrowserRouter>
           <ScrollToTop />
-          <div className="min-h-screen">
+          <div className="flex flex-col min-h-screen">
             <Navbar />
             <Routes>
               <Route path="/" element={<Home />} />

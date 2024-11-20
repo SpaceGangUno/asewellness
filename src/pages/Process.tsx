@@ -76,7 +76,7 @@ const qualityMarkers = [
 
 export default function Process() {
   return (
-    <div className="pt-16">
+    <main className="flex-1">
       {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-emerald-900 to-emerald-700 text-white py-24">
         <div className="absolute inset-0 overflow-hidden">
@@ -183,6 +183,6 @@ export default function Process() {
           </a>
         </div>
       </section>
-    </div>
+    </main>
   );
 }
