@@ -7,15 +7,25 @@ export default {
   theme: {
     extend: {
       keyframes: {
-        flowRight: {
-          'from': { transform: 'translateX(-50%)' },
-          'to': { transform: 'translateX(0)' }
+        scroll: {
+          '0%': { transform: 'translateX(0)' },
+          '100%': { transform: 'translateX(calc(-280px * 4 - 1rem * 3))' }  // 4 cards width + 3 gaps
         }
       },
       animation: {
-        flowRight: 'flowRight 2s linear infinite'
+        scroll: 'scroll 20s linear infinite'
       }
     },
   },
-  plugins: [],
+  plugins: [
+    function({ addUtilities }) {
+      addUtilities({
+        '.pause-on-hover': {
+          '&:hover > *': {
+            'animation-play-state': 'paused',
+          },
+        },
+      })
+    },
+  ],
 }
