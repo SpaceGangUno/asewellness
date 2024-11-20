@@ -1,5 +1,5 @@
 import React from 'react';
-import { Leaf, Droplets, ThermometerSun, Timer, ChevronRight } from 'lucide-react';
+import { Leaf, Droplets, ThermometerSun, Timer } from 'lucide-react';
 
 const steps = [
   {
@@ -57,10 +57,9 @@ export default function Process() {
             })}
           </div>
           
-          {/* Scroll indicator */}
-          <div className="absolute right-0 top-1/2 -translate-y-1/2 flex items-center space-x-1 text-emerald-300/80 md:hidden animate-pulse">
-            <ChevronRight className="w-5 h-5" />
-            <ChevronRight className="w-5 h-5 -ml-3" />
+          {/* Scroll animation */}
+          <div className="absolute bottom-0 left-0 right-0 h-[2px] overflow-hidden md:hidden">
+            <div className="h-full w-[200%] animate-flowRight bg-gradient-to-r from-transparent via-emerald-300/50 to-transparent" />
           </div>
         </div>
       </div>
