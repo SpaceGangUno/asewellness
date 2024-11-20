@@ -26,40 +26,44 @@ const steps = [
 
 export default function Process() {
   return (
-    <section id="process" className="bg-emerald-900 py-16">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-bold text-white text-center mb-12">
+    <section id="process" className="bg-gradient-to-br from-black/90 via-emerald-950/80 to-black/90 py-8">
+      <div className="max-w-7xl mx-auto px-4">
+        <h2 className="text-3xl font-bold text-white text-center mb-6">
           Our Cold Press Process
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <div className="flex overflow-x-auto pb-4 gap-4 snap-x snap-mandatory hide-scrollbar">
           {steps.map((step, index) => {
             const Icon = step.icon;
             return (
               <div 
                 key={step.title} 
-                className="flex flex-col items-center text-center"
+                className="flex-shrink-0 w-[280px] snap-center flex items-center space-x-3 bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-emerald-900/30"
               >
-                <div className="relative mb-4">
-                  <div className="w-16 h-16 bg-emerald-800 rounded-full flex items-center justify-center">
-                    <Icon className="h-8 w-8 text-white" />
-                  </div>
-                  {index < steps.length - 1 && (
-                    <div className="hidden md:block absolute top-1/2 left-[calc(100%+1rem)] w-[calc(100%-2rem)] h-0.5 bg-emerald-800">
-                      <div className="absolute right-0 -top-1 w-2 h-2 bg-emerald-700 rounded-full" />
-                    </div>
-                  )}
+                <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-emerald-500/20">
+                  <Icon className="h-6 w-6 text-emerald-300" />
                 </div>
-                <h3 className="text-xl font-semibold text-white mb-2">
-                  {step.title}
-                </h3>
-                <p className="text-emerald-100 text-lg">
-                  {step.description}
-                </p>
+                <div className="min-w-0">
+                  <h3 className="text-lg font-semibold text-white truncate">
+                    {step.title}
+                  </h3>
+                  <p className="text-sm text-emerald-100 line-clamp-2">
+                    {step.description}
+                  </p>
+                </div>
               </div>
             );
           })}
         </div>
       </div>
+      <style jsx>{`
+        .hide-scrollbar {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .hide-scrollbar::-webkit-scrollbar {
+          display: none;
+        }
+      `}</style>
     </section>
   );
 }
