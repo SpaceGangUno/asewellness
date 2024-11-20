@@ -28,19 +28,19 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed w-full bg-white/90 backdrop-blur-sm z-50 shadow-sm">
+      <nav className="fixed w-full bg-black/90 backdrop-blur-sm z-50 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
             <Link to="/" className="flex items-center space-x-2">
               <LotusIcon className="h-8 w-8 text-brand-primary" />
-              <span className="text-2xl font-bold text-gradient">Asé Juices</span>
+              <span className="text-2xl font-bold text-white">Asé Juices</span>
             </Link>
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
-              <Link to="/benefits" className="text-brand-dark hover:text-brand-primary transition">Benefits</Link>
-              <Link to="/products" className="text-brand-dark hover:text-brand-primary transition">Products</Link>
-              <Link to="/process" className="text-brand-dark hover:text-brand-primary transition">Our Process</Link>
+              <Link to="/benefits" className="text-white hover:text-brand-primary transition">Benefits</Link>
+              <Link to="/products" className="text-white hover:text-brand-primary transition">Products</Link>
+              <Link to="/process" className="text-white hover:text-brand-primary transition">Our Process</Link>
               <Link to="/portal" className="bg-gradient-brand text-white px-6 py-2 rounded-full hover:opacity-90 transition flex items-center space-x-2">
                 <User className="h-4 w-4" />
                 <span>Client Portal</span>
@@ -48,7 +48,7 @@ export default function Navbar() {
               <div className="relative">
                 <button
                   onClick={() => setIsCartOpen(!isCartOpen)}
-                  className="flex items-center space-x-2 text-brand-dark hover:text-brand-primary transition"
+                  className="flex items-center space-x-2 text-white hover:text-brand-primary transition"
                 >
                   <ShoppingCart className="h-6 w-6" />
                   {itemCount > 0 && (
@@ -59,29 +59,29 @@ export default function Navbar() {
                 </button>
 
                 {isCartOpen && (
-                  <div className="absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg p-4 animate-fade-in">
-                    <h3 className="text-lg font-semibold text-brand-dark mb-4">Shopping Cart</h3>
+                  <div className="absolute right-0 mt-2 w-80 bg-black rounded-lg shadow-lg p-4 animate-fade-in">
+                    <h3 className="text-lg font-semibold text-white mb-4">Shopping Cart</h3>
                     {items.length === 0 ? (
-                      <p className="text-gray-500">Your cart is empty</p>
+                      <p className="text-gray-400">Your cart is empty</p>
                     ) : (
                       <>
                         <div className="space-y-3 mb-4">
                           {items.map((item) => (
                             <div key={item.name} className="flex justify-between items-center">
                               <div>
-                                <p className="text-brand-dark">{item.name}</p>
-                                <p className="text-sm text-gray-500">
+                                <p className="text-white">{item.name}</p>
+                                <p className="text-sm text-gray-400">
                                   ${item.price.toFixed(2)} x {item.quantity}
                                 </p>
                               </div>
-                              <span className="font-semibold">
+                              <span className="font-semibold text-white">
                                 ${(item.price * item.quantity).toFixed(2)}
                               </span>
                             </div>
                           ))}
                         </div>
-                        <div className="border-t pt-3">
-                          <div className="flex justify-between items-center font-semibold text-brand-dark">
+                        <div className="border-t border-gray-700 pt-3">
+                          <div className="flex justify-between items-center font-semibold text-white">
                             <span>Total</span>
                             <span>${total.toFixed(2)}</span>
                           </div>
@@ -103,7 +103,7 @@ export default function Navbar() {
             <div className="flex items-center space-x-4 md:hidden">
               <button
                 onClick={() => setIsCartOpen(!isCartOpen)}
-                className="relative p-2 text-brand-dark hover:text-brand-primary transition"
+                className="relative p-2 text-white hover:text-brand-primary transition"
               >
                 <ShoppingCart className="h-6 w-6" />
                 {itemCount > 0 && (
@@ -114,7 +114,7 @@ export default function Navbar() {
               </button>
               <button
                 onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-                className="p-2 rounded-lg text-brand-dark hover:bg-gray-100 focus:outline-none"
+                className="p-2 rounded-lg text-white hover:text-brand-primary focus:outline-none"
               >
                 {isMobileMenuOpen ? (
                   <X className="h-6 w-6" />
@@ -127,32 +127,32 @@ export default function Navbar() {
 
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
-            <div className="md:hidden absolute top-16 left-0 right-0 bg-white shadow-lg rounded-b-xl animate-fade-in">
+            <div className="md:hidden absolute top-16 left-0 right-0 bg-black shadow-lg rounded-b-xl animate-fade-in">
               <div className="px-4 py-6 space-y-4">
                 <Link
                   to="/benefits"
-                  className="block text-brand-dark hover:text-brand-primary transition py-2"
+                  className="block text-white hover:text-brand-primary transition py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Benefits
                 </Link>
                 <Link
                   to="/products"
-                  className="block text-brand-dark hover:text-brand-primary transition py-2"
+                  className="block text-white hover:text-brand-primary transition py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Products
                 </Link>
                 <Link
                   to="/process"
-                  className="block text-brand-dark hover:text-brand-primary transition py-2"
+                  className="block text-white hover:text-brand-primary transition py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Our Process
                 </Link>
                 <Link
                   to="/portal"
-                  className="block text-brand-dark hover:text-brand-primary transition py-2"
+                  className="block text-white hover:text-brand-primary transition py-2"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Client Portal
@@ -163,29 +163,29 @@ export default function Navbar() {
 
           {/* Mobile Cart Popup */}
           {isCartOpen && (
-            <div className="md:hidden absolute top-16 left-0 right-0 bg-white shadow-lg rounded-b-xl animate-fade-in p-4">
-              <h3 className="text-lg font-semibold text-brand-dark mb-4">Shopping Cart</h3>
+            <div className="md:hidden absolute top-16 left-0 right-0 bg-black shadow-lg rounded-b-xl animate-fade-in p-4">
+              <h3 className="text-lg font-semibold text-white mb-4">Shopping Cart</h3>
               {items.length === 0 ? (
-                <p className="text-gray-500">Your cart is empty</p>
+                <p className="text-gray-400">Your cart is empty</p>
               ) : (
                 <>
                   <div className="space-y-3 mb-4">
                     {items.map((item) => (
                       <div key={item.name} className="flex justify-between items-center">
                         <div>
-                          <p className="text-brand-dark">{item.name}</p>
-                          <p className="text-sm text-gray-500">
+                          <p className="text-white">{item.name}</p>
+                          <p className="text-sm text-gray-400">
                             ${item.price.toFixed(2)} x {item.quantity}
                           </p>
                         </div>
-                        <span className="font-semibold">
+                        <span className="font-semibold text-white">
                           ${(item.price * item.quantity).toFixed(2)}
                         </span>
                       </div>
                     ))}
                   </div>
-                  <div className="border-t pt-3">
-                    <div className="flex justify-between items-center font-semibold text-brand-dark">
+                  <div className="border-t border-gray-700 pt-3">
+                    <div className="flex justify-between items-center font-semibold text-white">
                       <span>Total</span>
                       <span>${total.toFixed(2)}</span>
                     </div>
