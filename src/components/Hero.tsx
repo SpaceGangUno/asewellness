@@ -29,20 +29,19 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-r from-emerald-900/95 to-emerald-800/60 backdrop-blur-[2px]" />
       </div>
       
-      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[85vh] flex items-center py-16 sm:py-20">
-        <div className="w-full max-w-2xl space-y-10">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[85vh] flex items-center py-12 sm:py-16">
+        <div className="w-full max-w-2xl space-y-8">
           <div 
-            className={`space-y-6 transition-all duration-1000 delay-300 ${
+            className={`space-y-4 transition-all duration-1000 delay-300 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            <h1 className="text-5xl sm:text-6xl md:text-7xl font-bold text-white tracking-tight leading-[1.1]">
-              <span className="block">Elevate Your</span>
-              <span className="block bg-gradient-to-r from-emerald-200 to-emerald-400 text-transparent bg-clip-text">
-                Wellness Journey
+            <h1 className="text-5xl sm:text-6xl font-bold tracking-tight leading-[1.1]">
+              <span className="bg-gradient-to-r from-emerald-200 to-emerald-400 text-transparent bg-clip-text">
+                Natural Wellness Journey
               </span>
             </h1>
-            <p className="text-xl sm:text-2xl text-emerald-50/90 leading-relaxed max-w-xl font-light">
+            <p className="text-xl text-emerald-50/90 leading-relaxed max-w-xl font-light">
               Experience the power of nature through our premium cold-pressed juices.
             </p>
           </div>
