@@ -1,5 +1,3 @@
-import React from 'react';
-
 const LotusIcon = ({ className = "h-8 w-8" }: { className?: string }) => {
   return (
     <svg 
