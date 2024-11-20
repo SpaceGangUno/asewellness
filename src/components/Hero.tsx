@@ -24,7 +24,7 @@ export default function Hero() {
   }, []);
 
   return (
-    <div className="relative min-h-[100svh] overflow-hidden">
+    <div className="relative min-h-[80vh] overflow-hidden">
       <div 
         className="absolute inset-0 transition-transform duration-[2s] ease-out"
         style={{ 
@@ -39,10 +39,10 @@ export default function Hero() {
         <div className="absolute inset-0 bg-gradient-to-br from-black/90 via-emerald-950/80 to-black/90" />
       </div>
       
-      <div className="relative w-full px-4 min-h-[100svh] flex flex-col justify-center pt-20 pb-16">
-        <div className="w-full space-y-8">
+      <div className="relative w-full px-4 min-h-[80vh] flex flex-col justify-center pt-16 pb-12">
+        <div className="w-full space-y-6">
           <div 
-            className={`space-y-4 transition-all duration-1000 delay-300 ${
+            className={`space-y-3 transition-all duration-1000 delay-300 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
@@ -59,7 +59,7 @@ export default function Hero() {
           </div>
           
           <div 
-            className={`grid grid-cols-1 gap-3 transition-all duration-1000 delay-500 ${
+            className={`grid grid-cols-1 gap-2 transition-all duration-1000 delay-500 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
@@ -68,20 +68,20 @@ export default function Hero() {
               return (
                 <div 
                   key={benefit.text} 
-                  className="group relative flex items-center space-x-3 bg-black/30 backdrop-blur-sm rounded-xl p-4 transition-all duration-300 hover:bg-emerald-950/50 border border-emerald-900/30 touch-manipulation"
+                  className="group relative flex items-center space-x-3 bg-black/30 backdrop-blur-sm rounded-xl p-3 transition-all duration-300 hover:bg-emerald-950/50 border border-emerald-900/30 touch-manipulation"
                   style={{ transitionDelay: `${index * 100}ms` }}
                 >
-                  <div className="flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-lg bg-emerald-500/20 text-emerald-300 group-hover:scale-110 transition-transform duration-300">
-                    <Icon className="h-5 w-5" />
+                  <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-emerald-500/20 text-emerald-300 group-hover:scale-110 transition-transform duration-300">
+                    <Icon className="h-4 w-4" />
                   </div>
-                  <span className="text-lg text-white font-medium">{benefit.text}</span>
+                  <span className="text-base text-white font-medium">{benefit.text}</span>
                 </div>
               );
             })}
           </div>
 
           <div 
-            className={`pt-2 transition-all duration-1000 delay-700 ${
+            className={`transition-all duration-1000 delay-700 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
@@ -91,11 +91,14 @@ export default function Hero() {
       </div>
       
       <div 
-        className={`absolute bottom-4 left-1/2 -translate-x-1/2 text-white/70 animate-bounce transition-all duration-1000 delay-1000 ${
+        className={`absolute bottom-4 left-1/2 -translate-x-1/2 text-white/90 animate-bounce transition-all duration-1000 delay-1000 ${
           isVisible ? 'opacity-100' : 'opacity-0'
         }`}
       >
-        <ChevronDown className="w-6 h-6" />
+        <div className="flex flex-col items-center space-y-1">
+          <span className="text-sm font-medium text-emerald-300">Scroll to explore</span>
+          <ChevronDown className="w-5 h-5" />
+        </div>
       </div>
     </div>
   );
