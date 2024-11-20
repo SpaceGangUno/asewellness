@@ -81,23 +81,22 @@ export default function Hero() {
           </div>
 
           <div 
-            className={`transition-all duration-1000 delay-700 ${
+            className={`relative transition-all duration-1000 delay-700 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
             <DetoxQuiz />
+            <div 
+              className={`absolute left-1/2 -translate-x-1/2 mt-4 transition-all duration-500 ${
+                isVisible && scrollY < 100 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-0.5">
+                <span className="text-xs font-medium text-emerald-300/80">Scroll to explore</span>
+                <ChevronDown className="w-4 h-4 text-emerald-300/80 animate-bounce" />
+              </div>
+            </div>
           </div>
-        </div>
-      </div>
-      
-      <div 
-        className={`fixed right-6 bottom-6 text-white/90 transition-all duration-500 ${
-          isVisible && scrollY < 100 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
-        }`}
-      >
-        <div className="flex flex-col items-center space-y-1">
-          <span className="text-sm font-medium text-emerald-300 whitespace-nowrap">Scroll to explore</span>
-          <ChevronDown className="w-5 h-5 animate-bounce" />
         </div>
       </div>
     </div>
