@@ -22,15 +22,17 @@ function App() {
       <CartProvider>
         <BrowserRouter>
           <ScrollToTop />
-          <div className="flex flex-col min-h-screen">
+          <div className="min-h-screen flex flex-col">
             <Navbar />
-            <Routes>
-              <Route path="/" element={<Home />} />
-              <Route path="/products" element={<Products />} />
-              <Route path="/process" element={<Process />} />
-              <Route path="/benefits" element={<Benefits />} />
-              <Route path="/portal/*" element={<ClientPortal />} />
-            </Routes>
+            <div className="flex-grow">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/products" element={<Products />} />
+                <Route path="/process" element={<Process />} />
+                <Route path="/benefits" element={<Benefits />} />
+                <Route path="/portal/*" element={<ClientPortal />} />
+              </Routes>
+            </div>
             <Footer />
           </div>
         </BrowserRouter>
