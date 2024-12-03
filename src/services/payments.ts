@@ -1,8 +1,4 @@
-import { loadStripe } from '@stripe/stripe-js';
 import { v4 as uuidv4 } from 'uuid';
-
-const STRIPE_PUBLIC_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
-const stripePromise = loadStripe(STRIPE_PUBLIC_KEY);
 
 interface PaymentRequest {
   amount: number;
@@ -17,6 +13,7 @@ interface CreatePaymentParams {
     quantity: number;
   }>;
   total: number;
+  paymentMethodId: string;
 }
 
 export async function createPaymentRequest(amount: number): Promise<PaymentRequest> {
@@ -29,9 +26,7 @@ export async function createPaymentRequest(amount: number): Promise<PaymentReque
 
 export async function initializePayment(amount: number): Promise<void> {
   try {
-    const stripe = await stripePromise;
-    if (!stripe) throw new Error('Stripe failed to initialize');
-
+    // Create a payment intent on your server
     const response = await fetch('/api/create-payment-intent', {
       method: 'POST',
       headers: {
@@ -44,26 +39,11 @@ export async function initializePayment(amount: number): Promise<void> {
     });
 
     if (!response.ok) {
-      throw new Error('Payment intent creation failed');
+      throw new Error('Failed to create payment intent');
     }
 
     const { clientSecret } = await response.json();
-
-    const cardElement = document.querySelector('#card-element');
-    if (!cardElement) throw new Error('Card element not found');
-
-    const { error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
-      payment_method: {
-        card: cardElement as any, // Type assertion needed due to DOM element type mismatch
-        billing_details: {
-          name: 'Customer Name', // This should be dynamically set based on user input
-        },
-      },
-    });
-
-    if (confirmError) {
-      throw confirmError;
-    }
+    return clientSecret;
   } catch (error) {
     console.error('Payment initialization error:', error);
     throw error;
@@ -72,33 +52,26 @@ export async function initializePayment(amount: number): Promise<void> {
 
 export async function createPayment(params: CreatePaymentParams): Promise<void> {
   try {
-    const stripe = await stripePromise;
-    if (!stripe) throw new Error('Stripe failed to initialize');
-
-    const response = await fetch('/api/create-payment-intent', {
+    const response = await fetch('/api/process-payment', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
+        paymentMethodId: params.paymentMethodId,
         amount: params.total * 100, // Convert to cents
         currency: 'USD',
+        idempotencyKey: uuidv4(),
         items: params.items
       }),
     });
 
     if (!response.ok) {
-      throw new Error('Payment intent creation failed');
+      throw new Error('Payment processing failed');
     }
 
-    const { clientSecret } = await response.json();
-
-    const { error } = await stripe.confirmCardPayment(clientSecret);
-    if (error) {
-      throw error;
-    }
-
-    return;
+    const result = await response.json();
+    return result;
   } catch (error) {
     console.error('Payment processing error:', error);
     throw error;
