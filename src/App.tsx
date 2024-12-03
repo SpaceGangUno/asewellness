@@ -1,7 +1,5 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { Elements } from '@stripe/react-stripe-js';
-import { loadStripe } from '@stripe/stripe-js';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Products from './pages/Products';
@@ -12,9 +10,7 @@ import Footer from './components/Footer';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { useScrollToTop } from './hooks/useScrollToTop';
-
-// Initialize Stripe with the public key directly for testing
-const stripePromise = loadStripe('pk_live_51QRm4KK5lbUQ861dyPUK8WmPImORGhDCjEBGRClBZUPPntisSSrrgfIAvH1dLcqEz52TYjnFBZoGi1IH84Cbn8vQ000GVA0Xpd');
+import StripeProvider from './components/StripeProvider';
 
 function ScrollToTop() {
   useScrollToTop();
@@ -25,7 +21,7 @@ function App() {
   return (
     <AuthProvider>
       <CartProvider>
-        <Elements stripe={stripePromise}>
+        <StripeProvider>
           <BrowserRouter>
             <ScrollToTop />
             <div className="min-h-screen flex flex-col">
@@ -42,7 +38,7 @@ function App() {
               <Footer />
             </div>
           </BrowserRouter>
-        </Elements>
+        </StripeProvider>
       </CartProvider>
     </AuthProvider>
   );
