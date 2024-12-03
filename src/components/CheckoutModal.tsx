@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { X, Loader } from 'lucide-react';
 import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { StripeCardElementOptions } from '@stripe/stripe-js';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -9,11 +10,40 @@ interface CheckoutModalProps {
   onPaymentComplete: () => void;
 }
 
+const cardElementOptions: StripeCardElementOptions = {
+  style: {
+    base: {
+      fontSize: '16px',
+      color: '#424770',
+      fontFamily: 'system-ui, -apple-system, sans-serif',
+      '::placeholder': {
+        color: '#aab7c4',
+      },
+      ':focus': {
+        color: '#424770',
+      },
+    },
+    invalid: {
+      color: '#9e2146',
+      iconColor: '#9e2146',
+    },
+  },
+  hidePostalCode: true,
+};
+
 export default function CheckoutModal({ isOpen, onClose, total, onPaymentComplete }: CheckoutModalProps) {
   const stripe = useStripe();
   const elements = useElements();
   const [isLoading, setIsLoading] = React.useState(false);
   const [error, setError] = React.useState<string | null>(null);
+  const [cardComplete, setCardComplete] = React.useState(false);
+
+  useEffect(() => {
+    if (isOpen) {
+      setError(null);
+      setCardComplete(false);
+    }
+  }, [isOpen]);
 
   const handlePayment = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -23,15 +53,21 @@ export default function CheckoutModal({ isOpen, onClose, total, onPaymentComplet
       return;
     }
 
+    const cardElement = elements.getElement(CardElement);
+    if (!cardElement) {
+      setError('Card element not found');
+      return;
+    }
+
+    if (!cardComplete) {
+      setError('Please complete card details');
+      return;
+    }
+
     setIsLoading(true);
     setError(null);
 
     try {
-      const cardElement = elements.getElement(CardElement);
-      if (!cardElement) {
-        throw new Error('Card element not found');
-      }
-
       const { error: stripeError, paymentMethod } = await stripe.createPaymentMethod({
         type: 'card',
         card: cardElement,
@@ -45,8 +81,10 @@ export default function CheckoutModal({ isOpen, onClose, total, onPaymentComplet
       console.log('Payment method created:', paymentMethod.id);
       
       // For testing purposes, we'll just simulate success
-      onPaymentComplete();
-      onClose();
+      setTimeout(() => {
+        onPaymentComplete();
+        onClose();
+      }, 1000);
     } catch (err) {
       console.error('Payment error:', err);
       setError(err instanceof Error ? err.message : 'Payment failed. Please try again.');
@@ -65,6 +103,7 @@ export default function CheckoutModal({ isOpen, onClose, total, onPaymentComplet
           <button
             onClick={onClose}
             className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+            disabled={isLoading}
           >
             <X className="h-5 w-5 text-gray-500" />
           </button>
@@ -76,52 +115,45 @@ export default function CheckoutModal({ isOpen, onClose, total, onPaymentComplet
           </div>
         )}
 
-        <form onSubmit={handlePayment}>
-          <div className="mb-6">
-            <div className="flex justify-between mb-4">
-              <span className="text-gray-600">Total Amount:</span>
-              <span className="font-bold text-emerald-600">${total.toFixed(2)}</span>
-            </div>
-
-            <div className="mb-4 p-4 border rounded-lg">
-              <CardElement
-                options={{
-                  style: {
-                    base: {
-                      fontSize: '16px',
-                      color: '#424770',
-                      '::placeholder': {
-                        color: '#aab7c4',
-                      },
-                    },
-                    invalid: {
-                      color: '#9e2146',
-                    },
-                  },
-                }}
-              />
-            </div>
-
-            <button
-              type="submit"
-              disabled={isLoading || !stripe}
-              className="w-full bg-emerald-600 text-white py-3 px-4 rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 flex items-center justify-center"
-            >
-              {isLoading ? (
-                <>
-                  <Loader className="animate-spin h-5 w-5 mr-2" />
-                  Processing...
-                </>
-              ) : (
-                'Pay Now'
-              )}
-            </button>
+        <form onSubmit={handlePayment} className="space-y-4">
+          <div className="flex justify-between mb-4">
+            <span className="text-gray-600">Total Amount:</span>
+            <span className="font-bold text-emerald-600">${total.toFixed(2)}</span>
           </div>
-        </form>
 
-        <p className="text-xs text-gray-500 text-center">
-          Secured by Stripe. Your payment information is encrypted and secure.
-        </p>
+          <div className="p-4 border rounded-lg bg-white">
+            <CardElement 
+              options={cardElementOptions}
+              onChange={(e) => {
+                setCardComplete(e.complete);
+                if (e.error) {
+                  setError(e.error.message);
+                } else {
+                  setError(null);
+                }
+              }}
+            />
+          </div>
+
+          <button
+            type="submit"
+            disabled={isLoading || !stripe || !cardComplete}
+            className="w-full bg-emerald-600 text-white py-3 px-4 rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+          >
+            {isLoading ? (
+              <>
+                <Loader className="animate-spin h-5 w-5 mr-2" />
+                Processing...
+              </>
+            ) : (
+              'Pay Now'
+            )}
+          </button>
+
+          <p className="text-xs text-gray-500 text-center mt-4">
+            Secured by Stripe. Your payment information is encrypted and secure.
+          </p>
+        </form>
       </div>
     </div>
   );
