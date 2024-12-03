@@ -13,11 +13,8 @@ import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { useScrollToTop } from './hooks/useScrollToTop';
 
-// Initialize Stripe with the public key
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
-
-// Debug log to verify the key is loaded
-console.log('Stripe key available:', !!import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+// Initialize Stripe with the public key directly for testing
+const stripePromise = loadStripe('pk_live_51QRm4KK5lbUQ861dyPUK8WmPImORGhDCjEBGRClBZUPPntisSSrrgfIAvH1dLcqEz52TYjnFBZoGi1IH84Cbn8vQ000GVA0Xpd');
 
 function ScrollToTop() {
   useScrollToTop();
@@ -28,32 +25,24 @@ function App() {
   return (
     <AuthProvider>
       <CartProvider>
-        {stripePromise ? (
-          <Elements stripe={stripePromise}>
-            <BrowserRouter>
-              <ScrollToTop />
-              <div className="min-h-screen flex flex-col">
-                <Navbar />
-                <div className="flex-grow">
-                  <Routes>
-                    <Route path="/" element={<Home />} />
-                    <Route path="/products" element={<Products />} />
-                    <Route path="/process" element={<Process />} />
-                    <Route path="/benefits" element={<Benefits />} />
-                    <Route path="/portal/*" element={<ClientPortal />} />
-                  </Routes>
-                </div>
-                <Footer />
+        <Elements stripe={stripePromise}>
+          <BrowserRouter>
+            <ScrollToTop />
+            <div className="min-h-screen flex flex-col">
+              <Navbar />
+              <div className="flex-grow">
+                <Routes>
+                  <Route path="/" element={<Home />} />
+                  <Route path="/products" element={<Products />} />
+                  <Route path="/process" element={<Process />} />
+                  <Route path="/benefits" element={<Benefits />} />
+                  <Route path="/portal/*" element={<ClientPortal />} />
+                </Routes>
               </div>
-            </BrowserRouter>
-          </Elements>
-        ) : (
-          <div className="min-h-screen flex items-center justify-center">
-            <p className="text-red-500">
-              Error: Stripe configuration is missing. Please check your environment variables.
-            </p>
-          </div>
-        )}
+              <Footer />
+            </div>
+          </BrowserRouter>
+        </Elements>
       </CartProvider>
     </AuthProvider>
   );

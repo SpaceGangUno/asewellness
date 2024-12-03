@@ -1,30 +1,35 @@
-import { defineConfig, loadEnv } from 'vite';
+import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
+import { loadEnv } from 'vite';
+import path from 'path';
 
-// https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
+export default defineConfig(({ command, mode }) => {
   // Load env file based on `mode` in the current working directory.
-  const env = loadEnv(mode, process.cwd(), '');
-  
+  const env = loadEnv(mode, process.cwd());
+
   return {
     plugins: [react()],
     optimizeDeps: {
       exclude: ['lucide-react'],
     },
-    // Expose env variables
-    define: {
-      'process.env.VITE_STRIPE_PUBLIC_KEY': JSON.stringify(env.VITE_STRIPE_PUBLIC_KEY)
+    resolve: {
+      alias: {
+        '@': path.resolve(__dirname, './src'),
+      },
     },
-    // Log env variables during build
-    build: {
-      rollupOptions: {
-        onwarn(warning, warn) {
-          if (warning.code === 'MISSING_ENV_VAR') {
-            console.error('Missing environment variable:', warning.message);
-          }
-          warn(warning);
-        }
-      }
-    }
+    envPrefix: 'VITE_',
+    // Make env variables available globally
+    define: {
+      __STRIPE_KEY__: JSON.stringify(env.VITE_STRIPE_PUBLIC_KEY),
+    },
+    server: {
+      // Add any proxy configuration if needed
+      proxy: {
+        '/api': {
+          target: 'http://localhost:3000',
+          changeOrigin: true,
+        },
+      },
+    },
   };
 });
