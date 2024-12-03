@@ -13,7 +13,12 @@ import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { useScrollToTop } from './hooks/useScrollToTop';
 
-const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_PUBLIC_KEY);
+// Ensure the key is properly loaded from environment variables
+const stripeKey = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+if (!stripeKey) {
+  console.error('Stripe public key is missing. Please check your environment variables.');
+}
+const stripePromise = loadStripe(stripeKey);
 
 function ScrollToTop() {
   useScrollToTop();
@@ -21,6 +26,10 @@ function ScrollToTop() {
 }
 
 function App() {
+  if (!stripeKey) {
+    console.error('Stripe public key is missing');
+  }
+
   return (
     <AuthProvider>
       <CartProvider>
