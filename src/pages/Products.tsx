@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Star, ShoppingCart, Filter, Search, Check } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
@@ -135,19 +135,31 @@ function Products() {
     return matchesCategory && matchesSearch;
   });
 
-  const handleAddToCart = (product: Product) => {
-    addToCart({
+  const handleAddToCart = useCallback((product: Product) => {
+    console.log('Add to Cart clicked for:', product.name);
+    
+    const cartItem = {
       name: product.name,
       price: product.price,
       quantity: 1
-    });
+    };
+    
+    console.log('Adding item to cart:', cartItem);
+    addToCart(cartItem);
     
     // Show added confirmation
-    setAddedToCart({ ...addedToCart, [product.id]: true });
+    setAddedToCart(prev => {
+      console.log('Updating addedToCart state:', { ...prev, [product.id]: true });
+      return { ...prev, [product.id]: true };
+    });
+    
     setTimeout(() => {
-      setAddedToCart({ ...addedToCart, [product.id]: false });
+      setAddedToCart(prev => {
+        console.log('Resetting addedToCart state for:', product.id);
+        return { ...prev, [product.id]: false };
+      });
     }, 2000);
-  };
+  }, [addToCart]);
 
   return (
     <main className="flex-1 bg-gradient-to-br from-emerald-50 to-cyan-50 py-16">
