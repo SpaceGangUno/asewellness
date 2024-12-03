@@ -6,6 +6,7 @@ import {
   useElements,
   Elements
 } from '@stripe/react-stripe-js';
+import { useCart } from '../context/CartContext';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -39,6 +40,7 @@ const CheckoutForm = ({ total, onClose, onPaymentComplete }: Omit<CheckoutModalP
   const [error, setError] = useState<string | null>(null);
   const [cardComplete, setCardComplete] = useState(false);
   const [processing, setProcessing] = useState(false);
+  const { items } = useCart();
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -82,46 +84,67 @@ const CheckoutForm = ({ total, onClose, onPaymentComplete }: Omit<CheckoutModalP
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
-      <div className="flex justify-between mb-4">
-        <span className="text-gray-600">Total Amount:</span>
-        <span className="font-bold text-emerald-600">${total.toFixed(2)}</span>
-      </div>
-
-      <div className="p-4 border rounded-lg bg-white">
-        <CardElement
-          options={cardStyle}
-          onChange={(e) => {
-            setCardComplete(e.complete);
-            setError(e.error ? e.error.message : null);
-          }}
-        />
-      </div>
-
-      {error && (
-        <div className="p-3 bg-red-50 text-red-700 rounded-md text-sm">
-          {error}
+    <form onSubmit={handleSubmit} className="space-y-6">
+      {/* Order Summary */}
+      <div className="bg-gray-50 rounded-lg p-4 space-y-4">
+        <h3 className="font-semibold text-gray-900">Order Summary</h3>
+        <div className="space-y-2">
+          {items.map((item, index) => (
+            <div key={index} className="flex justify-between items-center py-2 border-b border-gray-200 last:border-0">
+              <div className="flex-1">
+                <p className="font-medium text-gray-900">{item.name}</p>
+                <p className="text-sm text-gray-500">${item.price.toFixed(2)} × {item.quantity}</p>
+              </div>
+              <span className="font-medium text-gray-900">
+                ${(item.price * item.quantity).toFixed(2)}
+              </span>
+            </div>
+          ))}
         </div>
-      )}
+        <div className="flex justify-between items-center pt-2 font-semibold text-gray-900">
+          <span>Total</span>
+          <span>${total.toFixed(2)}</span>
+        </div>
+      </div>
 
-      <button
-        type="submit"
-        disabled={!stripe || processing || !cardComplete}
-        className="w-full bg-emerald-600 text-white py-3 px-4 rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
-      >
-        {processing ? (
-          <>
-            <Loader className="animate-spin h-5 w-5 mr-2" />
-            Processing...
-          </>
-        ) : (
-          'Pay Now'
+      {/* Payment Details */}
+      <div className="space-y-4">
+        <h3 className="font-semibold text-gray-900">Payment Details</h3>
+        <div className="p-4 border rounded-lg bg-white">
+          <CardElement
+            options={cardStyle}
+            onChange={(e) => {
+              setCardComplete(e.complete);
+              setError(e.error ? e.error.message : null);
+            }}
+          />
+        </div>
+
+        {error && (
+          <div className="p-3 bg-red-50 text-red-700 rounded-md text-sm">
+            {error}
+          </div>
         )}
-      </button>
 
-      <p className="text-xs text-gray-500 text-center">
-        Secured by Stripe. Your payment information is encrypted and secure.
-      </p>
+        <button
+          type="submit"
+          disabled={!stripe || processing || !cardComplete}
+          className="w-full bg-emerald-600 text-white py-3 px-4 rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
+        >
+          {processing ? (
+            <>
+              <Loader className="animate-spin h-5 w-5 mr-2" />
+              Processing...
+            </>
+          ) : (
+            'Pay Now'
+          )}
+        </button>
+
+        <p className="text-xs text-gray-500 text-center">
+          Secured by Stripe. Your payment information is encrypted and secure.
+        </p>
+      </div>
     </form>
   );
 };
