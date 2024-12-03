@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { X, Loader } from 'lucide-react';
-import { createPaymentRequest } from '../services/payments';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
+import { initializePayment } from '../services/payments';
 
 interface CheckoutModalProps {
   isOpen: boolean;
@@ -10,61 +11,29 @@ interface CheckoutModalProps {
 }
 
 export default function CheckoutModal({ isOpen, onClose, total, onPaymentComplete }: CheckoutModalProps) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [paymentRequest, setPaymentRequest] = useState<any>(null);
+  const stripe = useStripe();
+  const elements = useElements();
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [error, setError] = React.useState<string | null>(null);
 
-  useEffect(() => {
-    let mounted = true;
+  const handlePayment = async (event: React.FormEvent) => {
+    event.preventDefault();
 
-    if (isOpen) {
-      initializePayment();
-    }
-
-    async function initializePayment() {
-      try {
-        setIsLoading(true);
-        setError(null);
-        const request = await createPaymentRequest(total);
-        if (mounted) {
-          setPaymentRequest(request);
-          setIsLoading(false);
-        }
-      } catch (err) {
-        console.error('Payment initialization error:', err);
-        if (mounted) {
-          setError('Failed to initialize payment form. Please try again.');
-          setIsLoading(false);
-        }
-      }
-    }
-
-    return () => {
-      mounted = false;
-      if (paymentRequest?.card) {
-        paymentRequest.card.destroy();
-      }
-    };
-  }, [isOpen, total]);
-
-  const handlePayment = async () => {
-    if (!paymentRequest) {
-      setError('Payment form not initialized');
+    if (!stripe || !elements) {
+      setError('Stripe has not been initialized');
       return;
     }
 
+    setIsLoading(true);
+    setError(null);
+
     try {
-      setIsLoading(true);
-      setError(null);
-      const { token, orderId } = await paymentRequest.tokenize();
-      
-      // Here you would send the token to your server
-      console.log('Payment token:', token, 'Order ID:', orderId);
-      
+      await initializePayment(Math.round(total * 100)); // Convert to cents
       onPaymentComplete();
+      onClose();
     } catch (err) {
       console.error('Payment error:', err);
-      setError('Payment failed. Please try again.');
+      setError(err instanceof Error ? err.message : 'Payment failed. Please try again.');
     } finally {
       setIsLoading(false);
     }
@@ -91,32 +60,51 @@ export default function CheckoutModal({ isOpen, onClose, total, onPaymentComplet
           </div>
         )}
 
-        <div className="mb-6">
-          <div className="flex justify-between mb-4">
-            <span className="text-gray-600">Total Amount:</span>
-            <span className="font-bold text-emerald-600">${total.toFixed(2)}</span>
+        <form onSubmit={handlePayment}>
+          <div className="mb-6">
+            <div className="flex justify-between mb-4">
+              <span className="text-gray-600">Total Amount:</span>
+              <span className="font-bold text-emerald-600">${total.toFixed(2)}</span>
+            </div>
+
+            <div className="mb-4 p-4 border rounded-lg">
+              <CardElement
+                options={{
+                  style: {
+                    base: {
+                      fontSize: '16px',
+                      color: '#424770',
+                      '::placeholder': {
+                        color: '#aab7c4',
+                      },
+                    },
+                    invalid: {
+                      color: '#9e2146',
+                    },
+                  },
+                }}
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={isLoading || !stripe}
+              className="w-full bg-emerald-600 text-white py-3 px-4 rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 flex items-center justify-center"
+            >
+              {isLoading ? (
+                <>
+                  <Loader className="animate-spin h-5 w-5 mr-2" />
+                  Processing...
+                </>
+              ) : (
+                'Pay Now'
+              )}
+            </button>
           </div>
-
-          <div id="card-container" className={`mb-4 p-4 border rounded-lg ${isLoading ? 'opacity-50' : ''}`} />
-
-          <button
-            onClick={handlePayment}
-            disabled={isLoading || !!error}
-            className="w-full bg-emerald-600 text-white py-3 px-4 rounded-lg hover:bg-emerald-700 transition-colors disabled:opacity-50 flex items-center justify-center"
-          >
-            {isLoading ? (
-              <>
-                <Loader className="animate-spin h-5 w-5 mr-2" />
-                Processing...
-              </>
-            ) : (
-              'Pay Now'
-            )}
-          </button>
-        </div>
+        </form>
 
         <p className="text-xs text-gray-500 text-center">
-          Secured by Square Payment Systems. Your payment information is encrypted and secure.
+          Secured by Stripe. Your payment information is encrypted and secure.
         </p>
       </div>
     </div>

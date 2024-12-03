@@ -1,8 +1,8 @@
+import { loadStripe } from '@stripe/stripe-js';
 import { v4 as uuidv4 } from 'uuid';
 
-const SQUARE_APP_ID = import.meta.env.VITE_SQUARE_APP_ID;
-const SQUARE_LOCATION_ID = import.meta.env.VITE_SQUARE_LOCATION_ID;
-const SQUARE_ACCESS_TOKEN = import.meta.env.VITE_SQUARE_ACCESS_TOKEN;
+const STRIPE_PUBLIC_KEY = import.meta.env.VITE_STRIPE_PUBLIC_KEY;
+const stripePromise = loadStripe(STRIPE_PUBLIC_KEY);
 
 interface PaymentRequest {
   amount: number;
@@ -17,7 +17,6 @@ interface CreatePaymentParams {
     quantity: number;
   }>;
   total: number;
-  sourceId: string;
 }
 
 export async function createPaymentRequest(amount: number): Promise<PaymentRequest> {
@@ -30,31 +29,40 @@ export async function createPaymentRequest(amount: number): Promise<PaymentReque
 
 export async function initializePayment(amount: number): Promise<void> {
   try {
-    const payments = await window.Square.payments(SQUARE_APP_ID, SQUARE_LOCATION_ID);
-    const card = await payments.card();
-    await card.attach('#card-container');
+    const stripe = await stripePromise;
+    if (!stripe) throw new Error('Stripe failed to initialize');
 
-    const paymentRequest = await createPaymentRequest(amount);
-
-    const response = await fetch('/api/create-payment', {
+    const response = await fetch('/api/create-payment-intent', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${SQUARE_ACCESS_TOKEN}`,
       },
-      body: JSON.stringify(paymentRequest),
+      body: JSON.stringify({
+        amount,
+        currency: 'USD',
+      }),
     });
 
     if (!response.ok) {
-      throw new Error('Payment creation failed');
+      throw new Error('Payment intent creation failed');
     }
 
-    const result = await card.tokenize();
-    if (result.status === 'OK') {
-      // Process payment with token
-      console.log('Payment successful:', result.token);
-    } else {
-      throw new Error(result.errors[0].message);
+    const { clientSecret } = await response.json();
+
+    const cardElement = document.querySelector('#card-element');
+    if (!cardElement) throw new Error('Card element not found');
+
+    const { error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
+      payment_method: {
+        card: cardElement as any, // Type assertion needed due to DOM element type mismatch
+        billing_details: {
+          name: 'Customer Name', // This should be dynamically set based on user input
+        },
+      },
+    });
+
+    if (confirmError) {
+      throw confirmError;
     }
   } catch (error) {
     console.error('Payment initialization error:', error);
@@ -64,27 +72,33 @@ export async function initializePayment(amount: number): Promise<void> {
 
 export async function createPayment(params: CreatePaymentParams): Promise<void> {
   try {
-    const response = await fetch('/api/process-payment', {
+    const stripe = await stripePromise;
+    if (!stripe) throw new Error('Stripe failed to initialize');
+
+    const response = await fetch('/api/create-payment-intent', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${SQUARE_ACCESS_TOKEN}`,
       },
       body: JSON.stringify({
-        sourceId: params.sourceId,
         amount: params.total * 100, // Convert to cents
         currency: 'USD',
-        idempotencyKey: uuidv4(),
         items: params.items
       }),
     });
 
     if (!response.ok) {
-      throw new Error('Payment processing failed');
+      throw new Error('Payment intent creation failed');
     }
 
-    const result = await response.json();
-    return result;
+    const { clientSecret } = await response.json();
+
+    const { error } = await stripe.confirmCardPayment(clientSecret);
+    if (error) {
+      throw error;
+    }
+
+    return;
   } catch (error) {
     console.error('Payment processing error:', error);
     throw error;

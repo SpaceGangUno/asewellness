@@ -1,4 +1,5 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { CardElement, useStripe, useElements } from '@stripe/react-stripe-js';
 import { initializePayment } from '../services/payments';
 
 interface PaymentFormProps {
@@ -8,33 +9,17 @@ interface PaymentFormProps {
 }
 
 export default function PaymentForm({ amount, onSuccess, onError }: PaymentFormProps) {
+  const stripe = useStripe();
+  const elements = useElements();
   const [isLoading, setIsLoading] = useState(false);
-
-  useEffect(() => {
-    const loadSquareScript = async () => {
-      try {
-        const script = document.createElement('script');
-        script.src = 'https://sandbox.web.squarecdn.com/v1/square.js';
-        script.async = true;
-        document.body.appendChild(script);
-
-        script.onload = async () => {
-          try {
-            await initializePayment(amount);
-          } catch (error) {
-            onError(error as Error);
-          }
-        };
-      } catch (error) {
-        onError(error as Error);
-      }
-    };
-
-    loadSquareScript();
-  }, [amount, onError]);
 
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
+    
+    if (!stripe || !elements) {
+      return;
+    }
+
     setIsLoading(true);
 
     try {
@@ -49,10 +34,27 @@ export default function PaymentForm({ amount, onSuccess, onError }: PaymentFormP
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
-      <div id="card-container" className="min-h-[100px] border rounded-lg p-4"></div>
+      <div className="min-h-[100px] border rounded-lg p-4">
+        <CardElement
+          options={{
+            style: {
+              base: {
+                fontSize: '16px',
+                color: '#424770',
+                '::placeholder': {
+                  color: '#aab7c4',
+                },
+              },
+              invalid: {
+                color: '#9e2146',
+              },
+            },
+          }}
+        />
+      </div>
       <button
         type="submit"
-        disabled={isLoading}
+        disabled={!stripe || isLoading}
         className="w-full bg-emerald-600 text-white py-2 px-4 rounded-lg hover:bg-emerald-700 transition disabled:opacity-50"
       >
         {isLoading ? 'Processing...' : `Pay $${(amount / 100).toFixed(2)}`}
