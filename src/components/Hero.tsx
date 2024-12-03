@@ -47,11 +47,11 @@ export default function Hero() {
             }`}
           >
             <h1 className="text-5xl font-bold tracking-tight leading-[1.1]">
-              <span className="block text-white opacity-90">Natural</span>
+              <span className="block text-white opacity-90">Start</span>
               <span className="block bg-gradient-to-r from-emerald-200 via-emerald-100 to-emerald-200 text-transparent bg-clip-text">
-                Wellness
+                your wellness
               </span>
-              <span className="block text-emerald-400">Journey</span>
+              <span className="block text-emerald-400">journey</span>
             </h1>
             <p className="text-lg text-gray-300 leading-relaxed font-light max-w-md">
               Experience the power of nature through our premium cold-pressed juices.
