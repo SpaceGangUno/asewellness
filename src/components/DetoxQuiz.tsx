@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Sparkles, Battery, Brain, Heart, ShoppingCart, Info, X } from 'lucide-react';
+import { Battery, Brain, Heart, Sparkles, Info, X } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 type QuestionOption = {
@@ -57,7 +57,6 @@ const programIds: Record<string, string> = {
 
 export default function DetoxQuiz() {
   const navigate = useNavigate();
-  const { addToCart } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
@@ -95,47 +94,50 @@ export default function DetoxQuiz() {
 
       {isOpen && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black/80" onClick={resetQuiz} />
-          <div className="relative bg-black/90 backdrop-blur-lg rounded-xl p-8 max-w-xl w-full animate-fade-in border border-emerald-900/30">
+          <div className="absolute inset-0 bg-black/90" onClick={resetQuiz} />
+          <div className="relative bg-black/95 w-full max-w-2xl mx-auto rounded-lg">
             <button
               onClick={resetQuiz}
-              className="absolute top-4 right-4 text-emerald-400 hover:text-emerald-300 transition"
+              className="absolute top-4 right-4 text-emerald-400/80 hover:text-emerald-400 transition"
             >
-              <X className="h-6 w-6" />
+              <X className="h-5 w-5" />
             </button>
             
-            <h3 className="text-2xl font-semibold text-white mb-6">
-              {questions[currentQuestion].question}
-            </h3>
-            
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {questions[currentQuestion].options.map((option) => {
-                const Icon = option.icon;
-                return (
-                  <div key={option.text} className="relative group">
-                    <button
-                      onClick={() => handleAnswer(option.text)}
-                      className="w-full flex flex-col items-center p-6 rounded-xl bg-emerald-950/50 hover:bg-emerald-900/50 border border-emerald-800/30 transition group-hover:border-emerald-600/50"
-                    >
-                      <Icon className="h-8 w-8 text-emerald-400 mb-3 group-hover:scale-110 transition duration-300" />
-                      <span className="text-white text-lg">{option.text}</span>
-                    </button>
-                    <button
-                      onClick={() => setShowInfo(showInfo === option.text ? null : option.text)}
-                      className="absolute top-3 right-3 p-1.5 rounded-full bg-emerald-900/50 hover:bg-emerald-800/50 transition"
-                    >
-                      <Info className="h-4 w-4 text-emerald-400" />
-                    </button>
-                    {showInfo === option.text && (
-                      <div className="absolute z-10 top-full left-0 right-0 mt-2 p-4 bg-emerald-950/90 backdrop-blur-sm rounded-lg border border-emerald-800/30 shadow-xl">
-                        <p className="text-sm text-emerald-300">
-                          {option.info}
-                        </p>
-                      </div>
-                    )}
-                  </div>
-                );
-              })}
+            <div className="p-8">
+              <h3 className="text-2xl text-white mb-8">
+                {questions[currentQuestion].question}
+              </h3>
+              
+              <div className="grid grid-cols-2 gap-4">
+                {questions[currentQuestion].options.map((option) => {
+                  const Icon = option.icon;
+                  return (
+                    <div key={option.text} className="relative">
+                      <button
+                        onClick={() => handleAnswer(option.text)}
+                        className="w-full h-32 flex flex-col items-center justify-center bg-emerald-950/50 hover:bg-emerald-900/50 rounded-lg transition group relative"
+                      >
+                        <Icon className="h-8 w-8 text-emerald-400 mb-3" />
+                        <span className="text-white text-lg">{option.text}</span>
+                      </button>
+                      <button
+                        onClick={() => setShowInfo(showInfo === option.text ? null : option.text)}
+                        className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full"
+                        aria-label="More information"
+                      >
+                        <Info className="h-4 w-4 text-emerald-400/80" />
+                      </button>
+                      {showInfo === option.text && (
+                        <div className="absolute z-10 top-full left-0 right-0 mt-2 p-3 bg-emerald-950/90 rounded-lg">
+                          <p className="text-sm text-emerald-300">
+                            {option.info}
+                          </p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
             </div>
           </div>
         </div>
