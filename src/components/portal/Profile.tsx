@@ -56,12 +56,6 @@ export default function Profile() {
     e.preventDefault();
     if (!user) return;
 
-    // Check if email is verified
-    if (!user.emailVerified) {
-      setError('Please verify your email address before updating your profile.');
-      return;
-    }
-
     // Validate required fields
     if (!profile.name.trim()) {
       setError('Name is required');
@@ -77,23 +71,17 @@ export default function Profile() {
     setError('');
 
     try {
-      // Get existing user data to preserve fields
-      const existingUser = await firestoreService.getUser(user.uid);
-      
-      // Create update object with all required fields
+      // Create initial user data if it doesn't exist
       const updates: Partial<UserType> = {
         id: user.uid,
         name: profile.name.trim(),
+        email: user.email || profile.email.trim(),
         phone: profile.phone.trim(),
         address: profile.address.trim(),
-        // Preserve existing data
-        points: existingUser?.points || 0,
-        email: existingUser?.email || user.email || '', // Keep existing email
-        createdAt: existingUser?.createdAt || new Date(),
-        updatedAt: new Date()
+        points: userData?.points || 0,
       };
 
-      await firestoreService.updateUser(user.uid, updates);
+      await firestoreService.createUser(user.uid, updates);
       
       // Show success message
       setError('Profile updated successfully!');
@@ -118,7 +106,8 @@ export default function Profile() {
     <div className="p-8">
       {!user?.emailVerified && (
         <div className="mb-6 p-4 bg-yellow-50 border border-yellow-200 text-yellow-800 rounded-xl">
-          Please verify your email address to update your profile. Check your inbox for the verification link.
+          <p>Please verify your email address to access all features. Check your inbox for the verification link.</p>
+          <p className="mt-2">You can still update your profile information while waiting for verification.</p>
         </div>
       )}
 
@@ -242,7 +231,7 @@ export default function Profile() {
 
             <button
               type="submit"
-              disabled={isSaving || !user?.emailVerified}
+              disabled={isSaving}
               className="w-full bg-gradient-to-r from-emerald-600 to-emerald-400 text-white py-3 px-4 rounded-xl hover:opacity-90 transition-opacity duration-200 disabled:opacity-50"
             >
               {isSaving ? 'Updating...' : 'Update Profile'}
