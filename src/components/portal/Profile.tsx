@@ -16,17 +16,18 @@ export default function Profile() {
     address: ''
   });
 
-  // Update profile state when userData changes
+  // Update profile state when userData or user changes
   useEffect(() => {
-    if (userData) {
-      setProfile({
-        name: userData.name || '',
-        email: userData.email || '',
-        phone: userData.phone || '',
-        address: userData.address || ''
-      });
-    }
-  }, [userData]);
+    // Prioritize Google auth email if available
+    const email = user?.email || userData?.email || '';
+    
+    setProfile({
+      name: userData?.name || user?.displayName || '',
+      email: email,
+      phone: userData?.phone || '',
+      address: userData?.address || ''
+    });
+  }, [userData, user]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -119,8 +120,14 @@ export default function Profile() {
                     value={profile.email}
                     onChange={(e) => setProfile({ ...profile, email: e.target.value })}
                     className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
+                    readOnly={!!user?.email} // Make email readonly if it came from Google auth
                   />
                 </div>
+                {user?.email && (
+                  <p className="mt-1 text-sm text-gray-500">
+                    Email is linked to your Google account
+                  </p>
+                )}
               </div>
 
               <div>
