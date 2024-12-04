@@ -11,6 +11,7 @@ export default function Profile() {
   const { userData, loading } = useUserData();
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
+  const [isAddressSelected, setIsAddressSelected] = useState(false);
   const addressInputRef = useRef<HTMLInputElement>(null);
   const [profile, setProfile] = useState({
     name: '',
@@ -30,6 +31,11 @@ export default function Profile() {
       phone: userData?.phone || '',
       address: userData?.address || ''
     });
+
+    // If there's an existing address, mark it as selected
+    if (userData?.address) {
+      setIsAddressSelected(true);
+    }
   }, [userData, user]);
 
   // Initialize address autocomplete
@@ -39,7 +45,13 @@ export default function Profile() {
       ...prev,
       address: result.formattedAddress
     }));
+    setIsAddressSelected(true);
   });
+
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setProfile(prev => ({ ...prev, address: e.target.value }));
+    setIsAddressSelected(false);
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -53,6 +65,12 @@ export default function Profile() {
 
     if (!profile.address.trim()) {
       setError('Address is required');
+      return;
+    }
+
+    // Warn if address hasn't been selected from suggestions
+    if (!isAddressSelected && !autocompleteError) {
+      setError('Please select an address from the suggestions');
       return;
     }
 
@@ -199,16 +217,20 @@ export default function Profile() {
                     ref={addressInputRef}
                     type="text"
                     value={profile.address}
-                    onChange={(e) => setProfile({ ...profile, address: e.target.value })}
+                    onChange={handleAddressChange}
                     placeholder="Start typing your address..."
-                    className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
+                    className={`block w-full pl-10 pr-3 py-3 border rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200 ${
+                      isAddressSelected ? 'border-emerald-200 bg-emerald-50' : 'border-gray-200'
+                    }`}
                     required
                   />
                 </div>
                 <p className="mt-1 text-sm text-gray-500">
                   {autocompleteError 
                     ? "Enter your full address including street, city, state, and ZIP code"
-                    : "Start typing to see address suggestions"}
+                    : isAddressSelected
+                      ? "✓ Address selected"
+                      : "Start typing to see address suggestions"}
                 </p>
               </div>
             </div>
