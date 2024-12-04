@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Sparkles, Battery, Brain, Heart, ShoppingCart } from 'lucide-react';
+import { Sparkles, Battery, Brain, Heart, ShoppingCart, Info } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 const questions = [
@@ -7,51 +7,83 @@ const questions = [
     id: 1,
     question: "What's your main wellness goal?",
     options: [
-      { text: "Boost Energy", icon: Battery },
-      { text: "Mental Clarity", icon: Brain },
-      { text: "Digestive Health", icon: Heart },
-      { text: "Overall Detox", icon: Sparkles }
+      { text: "Boost Energy", icon: Battery, info: "Natural energy enhancement through carefully selected ingredients" },
+      { text: "Mental Clarity", icon: Brain, info: "Support cognitive function and reduce mental fatigue" },
+      { text: "Digestive Health", icon: Heart, info: "Improve gut health and digestive wellness" },
+      { text: "Overall Detox", icon: Sparkles, info: "Comprehensive cleansing and body reset" }
     ]
   },
   {
     id: 2,
     question: "How would you describe your current lifestyle?",
     options: [
-      { text: "Always on the go", icon: Battery },
-      { text: "Mostly sedentary", icon: Brain },
-      { text: "Balanced but need boost", icon: Heart },
-      { text: "Stressed and tired", icon: Sparkles }
+      { text: "Always on the go", icon: Battery, info: "Solutions for busy, active lifestyles" },
+      { text: "Mostly sedentary", icon: Brain, info: "Products to boost vitality and movement" },
+      { text: "Balanced but need boost", icon: Heart, info: "Enhancement for your wellness routine" },
+      { text: "Stressed and tired", icon: Sparkles, info: "Relief and rejuvenation focused products" }
     ]
   },
   {
     id: 3,
     question: "What's your experience with detox programs?",
     options: [
-      { text: "First timer", icon: Battery },
-      { text: "Occasional", icon: Brain },
-      { text: "Regular", icon: Heart },
-      { text: "Expert", icon: Sparkles }
+      { text: "First timer", icon: Battery, info: "Gentle introduction to detox programs" },
+      { text: "Occasional", icon: Brain, info: "Moderate intensity cleansing" },
+      { text: "Regular", icon: Heart, info: "Advanced detox solutions" },
+      { text: "Expert", icon: Sparkles, info: "Professional-grade wellness programs" }
     ]
   }
 ];
 
-const recommendations = {
-  "Boost Energy-Always on the go-First timer": {
-    name: "Energize & Revive Program",
-    description: "A gentle introduction to detoxing with focus on natural energy boosters.",
+type Product = {
+  name: string;
+  price: number;
+  description: string;
+};
+
+type Program = {
+  name: string;
+  description: string;
+  products: Product[];
+};
+
+type ProgramKey = "Boost Energy" | "Mental Clarity" | "Digestive Health" | "Overall Detox";
+
+const recommendations: Record<ProgramKey, Program> = {
+  "Boost Energy": {
+    name: "Energy Enhancement Program",
+    description: "Elevate your energy levels naturally with our carefully crafted selection.",
     products: [
-      { name: "Morning Sunrise Juice", price: 9.99 },
-      { name: "Green Energy Blend", price: 8.99 },
-      { name: "Citrus Boost Tea", price: 7.99 }
+      { name: "Energy Booster Juice", price: 12.99, description: "Packed with beets, ginger, and citrus for a natural energy lift" },
+      { name: "Green Wellness Tea", price: 9.99, description: "Infused with matcha and ginseng to maintain energy throughout the day" },
+      { name: "Replenishing Recovery Juice", price: 10.99, description: "For post-work energy restoration" }
     ]
   },
-  "Mental Clarity-Mostly sedentary-Occasional": {
-    name: "Mind & Body Reset",
-    description: "Perfect for mental focus and gentle cleansing.",
+  "Mental Clarity": {
+    name: "Mental Focus Program",
+    description: "Enhance cognitive function and mental clarity with our specialized blends.",
     products: [
-      { name: "Brain Boost Elixir", price: 10.99 },
-      { name: "Clarity Tea Blend", price: 8.99 },
-      { name: "Focus Factor Juice", price: 9.99 }
+      { name: "Focus & Clarity Blend", price: 13.99, description: "A juice with turmeric, lemon, and blueberries to boost brain function" },
+      { name: "Herbal Calming Tea", price: 8.99, description: "Ingredients like chamomile and ashwagandha for stress reduction" },
+      { name: "Brain Boost Shot", price: 5.99, description: "A small concentrated shot with ginkgo biloba and green tea extract" }
+    ]
+  },
+  "Digestive Health": {
+    name: "Digestive Wellness Program",
+    description: "Support your gut health with our specially formulated products.",
+    products: [
+      { name: "Gut Cleanse Juice", price: 11.99, description: "A blend of green apple, celery, and aloe vera for gut health" },
+      { name: "Probiotic Wellness Tea", price: 8.99, description: "Supports digestion with probiotics and peppermint" },
+      { name: "Fiber Boost Shot", price: 4.99, description: "With chia seeds and ginger to regulate digestion" }
+    ]
+  },
+  "Overall Detox": {
+    name: "Complete Detox Program",
+    description: "A comprehensive approach to full-body cleansing and renewal.",
+    products: [
+      { name: "Detoxifying Green Blend", price: 12.99, description: "With spinach, kale, and parsley for a full-body cleanse" },
+      { name: "Liver Cleanse Tea", price: 8.99, description: "With milk thistle and dandelion to support liver function" },
+      { name: "Hydration Recovery Juice", price: 9.99, description: "Coconut water, cucumber, and mint for hydration" }
     ]
   }
 };
@@ -61,8 +93,9 @@ export default function DetoxQuiz() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
-  const [recommendation, setRecommendation] = useState<any>(null);
+  const [recommendation, setRecommendation] = useState<Program | null>(null);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [showInfo, setShowInfo] = useState<string | null>(null);
 
   const handleAnswer = (answer: string) => {
     const newAnswers = [...answers, answer];
@@ -71,16 +104,9 @@ export default function DetoxQuiz() {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      const key = newAnswers.join("-");
-      setRecommendation(recommendations[key as keyof typeof recommendations] || {
-        name: "Custom Wellness Program",
-        description: "A personalized program tailored to your unique needs.",
-        products: [
-          { name: "Premium Detox Blend", price: 11.99 },
-          { name: "Wellness Tea", price: 8.99 },
-          { name: "Recovery Juice", price: 9.99 }
-        ]
-      });
+      // Use the primary wellness goal (first answer) to determine the program
+      const programKey = newAnswers[0] as ProgramKey;
+      setRecommendation(recommendations[programKey] || recommendations["Overall Detox"]);
     }
   };
 
@@ -89,13 +115,16 @@ export default function DetoxQuiz() {
     setAnswers([]);
     setRecommendation(null);
     setAddedToCart(false);
+    setShowInfo(null);
   };
 
   const handleAddToCart = () => {
-    recommendation.products.forEach((product: { name: string; price: number }) => {
-      addToCart({ name: product.name, price: product.price, quantity: 1 });
-    });
-    setAddedToCart(true);
+    if (recommendation) {
+      recommendation.products.forEach((product) => {
+        addToCart({ name: product.name, price: product.price, quantity: 1 });
+      });
+      setAddedToCart(true);
+    }
   };
 
   return (
@@ -117,18 +146,30 @@ export default function DetoxQuiz() {
               <h3 className="text-xl font-semibold text-emerald-900 mb-4">
                 {questions[currentQuestion].question}
               </h3>
-              <div className="grid grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {questions[currentQuestion].options.map((option) => {
                   const Icon = option.icon;
                   return (
-                    <button
-                      key={option.text}
-                      onClick={() => handleAnswer(option.text)}
-                      className="flex flex-col items-center p-4 rounded-lg bg-emerald-50 hover:bg-emerald-100 transition"
-                    >
-                      <Icon className="h-8 w-8 text-emerald-600 mb-2" />
-                      <span className="text-emerald-900">{option.text}</span>
-                    </button>
+                    <div key={option.text} className="relative">
+                      <button
+                        onClick={() => handleAnswer(option.text)}
+                        className="w-full flex flex-col items-center p-4 rounded-lg bg-emerald-50 hover:bg-emerald-100 transition"
+                      >
+                        <Icon className="h-8 w-8 text-emerald-600 mb-2" />
+                        <span className="text-emerald-900">{option.text}</span>
+                      </button>
+                      <button
+                        onClick={() => setShowInfo(showInfo === option.text ? null : option.text)}
+                        className="absolute top-2 right-2 p-1 rounded-full bg-emerald-100 hover:bg-emerald-200 transition"
+                      >
+                        <Info className="h-4 w-4 text-emerald-600" />
+                      </button>
+                      {showInfo === option.text && (
+                        <div className="absolute z-10 top-full left-0 right-0 mt-2 p-3 bg-white rounded-lg shadow-lg text-sm text-emerald-800">
+                          {option.info}
+                        </div>
+                      )}
+                    </div>
                   );
                 })}
               </div>
@@ -139,11 +180,14 @@ export default function DetoxQuiz() {
                 {recommendation.name}
               </h3>
               <p className="text-emerald-700 mb-6">{recommendation.description}</p>
-              <div className="space-y-2 mb-6">
-                {recommendation.products.map((product: { name: string; price: number }) => (
-                  <div key={product.name} className="bg-emerald-50 p-3 rounded flex justify-between items-center">
-                    <span>{product.name}</span>
-                    <span className="font-semibold">${product.price.toFixed(2)}</span>
+              <div className="space-y-4 mb-6">
+                {recommendation.products.map((product) => (
+                  <div key={product.name} className="bg-emerald-50 p-4 rounded-lg">
+                    <div className="flex justify-between items-center mb-2">
+                      <span className="font-semibold text-emerald-900">{product.name}</span>
+                      <span className="font-bold text-emerald-600">${product.price.toFixed(2)}</span>
+                    </div>
+                    <p className="text-sm text-emerald-700 text-left">{product.description}</p>
                   </div>
                 ))}
               </div>
