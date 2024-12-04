@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Sparkles, Leaf, Battery, ChevronDown } from 'lucide-react';
+import DetoxQuiz from './DetoxQuiz';
 
 const benefits = [
   { icon: Sparkles, text: "Total Body Reset" },
@@ -10,6 +11,7 @@ const benefits = [
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);
   const [scrollY, setScrollY] = useState(0);
+  const [isQuizOpen, setIsQuizOpen] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
@@ -80,17 +82,33 @@ export default function Hero() {
           </div>
 
           <div 
-            className={`absolute left-1/2 -translate-x-1/2 bottom-8 transition-all duration-500 ${
-              isVisible && scrollY < 100 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+            className={`flex flex-col items-center space-y-6 transition-all duration-1000 delay-700 ${
+              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            <div className="flex flex-col items-center space-y-0.5">
-              <span className="text-xs font-medium text-emerald-300/80">Scroll to explore</span>
-              <ChevronDown className="w-4 h-4 text-emerald-300/80 animate-bounce" />
+            <button
+              onClick={() => setIsQuizOpen(true)}
+              className="bg-white text-emerald-600 px-8 py-3 rounded-full hover:bg-emerald-50 transition flex items-center space-x-2"
+            >
+              <Sparkles className="h-5 w-5" />
+              <span>Find Your Perfect Detox</span>
+            </button>
+
+            <div 
+              className={`transition-all duration-500 ${
+                isVisible && scrollY < 100 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
+              }`}
+            >
+              <div className="flex flex-col items-center space-y-0.5">
+                <span className="text-xs font-medium text-emerald-300/80">Scroll to explore</span>
+                <ChevronDown className="w-4 h-4 text-emerald-300/80 animate-bounce" />
+              </div>
             </div>
           </div>
         </div>
       </div>
+
+      <DetoxQuiz isOpen={isQuizOpen} onClose={() => setIsQuizOpen(false)} />
     </div>
   );
 }
