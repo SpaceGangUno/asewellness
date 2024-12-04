@@ -3,6 +3,7 @@ import { User, Mail, Phone, MapPin, Bell, Shield } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useUserData } from '../../hooks/useFirestore';
 import * as firestoreService from '../../services/firestore';
+import type { User as UserType } from '../../types/models';
 
 export default function Profile() {
   const { user } = useAuth();
@@ -37,16 +38,19 @@ export default function Profile() {
     setError('');
 
     try {
-      // Preserve existing user data and only update the fields that are in the form
-      const updatedUserData = {
-        ...userData,
+      // Create a partial user update object
+      const updates: Partial<UserType> = {
         name: profile.name,
-        email: profile.email,
         phone: profile.phone,
         address: profile.address,
       };
 
-      await firestoreService.updateUser(user.uid, updatedUserData);
+      // If the email is not from Google auth, update it too
+      if (!user.email) {
+        updates.email = profile.email;
+      }
+
+      await firestoreService.updateUser(user.uid, updates);
       
       // Force a refresh of the userData
       window.location.reload();
