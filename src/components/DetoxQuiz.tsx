@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Battery, Brain, Heart, Sparkles, Info, X } from 'lucide-react';
+import { Battery, Brain, Heart, Sparkles, X } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 type QuestionOption = {
@@ -60,7 +60,6 @@ export default function DetoxQuiz() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
-  const [showInfo, setShowInfo] = useState<string | null>(null);
 
   const handleAnswer = (answer: string) => {
     const newAnswers = [...answers, answer];
@@ -78,7 +77,6 @@ export default function DetoxQuiz() {
   const resetQuiz = () => {
     setCurrentQuestion(0);
     setAnswers([]);
-    setShowInfo(null);
     setIsOpen(false);
   };
 
@@ -93,17 +91,17 @@ export default function DetoxQuiz() {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
           <div className="absolute inset-0 bg-black/90" onClick={resetQuiz} />
-          <div className="relative bg-black/95 w-full max-w-2xl mx-auto rounded-lg">
+          <div className="relative w-full max-w-2xl mx-auto p-8">
             <button
               onClick={resetQuiz}
-              className="absolute top-4 right-4 text-emerald-400/80 hover:text-emerald-400 transition"
+              className="absolute -top-2 -right-2 w-8 h-8 flex items-center justify-center text-emerald-400/80 hover:text-emerald-400 transition z-10"
             >
-              <X className="h-5 w-5" />
+              <X className="h-6 w-6" />
             </button>
             
-            <div className="p-8">
+            <div className="bg-black/95 rounded-lg p-8">
               <h3 className="text-2xl text-white mb-8">
                 {questions[currentQuestion].question}
               </h3>
@@ -112,29 +110,17 @@ export default function DetoxQuiz() {
                 {questions[currentQuestion].options.map((option) => {
                   const Icon = option.icon;
                   return (
-                    <div key={option.text} className="relative">
-                      <button
-                        onClick={() => handleAnswer(option.text)}
-                        className="w-full h-32 flex flex-col items-center justify-center bg-emerald-950/50 hover:bg-emerald-900/50 rounded-lg transition group relative"
-                      >
-                        <Icon className="h-8 w-8 text-emerald-400 mb-3" />
-                        <span className="text-white text-lg">{option.text}</span>
-                      </button>
-                      <button
-                        onClick={() => setShowInfo(showInfo === option.text ? null : option.text)}
-                        className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center rounded-full"
-                        aria-label="More information"
-                      >
-                        <Info className="h-4 w-4 text-emerald-400/80" />
-                      </button>
-                      {showInfo === option.text && (
-                        <div className="absolute z-10 top-full left-0 right-0 mt-2 p-3 bg-emerald-950/90 rounded-lg">
-                          <p className="text-sm text-emerald-300">
-                            {option.info}
-                          </p>
-                        </div>
-                      )}
-                    </div>
+                    <button
+                      key={option.text}
+                      onClick={() => handleAnswer(option.text)}
+                      className="relative h-[140px] flex flex-col items-center justify-center bg-emerald-950/50 hover:bg-emerald-900/50 rounded-lg transition group"
+                    >
+                      <Icon className="h-10 w-10 text-emerald-400 mb-4" />
+                      <span className="text-white text-lg">{option.text}</span>
+                      <div className="absolute top-2 right-2 w-6 h-6 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="w-1 h-1 rounded-full bg-emerald-400/80" />
+                      </div>
+                    </button>
                   );
                 })}
               </div>
