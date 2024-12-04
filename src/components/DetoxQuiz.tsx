@@ -88,7 +88,7 @@ export default function DetoxQuiz({ isOpen, onClose }: DetoxQuizProps) {
 
   return (
     <div className="fixed inset-0 z-[60]">
-      <div className="absolute inset-0 bg-black" />
+      <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={resetQuiz} />
       <button
         onClick={resetQuiz}
         className="absolute top-4 right-4 text-emerald-400/60 hover:text-emerald-400/80 transition z-10"
@@ -108,7 +108,7 @@ export default function DetoxQuiz({ isOpen, onClose }: DetoxQuizProps) {
               <button
                 key={option.text}
                 onClick={() => handleAnswer(option.text)}
-                className="relative aspect-[4/3] flex flex-col items-center justify-center bg-[#001A12] hover:bg-[#002A1E] rounded-lg transition group"
+                className="relative aspect-[4/3] flex flex-col items-center justify-center bg-emerald-950/30 hover:bg-emerald-900/30 rounded-lg transition group"
               >
                 <Icon className="h-12 w-12 text-emerald-400 mb-4" />
                 <span className="text-white text-lg">{option.text}</span>
