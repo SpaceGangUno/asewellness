@@ -34,6 +34,7 @@ export default function Profile() {
 
   // Initialize address autocomplete
   const { error: autocompleteError } = useAddressAutocomplete(addressInputRef, (result) => {
+    console.log('Address selected:', result);
     setProfile(prev => ({
       ...prev,
       address: result.formattedAddress
@@ -44,26 +45,37 @@ export default function Profile() {
     e.preventDefault();
     if (!user) return;
 
+    // Validate required fields
+    if (!profile.name.trim()) {
+      setError('Name is required');
+      return;
+    }
+
+    if (!profile.address.trim()) {
+      setError('Address is required');
+      return;
+    }
+
     setIsSaving(true);
     setError('');
 
     try {
       // Only include fields that are actually being updated
       const updates: Partial<UserType> = {
-        name: profile.name || userData?.name || '',
-        phone: profile.phone,
-        address: profile.address,
+        name: profile.name.trim(),
+        phone: profile.phone.trim(),
+        address: profile.address.trim(),
         points: userData?.points || 0, // Preserve existing points
       };
 
       // Only include email if it's not from Google auth and has changed
       if (!user.email && profile.email !== userData?.email) {
-        updates.email = profile.email;
+        updates.email = profile.email.trim();
       }
 
       await firestoreService.updateUser(user.uid, updates);
       
-      // Show success message instead of reloading
+      // Show success message
       setError('Profile updated successfully!');
       setTimeout(() => setError(''), 3000);
     } catch (error) {
@@ -110,7 +122,7 @@ export default function Profile() {
 
           {autocompleteError && (
             <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 text-yellow-600 rounded-xl">
-              Address autocomplete is currently unavailable. You can still type your address manually.
+              Address suggestions are currently unavailable. You can still type your address manually.
             </div>
           )}
 
@@ -118,7 +130,7 @@ export default function Profile() {
             <div className="grid md:grid-cols-2 gap-6">
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Full Name
+                  Full Name <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
@@ -129,6 +141,7 @@ export default function Profile() {
                     value={profile.name}
                     onChange={(e) => setProfile({ ...profile, name: e.target.value })}
                     className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
+                    required
                   />
                 </div>
               </div>
@@ -169,13 +182,14 @@ export default function Profile() {
                     value={profile.phone}
                     onChange={(e) => setProfile({ ...profile, phone: e.target.value })}
                     className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
+                    placeholder="(123) 456-7890"
                   />
                 </div>
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Address
+                  Address <span className="text-red-500">*</span>
                 </label>
                 <div className="relative">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center">
@@ -188,10 +202,13 @@ export default function Profile() {
                     onChange={(e) => setProfile({ ...profile, address: e.target.value })}
                     placeholder="Start typing your address..."
                     className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
+                    required
                   />
                 </div>
                 <p className="mt-1 text-sm text-gray-500">
-                  Start typing to see address suggestions
+                  {autocompleteError 
+                    ? "Enter your full address including street, city, state, and ZIP code"
+                    : "Start typing to see address suggestions"}
                 </p>
               </div>
             </div>
