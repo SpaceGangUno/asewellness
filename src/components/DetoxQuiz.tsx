@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Battery, Brain, Heart, Sparkles, X } from 'lucide-react';
+import { Battery, Brain, Heart, Sparkles, X, ArrowLeft } from 'lucide-react';
 import { useCart } from '../context/CartContext';
+import clsx from 'clsx';
 
 type QuestionOption = {
   text: string;
@@ -66,7 +67,8 @@ export default function DetoxQuiz({ isOpen, onClose }: DetoxQuizProps) {
   const [answers, setAnswers] = useState<string[]>([]);
 
   const handleAnswer = (answer: string) => {
-    const newAnswers = [...answers, answer];
+    const newAnswers = [...answers];
+    newAnswers[currentQuestion] = answer;
     setAnswers(newAnswers);
 
     if (currentQuestion < questions.length - 1) {
@@ -75,6 +77,12 @@ export default function DetoxQuiz({ isOpen, onClose }: DetoxQuizProps) {
       // Navigate to detox page with the selected program
       navigate(`/detox?program=${programIds[newAnswers[0]]}`);
       resetQuiz();
+    }
+  };
+
+  const handleBack = () => {
+    if (currentQuestion > 0) {
+      setCurrentQuestion(currentQuestion - 1);
     }
   };
 
@@ -89,28 +97,65 @@ export default function DetoxQuiz({ isOpen, onClose }: DetoxQuizProps) {
   return (
     <div className="fixed inset-0 z-[60]">
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={resetQuiz} />
-      <button
-        onClick={resetQuiz}
-        className="absolute top-4 right-4 text-emerald-400/60 hover:text-emerald-400/80 transition z-10"
-      >
-        <X className="h-6 w-6" />
-      </button>
+      <div className="absolute top-4 left-4 right-4 flex justify-between z-10">
+        {currentQuestion > 0 ? (
+          <button
+            onClick={handleBack}
+            className="text-emerald-400/60 hover:text-emerald-400/80 transition flex items-center space-x-2"
+          >
+            <ArrowLeft className="h-5 w-5" />
+            <span>Back</span>
+          </button>
+        ) : (
+          <div /> /* Empty div to maintain layout */
+        )}
+        <button
+          onClick={resetQuiz}
+          className="text-emerald-400/60 hover:text-emerald-400/80 transition"
+        >
+          <X className="h-6 w-6" />
+        </button>
+      </div>
       
       <div className="relative h-full flex flex-col justify-center px-6">
-        <h3 className="text-[28px] text-white mb-8 leading-tight">
-          {questions[currentQuestion].question}
-        </h3>
+        <div className="mb-8">
+          <div className="flex justify-center space-x-2 mb-4">
+            {questions.map((_, index) => (
+              <div
+                key={index}
+                className={clsx(
+                  'h-1 rounded-full transition-all duration-300',
+                  index === currentQuestion && 'w-8 bg-emerald-400',
+                  index < currentQuestion && 'w-8 bg-emerald-400/50',
+                  index > currentQuestion && 'w-2 bg-emerald-400/30'
+                )}
+              />
+            ))}
+          </div>
+          <h3 className="text-[28px] text-white leading-tight text-center">
+            {questions[currentQuestion].question}
+          </h3>
+        </div>
         
         <div className="grid grid-cols-2 gap-4">
           {questions[currentQuestion].options.map((option) => {
             const Icon = option.icon;
+            const isSelected = answers[currentQuestion] === option.text;
             return (
               <button
                 key={option.text}
                 onClick={() => handleAnswer(option.text)}
-                className="relative aspect-[4/3] flex flex-col items-center justify-center bg-emerald-950/30 hover:bg-emerald-900/30 rounded-lg transition group"
+                className={clsx(
+                  'relative aspect-[4/3] flex flex-col items-center justify-center rounded-lg transition group',
+                  isSelected
+                    ? 'bg-emerald-600/30 border-2 border-emerald-400'
+                    : 'bg-emerald-950/30 hover:bg-emerald-900/30 border border-emerald-900/30'
+                )}
               >
-                <Icon className="h-12 w-12 text-emerald-400 mb-4" />
+                <Icon className={clsx(
+                  'h-12 w-12 mb-4 transition-colors duration-300',
+                  isSelected ? 'text-emerald-300' : 'text-emerald-400'
+                )} />
                 <span className="text-white text-lg">{option.text}</span>
                 <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-emerald-400/60 opacity-0 group-hover:opacity-100 transition-opacity" />
               </button>
