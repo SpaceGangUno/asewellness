@@ -6,6 +6,7 @@ import Products from './pages/Products';
 import Process from './pages/Process';
 import Benefits from './pages/Benefits';
 import ClientPortal from './pages/ClientPortal';
+import Detox from './pages/Detox';
 import Footer from './components/Footer';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
@@ -33,6 +34,7 @@ function App() {
                   <Route path="/process" element={<Process />} />
                   <Route path="/benefits" element={<Benefits />} />
                   <Route path="/portal/*" element={<ClientPortal />} />
+                  <Route path="/detox" element={<Detox />} />
                 </Routes>
               </div>
               <Footer />
