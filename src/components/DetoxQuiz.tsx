@@ -99,7 +99,7 @@ export default function DetoxQuiz() {
   };
 
   return (
-    <div className="mt-8">
+    <div className="mt-8 flex justify-center">
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
