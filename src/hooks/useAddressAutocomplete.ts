@@ -20,13 +20,33 @@ export const useAddressAutocomplete = (
 ) => {
   const [error, setError] = useState<string | null>(null);
   const autocompleteRef = useRef<google.maps.places.Autocomplete | null>(null);
+  const [isInitialized, setIsInitialized] = useState(false);
 
+  // Initialize Google Maps script
   useEffect(() => {
-    if (!inputRef.current || !window.google) {
-      console.log('Dependencies not ready:', { 
-        hasInput: !!inputRef.current, 
-        hasGoogle: !!window.google 
-      });
+    const script = document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]');
+    if (!script) {
+      const apiKey = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+      if (!apiKey) {
+        setError('Google Maps API key is missing');
+        return;
+      }
+
+      const newScript = document.createElement('script');
+      newScript.src = `https://maps.googleapis.com/maps/api/js?key=${apiKey}&libraries=places`;
+      newScript.async = true;
+      newScript.defer = true;
+      newScript.onload = () => setIsInitialized(true);
+      newScript.onerror = () => setError('Failed to load Google Maps script');
+      document.head.appendChild(newScript);
+    } else {
+      setIsInitialized(true);
+    }
+  }, []);
+
+  // Initialize autocomplete
+  useEffect(() => {
+    if (!isInitialized || !inputRef.current || error) {
       return;
     }
 
@@ -43,10 +63,7 @@ export const useAddressAutocomplete = (
       // Handle place selection
       const handlePlaceSelect = () => {
         const place = autocomplete.getPlace();
-        console.log('Selected place:', place);
-
         if (!place.address_components) {
-          console.warn('No address components found');
           return;
         }
 
@@ -91,7 +108,6 @@ export const useAddressAutocomplete = (
           }
         }
 
-        console.log('Calling onSelect with:', { formattedAddress, components: addressComponents });
         onSelect({
           formattedAddress,
           components: addressComponents
@@ -112,7 +128,7 @@ export const useAddressAutocomplete = (
       console.error('Error initializing autocomplete:', err);
       setError('Failed to initialize address autocomplete');
     }
-  }, [inputRef, onSelect]);
+  }, [isInitialized, inputRef, onSelect, error]);
 
   // Prevent form submission on enter key
   useEffect(() => {
