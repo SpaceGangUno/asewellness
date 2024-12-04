@@ -91,32 +91,32 @@ export default function DetoxQuiz() {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6 md:p-8">
           <div className="absolute inset-0 bg-black" onClick={resetQuiz} />
-          <div className="relative w-full max-w-3xl mx-auto px-4">
+          <div className="relative w-full max-w-2xl mx-auto">
             <button
               onClick={resetQuiz}
-              className="absolute top-2 right-2 w-8 h-8 flex items-center justify-center text-emerald-400/60 hover:text-emerald-400/80 transition z-10"
+              className="absolute -top-2 -right-2 w-8 h-8 flex items-center justify-center text-emerald-400/60 hover:text-emerald-400/80 transition z-10"
             >
               <X className="h-5 w-5" />
             </button>
             
-            <div className="bg-black rounded-lg p-8">
-              <h3 className="text-2xl text-white mb-10">
+            <div className="bg-black rounded-lg p-6 sm:p-8">
+              <h3 className="text-2xl text-white mb-8">
                 {questions[currentQuestion].question}
               </h3>
               
-              <div className="grid grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                 {questions[currentQuestion].options.map((option) => {
                   const Icon = option.icon;
                   return (
                     <button
                       key={option.text}
                       onClick={() => handleAnswer(option.text)}
-                      className="relative h-[160px] flex flex-col items-center justify-center bg-emerald-950/30 hover:bg-emerald-900/30 rounded-lg transition group"
+                      className="relative h-[120px] sm:h-[140px] flex flex-col items-center justify-center bg-emerald-950/30 hover:bg-emerald-900/30 rounded-lg transition group"
                     >
-                      <Icon className="h-12 w-12 text-emerald-400 mb-4" />
-                      <span className="text-white text-lg">{option.text}</span>
+                      <Icon className="h-10 w-10 sm:h-12 sm:w-12 text-emerald-400 mb-3 sm:mb-4" />
+                      <span className="text-white text-base sm:text-lg">{option.text}</span>
                       <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-emerald-400/60 opacity-0 group-hover:opacity-100 transition-opacity" />
                     </button>
                   );
