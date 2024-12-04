@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { User, ShoppingCart, Menu, X } from 'lucide-react';
+import { User, ShoppingCart, Menu, X, Sparkles } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 import CheckoutModal from './CheckoutModal';
+import DetoxQuiz from './DetoxQuiz';
 import LotusIcon from './LotusIcon';
 
 export default function Navbar() {
@@ -10,6 +11,7 @@ export default function Navbar() {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [isCheckoutModalOpen, setIsCheckoutModalOpen] = useState(false);
+  const [isQuizOpen, setIsQuizOpen] = useState(false);
   const navigate = useNavigate();
 
   const itemCount = items.reduce((sum, item) => sum + item.quantity, 0);
@@ -41,6 +43,13 @@ export default function Navbar() {
               <Link to="/benefits" className="text-gray-300 hover:text-white transition">Benefits</Link>
               <Link to="/products" className="text-gray-300 hover:text-white transition">Products</Link>
               <Link to="/process" className="text-gray-300 hover:text-white transition">Our Process</Link>
+              <button
+                onClick={() => setIsQuizOpen(true)}
+                className="text-gray-300 hover:text-white transition flex items-center space-x-2"
+              >
+                <Sparkles className="h-4 w-4" />
+                <span>Find Your Perfect Detox</span>
+              </button>
               <Link to="/portal" className="bg-emerald-600 text-white px-6 py-2 rounded-full hover:bg-emerald-500 transition flex items-center space-x-2">
                 <User className="h-4 w-4" />
                 <span>Client Portal</span>
@@ -101,6 +110,12 @@ export default function Navbar() {
 
             {/* Mobile Navigation Controls */}
             <div className="flex items-center space-x-4 md:hidden">
+              <button
+                onClick={() => setIsQuizOpen(true)}
+                className="text-gray-300 hover:text-white transition"
+              >
+                <Sparkles className="h-5 w-5" />
+              </button>
               <button
                 onClick={() => setIsCartOpen(!isCartOpen)}
                 className="relative p-2 text-gray-300 hover:text-white transition"
@@ -204,6 +219,8 @@ export default function Navbar() {
           )}
         </div>
       </nav>
+
+      <DetoxQuiz isOpen={isQuizOpen} onClose={() => setIsQuizOpen(false)} />
 
       <CheckoutModal
         isOpen={isCheckoutModalOpen}

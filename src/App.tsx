@@ -8,7 +8,6 @@ import Benefits from './pages/Benefits';
 import ClientPortal from './pages/ClientPortal';
 import Detox from './pages/Detox';
 import Footer from './components/Footer';
-import QuizButton from './components/QuizButton';
 import { CartProvider } from './context/CartContext';
 import { AuthProvider } from './context/AuthContext';
 import { useScrollToTop } from './hooks/useScrollToTop';
@@ -38,7 +37,6 @@ function App() {
                   <Route path="/detox" element={<Detox />} />
                 </Routes>
               </div>
-              <QuizButton />
               <Footer />
             </div>
           </BrowserRouter>

@@ -55,9 +55,13 @@ const programIds: Record<string, string> = {
   "Overall Detox": "overall-detox"
 };
 
-export default function DetoxQuiz() {
+interface DetoxQuizProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+export default function DetoxQuiz({ isOpen, onClose }: DetoxQuizProps) {
   const navigate = useNavigate();
-  const [isOpen, setIsOpen] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
 
@@ -77,55 +81,43 @@ export default function DetoxQuiz() {
   const resetQuiz = () => {
     setCurrentQuestion(0);
     setAnswers([]);
-    setIsOpen(false);
+    onClose();
   };
 
-  return (
-    <>
-      <button
-        onClick={() => setIsOpen(true)}
-        className="bg-white text-emerald-600 px-8 py-3 rounded-full hover:bg-emerald-50 transition flex items-center space-x-2"
-      >
-        <Sparkles className="h-5 w-5" />
-        <span>Find Your Perfect Detox</span>
-      </button>
+  if (!isOpen) return null;
 
-      {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-black" onClick={resetQuiz} />
-          <div className="relative w-[95%] max-w-[460px] mx-auto">
-            <button
-              onClick={resetQuiz}
-              className="absolute -top-2 -right-2 w-8 h-8 flex items-center justify-center text-emerald-400/60 hover:text-emerald-400/80 transition z-10"
-            >
-              <X className="h-5 w-5" />
-            </button>
-            
-            <div className="bg-black rounded-lg p-4">
-              <h3 className="text-lg sm:text-xl text-white mb-4">
-                {questions[currentQuestion].question}
-              </h3>
-              
-              <div className="grid grid-cols-2 gap-2.5">
-                {questions[currentQuestion].options.map((option) => {
-                  const Icon = option.icon;
-                  return (
-                    <button
-                      key={option.text}
-                      onClick={() => handleAnswer(option.text)}
-                      className="relative h-[90px] flex flex-col items-center justify-center bg-emerald-950/30 hover:bg-emerald-900/30 rounded-lg transition group"
-                    >
-                      <Icon className="h-6 w-6 text-emerald-400 mb-2" />
-                      <span className="text-white text-sm px-1 text-center leading-tight">{option.text}</span>
-                      <div className="absolute top-2 right-2 w-1 h-1 rounded-full bg-emerald-400/60 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </div>
+  return (
+    <div className="fixed inset-0 z-[60]">
+      <div className="absolute inset-0 bg-black" />
+      <button
+        onClick={resetQuiz}
+        className="absolute top-4 right-4 text-emerald-400/60 hover:text-emerald-400/80 transition z-10"
+      >
+        <X className="h-6 w-6" />
+      </button>
+      
+      <div className="relative h-full flex flex-col justify-center px-6">
+        <h3 className="text-[28px] text-white mb-8 leading-tight">
+          {questions[currentQuestion].question}
+        </h3>
+        
+        <div className="grid grid-cols-2 gap-4">
+          {questions[currentQuestion].options.map((option) => {
+            const Icon = option.icon;
+            return (
+              <button
+                key={option.text}
+                onClick={() => handleAnswer(option.text)}
+                className="relative aspect-[4/3] flex flex-col items-center justify-center bg-[#001A12] hover:bg-[#002A1E] rounded-lg transition group"
+              >
+                <Icon className="h-12 w-12 text-emerald-400 mb-4" />
+                <span className="text-white text-lg">{option.text}</span>
+                <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-emerald-400/60 opacity-0 group-hover:opacity-100 transition-opacity" />
+              </button>
+            );
+          })}
         </div>
-      )}
-    </>
+      </div>
+    </div>
   );
 }
