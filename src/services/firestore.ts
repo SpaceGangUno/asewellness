@@ -4,13 +4,13 @@ import {
   getDoc,
   getDocs,
   setDoc,
-  updateDoc,
   query,
   where,
   orderBy,
   Timestamp,
   addDoc,
-  FirestoreError
+  FirestoreError,
+  Firestore
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import type { User, Order, Product } from '../types/models';
@@ -20,15 +20,23 @@ const handleFirestoreError = (error: FirestoreError, operation: string) => {
   throw error;
 };
 
+const getDB = (): Firestore => {
+  if (!db) {
+    throw new Error('Firestore is not initialized');
+  }
+  return db;
+};
+
 // User Services
 export const createUser = async (userId: string, userData: Partial<User>) => {
   try {
-    const userRef = doc(db, 'users', userId);
+    const database = getDB();
+    const userRef = doc(database, 'users', userId);
     const now = Timestamp.now();
     
     await setDoc(userRef, {
       ...userData,
-      points: 0,
+      points: userData.points ?? 0,
       createdAt: now,
       updatedAt: now
     }, { merge: true });
@@ -39,7 +47,8 @@ export const createUser = async (userId: string, userData: Partial<User>) => {
 
 export const getUser = async (userId: string) => {
   try {
-    const userRef = doc(db, 'users', userId);
+    const database = getDB();
+    const userRef = doc(database, 'users', userId);
     const userSnap = await getDoc(userRef);
     return userSnap.exists() ? userSnap.data() as User : null;
   } catch (error) {
@@ -50,11 +59,20 @@ export const getUser = async (userId: string) => {
 
 export const updateUser = async (userId: string, userData: Partial<User>) => {
   try {
-    const userRef = doc(db, 'users', userId);
-    await updateDoc(userRef, {
+    const database = getDB();
+    const userRef = doc(database, 'users', userId);
+    const now = Timestamp.now();
+
+    // Get existing user data
+    const userSnap = await getDoc(userRef);
+    const existingData = userSnap.exists() ? userSnap.data() : {};
+
+    // Merge existing data with updates
+    await setDoc(userRef, {
+      ...existingData,
       ...userData,
-      updatedAt: Timestamp.now()
-    });
+      updatedAt: now
+    }, { merge: true });
   } catch (error) {
     handleFirestoreError(error as FirestoreError, 'updateUser');
   }
@@ -63,8 +81,9 @@ export const updateUser = async (userId: string, userData: Partial<User>) => {
 // Order Services
 export const createOrder = async (orderData: Omit<Order, 'id' | 'createdAt' | 'updatedAt'>) => {
   try {
+    const database = getDB();
     const now = Timestamp.now();
-    const orderRef = await addDoc(collection(db, 'orders'), {
+    const orderRef = await addDoc(collection(database, 'orders'), {
       ...orderData,
       createdAt: now,
       updatedAt: now
@@ -78,7 +97,8 @@ export const createOrder = async (orderData: Omit<Order, 'id' | 'createdAt' | 'u
 
 export const getOrder = async (orderId: string) => {
   try {
-    const orderRef = doc(db, 'orders', orderId);
+    const database = getDB();
+    const orderRef = doc(database, 'orders', orderId);
     const orderSnap = await getDoc(orderRef);
     return orderSnap.exists() ? orderSnap.data() as Order : null;
   } catch (error) {
@@ -89,7 +109,8 @@ export const getOrder = async (orderId: string) => {
 
 export const getUserOrders = async (userId: string) => {
   try {
-    const ordersRef = collection(db, 'orders');
+    const database = getDB();
+    const ordersRef = collection(database, 'orders');
     const q = query(
       ordersRef,
       where('userId', '==', userId),
@@ -109,11 +130,20 @@ export const getUserOrders = async (userId: string) => {
 
 export const updateOrder = async (orderId: string, orderData: Partial<Order>) => {
   try {
-    const orderRef = doc(db, 'orders', orderId);
-    await updateDoc(orderRef, {
+    const database = getDB();
+    const orderRef = doc(database, 'orders', orderId);
+    const now = Timestamp.now();
+
+    // Get existing order data
+    const orderSnap = await getDoc(orderRef);
+    const existingData = orderSnap.exists() ? orderSnap.data() : {};
+
+    // Merge existing data with updates
+    await setDoc(orderRef, {
+      ...existingData,
       ...orderData,
-      updatedAt: Timestamp.now()
-    });
+      updatedAt: now
+    }, { merge: true });
   } catch (error) {
     handleFirestoreError(error as FirestoreError, 'updateOrder');
   }
@@ -122,7 +152,8 @@ export const updateOrder = async (orderId: string, orderData: Partial<Order>) =>
 // Product Services
 export const getAllProducts = async () => {
   try {
-    const productsRef = collection(db, 'products');
+    const database = getDB();
+    const productsRef = collection(database, 'products');
     const q = query(productsRef, where('inStock', '==', true));
     
     const querySnapshot = await getDocs(q);

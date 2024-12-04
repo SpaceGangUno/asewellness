@@ -1,7 +1,7 @@
-import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getAnalytics, isSupported } from 'firebase/analytics';
+import { initializeApp, FirebaseApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider, Auth } from 'firebase/auth';
+import { getFirestore, Firestore } from 'firebase/firestore';
+import { getAnalytics, Analytics, isSupported } from 'firebase/analytics';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -16,11 +16,11 @@ const firebaseConfig = {
 // Initialize Firebase only if config is valid
 const isConfigValid = Object.values(firebaseConfig).every(value => value !== undefined && value !== '');
 
-let app;
-let auth;
-let db;
-let analytics = null;
-let googleProvider;
+let app: FirebaseApp | undefined;
+let auth: Auth | undefined;
+let db: Firestore | undefined;
+let analytics: Analytics | null = null;
+let googleProvider: GoogleAuthProvider | undefined;
 
 if (isConfigValid) {
   try {
@@ -31,7 +31,7 @@ if (isConfigValid) {
 
     // Initialize Analytics only if supported
     isSupported().then(supported => {
-      if (supported) {
+      if (supported && app) {
         analytics = getAnalytics(app);
       }
     }).catch(error => {

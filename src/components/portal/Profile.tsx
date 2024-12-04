@@ -22,19 +22,18 @@ export default function Profile() {
 
   // Update profile state when userData or user changes
   useEffect(() => {
-    // Prioritize Google auth email if available
-    const email = user?.email || userData?.email || '';
-    
-    setProfile({
-      name: userData?.name || user?.displayName || '',
-      email: email,
-      phone: userData?.phone || '',
-      address: userData?.address || ''
-    });
+    if (userData || user) {
+      setProfile({
+        name: userData?.name || user?.displayName || '',
+        email: userData?.email || user?.email || '',
+        phone: userData?.phone || '',
+        address: userData?.address || ''
+      });
 
-    // If there's an existing address, mark it as selected
-    if (userData?.address) {
-      setIsAddressSelected(true);
+      // If there's an existing address, mark it as selected
+      if (userData?.address) {
+        setIsAddressSelected(true);
+      }
     }
   }, [userData, user]);
 
@@ -68,28 +67,25 @@ export default function Profile() {
       return;
     }
 
-    // Warn if address hasn't been selected from suggestions
-    if (!isAddressSelected && !autocompleteError) {
-      setError('Please select an address from the suggestions');
-      return;
-    }
-
     setIsSaving(true);
     setError('');
 
     try {
-      // Only include fields that are actually being updated
+      // Get existing user data to preserve fields
+      const existingUser = await firestoreService.getUser(user.uid);
+      
+      // Create update object with all required fields
       const updates: Partial<UserType> = {
+        id: user.uid,
         name: profile.name.trim(),
         phone: profile.phone.trim(),
         address: profile.address.trim(),
-        points: userData?.points || 0, // Preserve existing points
+        // Preserve existing data
+        points: existingUser?.points || 0,
+        email: user.email || profile.email.trim(), // Prefer Firebase auth email
+        createdAt: existingUser?.createdAt || new Date(),
+        updatedAt: new Date()
       };
-
-      // Only include email if it's not from Google auth and has changed
-      if (!user.email && profile.email !== userData?.email) {
-        updates.email = profile.email.trim();
-      }
 
       await firestoreService.updateUser(user.uid, updates);
       

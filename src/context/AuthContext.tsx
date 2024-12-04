@@ -8,10 +8,12 @@ import {
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile,
-  sendEmailVerification
+  sendEmailVerification,
+  Auth
 } from 'firebase/auth';
-import { auth, googleProvider } from '../config/firebase';
+import { auth as firebaseAuth, googleProvider as firebaseGoogleProvider } from '../config/firebase';
 import * as firestoreService from '../services/firestore';
+import type { User as UserType } from '../types/models';
 
 interface AuthContextType {
   user: User | null;
@@ -31,6 +33,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const auth = firebaseAuth as Auth | undefined;
+  const googleProvider = firebaseGoogleProvider as GoogleAuthProvider | undefined;
+
   useEffect(() => {
     if (!auth) {
       setLoading(false);
@@ -42,11 +47,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(user);
       if (user) {
         try {
-          const userData = {
+          // Get existing user data first
+          const existingUser = await firestoreService.getUser(user.uid);
+          
+          const userData: Partial<UserType> = {
             id: user.uid,
             email: user.email || '',
             name: user.displayName || '',
+            // Preserve existing data
+            points: existingUser?.points || 0,
+            phone: existingUser?.phone || '',
+            address: existingUser?.address || '',
+            createdAt: existingUser?.createdAt || new Date(),
+            updatedAt: new Date()
           };
+          
           await firestoreService.createUser(user.uid, userData);
         } catch (error) {
           console.error('Error updating user data:', error);
@@ -56,7 +71,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     });
 
     return unsubscribe;
-  }, []);
+  }, [auth]);
 
   const signInWithGoogle = async () => {
     if (!auth || !googleProvider) {
@@ -67,11 +82,21 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       const result = await signInWithPopup(auth, googleProvider);
       const user = result.user;
       
-      const userData = {
+      // Get existing user data first
+      const existingUser = await firestoreService.getUser(user.uid);
+      
+      const userData: Partial<UserType> = {
         id: user.uid,
         email: user.email || '',
         name: user.displayName || '',
+        // Preserve existing data
+        points: existingUser?.points || 0,
+        phone: existingUser?.phone || '',
+        address: existingUser?.address || '',
+        createdAt: existingUser?.createdAt || new Date(),
+        updatedAt: new Date()
       };
+      
       await firestoreService.createUser(user.uid, userData);
     } catch (error) {
       console.error('Error signing in with Google:', error);
@@ -104,11 +129,17 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       await updateProfile(user, { displayName: name });
       await sendEmailVerification(user);
 
-      const userData = {
+      const userData: Partial<UserType> = {
         id: user.uid,
         email: user.email || '',
         name: name,
+        points: 0,
+        phone: '',
+        address: '',
+        createdAt: new Date(),
+        updatedAt: new Date()
       };
+      
       await firestoreService.createUser(user.uid, userData);
     } catch (error) {
       console.error('Error signing up with email:', error);
