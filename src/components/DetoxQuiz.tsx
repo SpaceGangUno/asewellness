@@ -2,7 +2,19 @@ import React, { useState } from 'react';
 import { Sparkles, Battery, Brain, Heart, ShoppingCart, Info } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
-const questions = [
+type QuestionOption = {
+  text: string;
+  icon: React.FC<{ className?: string }>;
+  info: string;
+};
+
+type Question = {
+  id: number;
+  question: string;
+  options: QuestionOption[];
+};
+
+const questions: Question[] = [
   {
     id: 1,
     question: "What's your main wellness goal?",
@@ -45,6 +57,7 @@ type Program = {
   name: string;
   description: string;
   products: Product[];
+  details: string;
 };
 
 type ProgramKey = "Boost Energy" | "Mental Clarity" | "Digestive Health" | "Overall Detox";
@@ -53,6 +66,7 @@ const recommendations: Record<ProgramKey, Program> = {
   "Boost Energy": {
     name: "Energy Enhancement Program",
     description: "Elevate your energy levels naturally with our carefully crafted selection.",
+    details: "Our Energy Enhancement Program is designed to naturally boost your vitality throughout the day. Each product is carefully formulated with ingredients known for their energy-boosting properties. The program includes a powerful juice blend with beets for improved blood flow, ginger for metabolism boost, and citrus for natural energy. Combined with our specialized tea and recovery juice, this program provides sustained energy without crashes.",
     products: [
       { name: "Energy Booster Juice", price: 12.99, description: "Packed with beets, ginger, and citrus for a natural energy lift" },
       { name: "Green Wellness Tea", price: 9.99, description: "Infused with matcha and ginseng to maintain energy throughout the day" },
@@ -62,6 +76,7 @@ const recommendations: Record<ProgramKey, Program> = {
   "Mental Clarity": {
     name: "Mental Focus Program",
     description: "Enhance cognitive function and mental clarity with our specialized blends.",
+    details: "The Mental Focus Program is crafted to support optimal brain function and mental clarity. Our unique combination of ingredients includes powerful antioxidants from blueberries, anti-inflammatory properties from turmeric, and natural focus enhancers. The program features a strategic blend of adaptogens and nootropics to help reduce mental fatigue while promoting sustained concentration and cognitive performance.",
     products: [
       { name: "Focus & Clarity Blend", price: 13.99, description: "A juice with turmeric, lemon, and blueberries to boost brain function" },
       { name: "Herbal Calming Tea", price: 8.99, description: "Ingredients like chamomile and ashwagandha for stress reduction" },
@@ -71,6 +86,7 @@ const recommendations: Record<ProgramKey, Program> = {
   "Digestive Health": {
     name: "Digestive Wellness Program",
     description: "Support your gut health with our specially formulated products.",
+    details: "Our Digestive Wellness Program focuses on optimizing your gut health through carefully selected ingredients known for their digestive benefits. The program combines the cleansing properties of green apple and celery with the soothing effects of aloe vera. Our probiotic tea and fiber boost shot work together to support healthy digestion, reduce bloating, and promote regular gut function.",
     products: [
       { name: "Gut Cleanse Juice", price: 11.99, description: "A blend of green apple, celery, and aloe vera for gut health" },
       { name: "Probiotic Wellness Tea", price: 8.99, description: "Supports digestion with probiotics and peppermint" },
@@ -80,6 +96,7 @@ const recommendations: Record<ProgramKey, Program> = {
   "Overall Detox": {
     name: "Complete Detox Program",
     description: "A comprehensive approach to full-body cleansing and renewal.",
+    details: "The Complete Detox Program offers a holistic approach to body cleansing and renewal. Our carefully curated selection of products works synergistically to support your body's natural detoxification processes. The program includes a powerful green blend rich in chlorophyll and antioxidants, a specialized tea targeting liver health, and a hydrating juice blend to help flush toxins while maintaining optimal hydration levels.",
     products: [
       { name: "Detoxifying Green Blend", price: 12.99, description: "With spinach, kale, and parsley for a full-body cleanse" },
       { name: "Liver Cleanse Tea", price: 8.99, description: "With milk thistle and dandelion to support liver function" },
@@ -96,6 +113,7 @@ export default function DetoxQuiz() {
   const [recommendation, setRecommendation] = useState<Program | null>(null);
   const [addedToCart, setAddedToCart] = useState(false);
   const [showInfo, setShowInfo] = useState<string | null>(null);
+  const [showProgramDetails, setShowProgramDetails] = useState(false);
 
   const handleAnswer = (answer: string) => {
     const newAnswers = [...answers, answer];
@@ -116,6 +134,7 @@ export default function DetoxQuiz() {
     setRecommendation(null);
     setAddedToCart(false);
     setShowInfo(null);
+    setShowProgramDetails(false);
   };
 
   const handleAddToCart = () => {
@@ -179,7 +198,21 @@ export default function DetoxQuiz() {
               <h3 className="text-2xl font-bold text-emerald-900 mb-4">
                 {recommendation.name}
               </h3>
-              <p className="text-emerald-700 mb-6">{recommendation.description}</p>
+              <p className="text-emerald-700 mb-2">{recommendation.description}</p>
+              <button
+                onClick={() => setShowProgramDetails(!showProgramDetails)}
+                className="mb-6 text-emerald-600 hover:text-emerald-700 transition flex items-center space-x-1 mx-auto"
+              >
+                <Info className="h-4 w-4" />
+                <span>{showProgramDetails ? 'Show Less' : 'Learn More'}</span>
+              </button>
+              {showProgramDetails && (
+                <div className="mb-6 p-4 bg-emerald-50 rounded-lg text-left">
+                  <p className="text-emerald-800 text-sm leading-relaxed">
+                    {recommendation.details}
+                  </p>
+                </div>
+              )}
               <div className="space-y-4 mb-6">
                 {recommendation.products.map((product) => (
                   <div key={product.name} className="bg-emerald-50 p-4 rounded-lg">
