@@ -7,29 +7,15 @@ export default {
   theme: {
     extend: {
       keyframes: {
-        scroll: {
-          '0%': { transform: 'translateX(0)' },
-          '100%': { transform: 'translateX(calc(-280px * 4 - 1rem * 3))' }  // 4 cards width + 3 gaps
+        float: {
+          '0%, 100%': { transform: 'translate(-50%, 0)' },
+          '50%': { transform: 'translate(-50%, -10px)' },
         }
       },
       animation: {
-        scroll: 'scroll 20s linear infinite'
-      },
-      backgroundImage: {
-        'gradient-brand': 'linear-gradient(135deg, #4ade80, #38bdf8)',
-        'gradient-brand-reverse': 'linear-gradient(135deg, #38bdf8, #4ade80)'
+        float: 'float 3s ease-in-out infinite',
       }
     },
   },
-  plugins: [
-    function({ addUtilities }) {
-      addUtilities({
-        '.pause-on-hover': {
-          '&:hover > *': {
-            'animation-play-state': 'paused',
-          },
-        },
-      })
-    },
-  ],
+  plugins: [],
 }
