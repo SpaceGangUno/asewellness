@@ -33,7 +33,7 @@ export default function Profile() {
   }, [userData, user]);
 
   // Initialize address autocomplete
-  useAddressAutocomplete(addressInputRef, (result) => {
+  const { error: autocompleteError } = useAddressAutocomplete(addressInputRef, (result) => {
     setProfile(prev => ({
       ...prev,
       address: result.formattedAddress
@@ -63,8 +63,9 @@ export default function Profile() {
 
       await firestoreService.updateUser(user.uid, updates);
       
-      // Refresh the page to show updated data
-      window.location.reload();
+      // Show success message instead of reloading
+      setError('Profile updated successfully!');
+      setTimeout(() => setError(''), 3000);
     } catch (error) {
       console.error('Error updating profile:', error);
       setError('Failed to update profile. Please try again.');
@@ -98,8 +99,18 @@ export default function Profile() {
       <div className="grid md:grid-cols-3 gap-8">
         <div className="md:col-span-2">
           {error && (
-            <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl">
+            <div className={`mb-4 p-4 rounded-xl ${
+              error.includes('success')
+                ? 'bg-emerald-50 border border-emerald-200 text-emerald-600'
+                : 'bg-red-50 border border-red-200 text-red-600'
+            }`}>
               {error}
+            </div>
+          )}
+
+          {autocompleteError && (
+            <div className="mb-4 p-4 bg-yellow-50 border border-yellow-200 text-yellow-600 rounded-xl">
+              Address autocomplete is currently unavailable. You can still type your address manually.
             </div>
           )}
 
