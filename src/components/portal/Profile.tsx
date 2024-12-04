@@ -38,21 +38,22 @@ export default function Profile() {
     setError('');
 
     try {
-      // Create a partial user update object
+      // Only include fields that are actually being updated
       const updates: Partial<UserType> = {
-        name: profile.name,
+        name: profile.name || userData?.name || '',
         phone: profile.phone,
         address: profile.address,
+        points: userData?.points || 0, // Preserve existing points
       };
 
-      // If the email is not from Google auth, update it too
-      if (!user.email) {
+      // Only include email if it's not from Google auth and has changed
+      if (!user.email && profile.email !== userData?.email) {
         updates.email = profile.email;
       }
 
       await firestoreService.updateUser(user.uid, updates);
       
-      // Force a refresh of the userData
+      // Refresh the page to show updated data
       window.location.reload();
     } catch (error) {
       console.error('Error updating profile:', error);
