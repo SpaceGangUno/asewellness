@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { ShoppingCart } from 'lucide-react';
+import { ShoppingCart, Sparkles } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 const detoxPrograms = {
@@ -58,7 +58,9 @@ export default function Detox() {
   useEffect(() => {
     const program = searchParams.get('program');
     if (program && programRefs.current[program]) {
-      programRefs.current[program]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => {
+        programRefs.current[program]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
     }
   }, [searchParams]);
 
@@ -69,52 +71,57 @@ export default function Detox() {
   };
 
   return (
-    <div className="container mx-auto px-4 py-12">
-      <h1 className="text-4xl font-bold text-emerald-900 mb-8 text-center">
-        Our Detox Programs
-      </h1>
-      <div className="space-y-12">
-        {Object.values(detoxPrograms).map((program) => (
-          <div
-            key={program.id}
-            ref={el => programRefs.current[program.id] = el}
-            className="bg-white rounded-xl shadow-lg overflow-hidden transition-all duration-300 hover:shadow-xl"
-          >
-            <div className="p-8">
-              <h2 className="text-2xl font-bold text-emerald-900 mb-4">
-                {program.name}
-              </h2>
-              <p className="text-emerald-700 mb-6">
-                {program.description}
-              </p>
-              <div className="bg-emerald-50 rounded-lg p-6 mb-6">
-                <p className="text-emerald-800 text-sm leading-relaxed">
-                  {program.details}
+    <div className="min-h-screen bg-black">
+      <div className="container mx-auto px-4 py-16">
+        <h1 className="text-5xl font-bold text-white mb-4 text-center">
+          Our Detox Programs
+        </h1>
+        <p className="text-emerald-400 text-xl mb-12 text-center max-w-2xl mx-auto">
+          Discover the perfect detox program tailored to your wellness journey
+        </p>
+        <div className="space-y-12">
+          {Object.values(detoxPrograms).map((program) => (
+            <div
+              key={program.id}
+              ref={el => programRefs.current[program.id] = el}
+              className="bg-black/50 backdrop-blur-lg rounded-xl overflow-hidden transition-all duration-300 hover:bg-black/70 border border-emerald-900/30"
+            >
+              <div className="p-8">
+                <h2 className="text-3xl font-bold text-white mb-4">
+                  {program.name}
+                </h2>
+                <p className="text-emerald-400 text-lg mb-6">
+                  {program.description}
                 </p>
-              </div>
-              <div className="space-y-4">
-                {program.products.map((product) => (
-                  <div key={product.name} className="bg-emerald-50 p-4 rounded-lg">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-semibold text-emerald-900">{product.name}</span>
-                      <span className="font-bold text-emerald-600">${product.price.toFixed(2)}</span>
+                <div className="bg-emerald-950/50 rounded-xl p-6 mb-8 border border-emerald-900/30">
+                  <p className="text-emerald-300 leading-relaxed">
+                    {program.details}
+                  </p>
+                </div>
+                <div className="space-y-4">
+                  {program.products.map((product) => (
+                    <div key={product.name} className="bg-emerald-950/30 p-5 rounded-xl border border-emerald-900/30">
+                      <div className="flex justify-between items-center mb-2">
+                        <span className="font-semibold text-white text-lg">{product.name}</span>
+                        <span className="font-bold text-emerald-400 text-lg">${product.price.toFixed(2)}</span>
+                      </div>
+                      <p className="text-emerald-300">{product.description}</p>
                     </div>
-                    <p className="text-sm text-emerald-700">{product.description}</p>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6 flex justify-center">
-                <button
-                  onClick={() => handleAddToCart(program.products)}
-                  className="bg-emerald-600 text-white px-6 py-2 rounded-full hover:bg-emerald-700 transition flex items-center space-x-2"
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                  <span>Add Program to Cart</span>
-                </button>
+                  ))}
+                </div>
+                <div className="mt-8 flex justify-center">
+                  <button
+                    onClick={() => handleAddToCart(program.products)}
+                    className="bg-emerald-600 text-white px-8 py-3 rounded-full hover:bg-emerald-700 transition flex items-center space-x-3"
+                  >
+                    <ShoppingCart className="h-5 w-5" />
+                    <span>Add Program to Cart</span>
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Sparkles, Battery, Brain, Heart, ShoppingCart, Info } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { Sparkles, Battery, Brain, Heart, ShoppingCart, Info, X } from 'lucide-react';
 import { useCart } from '../context/CartContext';
 
 type QuestionOption = {
@@ -47,73 +48,20 @@ const questions: Question[] = [
   }
 ];
 
-type Product = {
-  name: string;
-  price: number;
-  description: string;
-};
-
-type Program = {
-  name: string;
-  description: string;
-  products: Product[];
-  details: string;
-};
-
-type ProgramKey = "Boost Energy" | "Mental Clarity" | "Digestive Health" | "Overall Detox";
-
-const recommendations: Record<ProgramKey, Program> = {
-  "Boost Energy": {
-    name: "Energy Enhancement Program",
-    description: "Elevate your energy levels naturally with our carefully crafted selection.",
-    details: "Our Energy Enhancement Program is designed to naturally boost your vitality throughout the day. Each product is carefully formulated with ingredients known for their energy-boosting properties. The program includes a powerful juice blend with beets for improved blood flow, ginger for metabolism boost, and citrus for natural energy. Combined with our specialized tea and recovery juice, this program provides sustained energy without crashes.",
-    products: [
-      { name: "Energy Booster Juice", price: 12.99, description: "Packed with beets, ginger, and citrus for a natural energy lift" },
-      { name: "Green Wellness Tea", price: 9.99, description: "Infused with matcha and ginseng to maintain energy throughout the day" },
-      { name: "Replenishing Recovery Juice", price: 10.99, description: "For post-work energy restoration" }
-    ]
-  },
-  "Mental Clarity": {
-    name: "Mental Focus Program",
-    description: "Enhance cognitive function and mental clarity with our specialized blends.",
-    details: "The Mental Focus Program is crafted to support optimal brain function and mental clarity. Our unique combination of ingredients includes powerful antioxidants from blueberries, anti-inflammatory properties from turmeric, and natural focus enhancers. The program features a strategic blend of adaptogens and nootropics to help reduce mental fatigue while promoting sustained concentration and cognitive performance.",
-    products: [
-      { name: "Focus & Clarity Blend", price: 13.99, description: "A juice with turmeric, lemon, and blueberries to boost brain function" },
-      { name: "Herbal Calming Tea", price: 8.99, description: "Ingredients like chamomile and ashwagandha for stress reduction" },
-      { name: "Brain Boost Shot", price: 5.99, description: "A small concentrated shot with ginkgo biloba and green tea extract" }
-    ]
-  },
-  "Digestive Health": {
-    name: "Digestive Wellness Program",
-    description: "Support your gut health with our specially formulated products.",
-    details: "Our Digestive Wellness Program focuses on optimizing your gut health through carefully selected ingredients known for their digestive benefits. The program combines the cleansing properties of green apple and celery with the soothing effects of aloe vera. Our probiotic tea and fiber boost shot work together to support healthy digestion, reduce bloating, and promote regular gut function.",
-    products: [
-      { name: "Gut Cleanse Juice", price: 11.99, description: "A blend of green apple, celery, and aloe vera for gut health" },
-      { name: "Probiotic Wellness Tea", price: 8.99, description: "Supports digestion with probiotics and peppermint" },
-      { name: "Fiber Boost Shot", price: 4.99, description: "With chia seeds and ginger to regulate digestion" }
-    ]
-  },
-  "Overall Detox": {
-    name: "Complete Detox Program",
-    description: "A comprehensive approach to full-body cleansing and renewal.",
-    details: "The Complete Detox Program offers a holistic approach to body cleansing and renewal. Our carefully curated selection of products works synergistically to support your body's natural detoxification processes. The program includes a powerful green blend rich in chlorophyll and antioxidants, a specialized tea targeting liver health, and a hydrating juice blend to help flush toxins while maintaining optimal hydration levels.",
-    products: [
-      { name: "Detoxifying Green Blend", price: 12.99, description: "With spinach, kale, and parsley for a full-body cleanse" },
-      { name: "Liver Cleanse Tea", price: 8.99, description: "With milk thistle and dandelion to support liver function" },
-      { name: "Hydration Recovery Juice", price: 9.99, description: "Coconut water, cucumber, and mint for hydration" }
-    ]
-  }
+const programIds: Record<string, string> = {
+  "Boost Energy": "boost-energy",
+  "Mental Clarity": "mental-clarity",
+  "Digestive Health": "digestive-health",
+  "Overall Detox": "overall-detox"
 };
 
 export default function DetoxQuiz() {
+  const navigate = useNavigate();
   const { addToCart } = useCart();
   const [isOpen, setIsOpen] = useState(false);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [answers, setAnswers] = useState<string[]>([]);
-  const [recommendation, setRecommendation] = useState<Program | null>(null);
-  const [addedToCart, setAddedToCart] = useState(false);
   const [showInfo, setShowInfo] = useState<string | null>(null);
-  const [showProgramDetails, setShowProgramDetails] = useState(false);
 
   const handleAnswer = (answer: string) => {
     const newAnswers = [...answers, answer];
@@ -122,132 +70,76 @@ export default function DetoxQuiz() {
     if (currentQuestion < questions.length - 1) {
       setCurrentQuestion(currentQuestion + 1);
     } else {
-      // Use the primary wellness goal (first answer) to determine the program
-      const programKey = newAnswers[0] as ProgramKey;
-      setRecommendation(recommendations[programKey] || recommendations["Overall Detox"]);
+      // Navigate to detox page with the selected program
+      navigate(`/detox?program=${programIds[newAnswers[0]]}`);
+      resetQuiz();
     }
   };
 
   const resetQuiz = () => {
     setCurrentQuestion(0);
     setAnswers([]);
-    setRecommendation(null);
-    setAddedToCart(false);
     setShowInfo(null);
-    setShowProgramDetails(false);
-  };
-
-  const handleAddToCart = () => {
-    if (recommendation) {
-      recommendation.products.forEach((product) => {
-        addToCart({ name: product.name, price: product.price, quantity: 1 });
-      });
-      setAddedToCart(true);
-    }
+    setIsOpen(false);
   };
 
   return (
-    <div className="mt-8 flex justify-center">
-      {!isOpen && (
-        <button
-          onClick={() => setIsOpen(true)}
-          className="bg-white text-emerald-600 px-8 py-3 rounded-full hover:bg-emerald-50 transition flex items-center space-x-2"
-        >
-          <Sparkles className="h-5 w-5" />
-          <span>Find Your Perfect Detox</span>
-        </button>
-      )}
+    <>
+      <button
+        onClick={() => setIsOpen(true)}
+        className="bg-white text-emerald-600 px-8 py-3 rounded-full hover:bg-emerald-50 transition flex items-center space-x-2"
+      >
+        <Sparkles className="h-5 w-5" />
+        <span>Find Your Perfect Detox</span>
+      </button>
 
       {isOpen && (
-        <div className="bg-white/95 backdrop-blur-sm rounded-xl p-6 max-w-xl animate-fade-in">
-          {!recommendation ? (
-            <div>
-              <h3 className="text-xl font-semibold text-emerald-900 mb-4">
-                {questions[currentQuestion].question}
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {questions[currentQuestion].options.map((option) => {
-                  const Icon = option.icon;
-                  return (
-                    <div key={option.text} className="relative">
-                      <button
-                        onClick={() => handleAnswer(option.text)}
-                        className="w-full flex flex-col items-center p-4 rounded-lg bg-emerald-50 hover:bg-emerald-100 transition"
-                      >
-                        <Icon className="h-8 w-8 text-emerald-600 mb-2" />
-                        <span className="text-emerald-900">{option.text}</span>
-                      </button>
-                      <button
-                        onClick={() => setShowInfo(showInfo === option.text ? null : option.text)}
-                        className="absolute top-2 right-2 p-1 rounded-full bg-emerald-100 hover:bg-emerald-200 transition"
-                      >
-                        <Info className="h-4 w-4 text-emerald-600" />
-                      </button>
-                      {showInfo === option.text && (
-                        <div className="absolute z-10 top-full left-0 right-0 mt-2 p-3 bg-white rounded-lg shadow-lg text-sm text-emerald-800">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+          <div className="absolute inset-0 bg-black/80" onClick={resetQuiz} />
+          <div className="relative bg-black/90 backdrop-blur-lg rounded-xl p-8 max-w-xl w-full animate-fade-in border border-emerald-900/30">
+            <button
+              onClick={resetQuiz}
+              className="absolute top-4 right-4 text-emerald-400 hover:text-emerald-300 transition"
+            >
+              <X className="h-6 w-6" />
+            </button>
+            
+            <h3 className="text-2xl font-semibold text-white mb-6">
+              {questions[currentQuestion].question}
+            </h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {questions[currentQuestion].options.map((option) => {
+                const Icon = option.icon;
+                return (
+                  <div key={option.text} className="relative group">
+                    <button
+                      onClick={() => handleAnswer(option.text)}
+                      className="w-full flex flex-col items-center p-6 rounded-xl bg-emerald-950/50 hover:bg-emerald-900/50 border border-emerald-800/30 transition group-hover:border-emerald-600/50"
+                    >
+                      <Icon className="h-8 w-8 text-emerald-400 mb-3 group-hover:scale-110 transition duration-300" />
+                      <span className="text-white text-lg">{option.text}</span>
+                    </button>
+                    <button
+                      onClick={() => setShowInfo(showInfo === option.text ? null : option.text)}
+                      className="absolute top-3 right-3 p-1.5 rounded-full bg-emerald-900/50 hover:bg-emerald-800/50 transition"
+                    >
+                      <Info className="h-4 w-4 text-emerald-400" />
+                    </button>
+                    {showInfo === option.text && (
+                      <div className="absolute z-10 top-full left-0 right-0 mt-2 p-4 bg-emerald-950/90 backdrop-blur-sm rounded-lg border border-emerald-800/30 shadow-xl">
+                        <p className="text-sm text-emerald-300">
                           {option.info}
-                        </div>
-                      )}
-                    </div>
-                  );
-                })}
-              </div>
-            </div>
-          ) : (
-            <div className="text-center">
-              <h3 className="text-2xl font-bold text-emerald-900 mb-4">
-                {recommendation.name}
-              </h3>
-              <p className="text-emerald-700 mb-2">{recommendation.description}</p>
-              <button
-                onClick={() => setShowProgramDetails(!showProgramDetails)}
-                className="mb-6 text-emerald-600 hover:text-emerald-700 transition flex items-center space-x-1 mx-auto"
-              >
-                <Info className="h-4 w-4" />
-                <span>{showProgramDetails ? 'Show Less' : 'Learn More'}</span>
-              </button>
-              {showProgramDetails && (
-                <div className="mb-6 p-4 bg-emerald-50 rounded-lg text-left">
-                  <p className="text-emerald-800 text-sm leading-relaxed">
-                    {recommendation.details}
-                  </p>
-                </div>
-              )}
-              <div className="space-y-4 mb-6">
-                {recommendation.products.map((product) => (
-                  <div key={product.name} className="bg-emerald-50 p-4 rounded-lg">
-                    <div className="flex justify-between items-center mb-2">
-                      <span className="font-semibold text-emerald-900">{product.name}</span>
-                      <span className="font-bold text-emerald-600">${product.price.toFixed(2)}</span>
-                    </div>
-                    <p className="text-sm text-emerald-700 text-left">{product.description}</p>
+                        </p>
+                      </div>
+                    )}
                   </div>
-                ))}
-              </div>
-              <div className="flex space-x-4 justify-center">
-                <button
-                  onClick={resetQuiz}
-                  className="bg-emerald-100 text-emerald-700 px-6 py-2 rounded-full hover:bg-emerald-200 transition"
-                >
-                  Start Over
-                </button>
-                <button
-                  onClick={handleAddToCart}
-                  disabled={addedToCart}
-                  className={`flex items-center space-x-2 px-6 py-2 rounded-full transition ${
-                    addedToCart
-                      ? 'bg-emerald-200 text-emerald-800 cursor-not-allowed'
-                      : 'bg-emerald-600 text-white hover:bg-emerald-700'
-                  }`}
-                >
-                  <ShoppingCart className="h-5 w-5" />
-                  <span>{addedToCart ? 'Added to Cart' : 'Add All to Cart'}</span>
-                </button>
-              </div>
+                );
+              })}
             </div>
-          )}
+          </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
