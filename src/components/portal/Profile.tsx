@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { User, Mail, Phone, MapPin, Bell, Shield } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useUserData } from '../../hooks/useFirestore';
+import { useAddressAutocomplete } from '../../hooks/useAddressAutocomplete';
 import * as firestoreService from '../../services/firestore';
 import type { User as UserType } from '../../types/models';
 
@@ -10,6 +11,7 @@ export default function Profile() {
   const { userData, loading } = useUserData();
   const [isSaving, setIsSaving] = useState(false);
   const [error, setError] = useState('');
+  const addressInputRef = useRef<HTMLInputElement>(null);
   const [profile, setProfile] = useState({
     name: '',
     email: '',
@@ -29,6 +31,14 @@ export default function Profile() {
       address: userData?.address || ''
     });
   }, [userData, user]);
+
+  // Initialize address autocomplete
+  useAddressAutocomplete(addressInputRef, (result) => {
+    setProfile(prev => ({
+      ...prev,
+      address: result.formattedAddress
+    }));
+  });
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -161,12 +171,17 @@ export default function Profile() {
                     <MapPin className="h-5 w-5 text-gray-400" />
                   </div>
                   <input
+                    ref={addressInputRef}
                     type="text"
                     value={profile.address}
                     onChange={(e) => setProfile({ ...profile, address: e.target.value })}
+                    placeholder="Start typing your address..."
                     className="block w-full pl-10 pr-3 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent transition-all duration-200"
                   />
                 </div>
+                <p className="mt-1 text-sm text-gray-500">
+                  Start typing to see address suggestions
+                </p>
               </div>
             </div>
 
