@@ -1,10 +1,11 @@
 import React from 'react';
 import { Award, Star, TrendingUp } from 'lucide-react';
 import { usePoints } from '../../hooks/usePoints';
+import { useAuth } from '../../context/AuthContext';
 
 export default function PointsDisplay() {
-  const { points, nextAchievement, loading } = usePoints('demo-user');
-  const progress = (points / nextAchievement.pointsRequired) * 100;
+  const { user } = useAuth();
+  const { points, nextAchievement, loading, hasOrders } = usePoints(user?.uid || '');
 
   if (loading) {
     return (
@@ -13,6 +14,22 @@ export default function PointsDisplay() {
       </div>
     );
   }
+
+  // Don't show anything if user has no orders
+  if (!hasOrders) {
+    return (
+      <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 lg:p-6 shadow-lg">
+        <div className="text-center text-gray-600">
+          <Award className="h-12 w-12 mx-auto mb-3 text-gray-400" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Reward Points</h3>
+          <p>Make your first purchase to start earning reward points!</p>
+          <p className="text-sm mt-2">($1 spent = 10 points)</p>
+        </div>
+      </div>
+    );
+  }
+
+  const progress = (points / nextAchievement.pointsRequired) * 100;
 
   return (
     <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 lg:p-6 shadow-lg">
