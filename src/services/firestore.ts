@@ -9,8 +9,7 @@ import {
   orderBy,
   Timestamp,
   addDoc,
-  FirestoreError,
-  Firestore
+  FirestoreError
 } from 'firebase/firestore';
 import { db } from '../config/firebase';
 import type { User, Order, Product } from '../types/models';
@@ -20,7 +19,7 @@ const handleFirestoreError = (error: FirestoreError, operation: string) => {
   throw error;
 };
 
-const getDB = (): Firestore => {
+const getDB = (): any => {
   if (!db) {
     throw new Error('Firestore is not initialized');
   }
@@ -32,14 +31,29 @@ export const createUser = async (userId: string, userData: Partial<User>) => {
   try {
     const database = getDB();
     const userRef = doc(database, 'users', userId);
+    const userDoc = await getDoc(userRef);
     const now = Timestamp.now();
-    
-    await setDoc(userRef, {
-      ...userData,
-      points: userData.points ?? 0,
-      createdAt: now,
-      updatedAt: now
-    }, { merge: true });
+
+    // If user exists, merge new data with existing data
+    if (userDoc.exists()) {
+      const existingData = userDoc.data();
+      await setDoc(userRef, {
+        ...existingData,
+        ...userData,
+        updatedAt: now
+      }, { merge: true });
+    } else {
+      // If user doesn't exist, create new user with default values
+      await setDoc(userRef, {
+        id: userId,
+        email: userData.email || '',
+        name: userData.name || '',
+        points: 0,
+        createdAt: now,
+        updatedAt: now,
+        ...userData
+      }, { merge: true });
+    }
   } catch (error) {
     handleFirestoreError(error as FirestoreError, 'createUser');
   }
@@ -50,7 +64,13 @@ export const getUser = async (userId: string) => {
     const database = getDB();
     const userRef = doc(database, 'users', userId);
     const userSnap = await getDoc(userRef);
-    return userSnap.exists() ? userSnap.data() as User : null;
+    
+    if (!userSnap.exists()) {
+      // If user doesn't exist, return null and let the calling code handle creation
+      return null;
+    }
+    
+    return userSnap.data() as User;
   } catch (error) {
     handleFirestoreError(error as FirestoreError, 'getUser');
     return null;
@@ -61,18 +81,19 @@ export const updateUser = async (userId: string, userData: Partial<User>) => {
   try {
     const database = getDB();
     const userRef = doc(database, 'users', userId);
-    const now = Timestamp.now();
+    const userDoc = await getDoc(userRef);
 
-    // Get existing user data
-    const userSnap = await getDoc(userRef);
-    const existingData = userSnap.exists() ? userSnap.data() : {};
-
-    // Merge existing data with updates
-    await setDoc(userRef, {
-      ...existingData,
-      ...userData,
-      updatedAt: now
-    }, { merge: true });
+    if (!userDoc.exists()) {
+      // If user doesn't exist, create it first
+      await createUser(userId, userData);
+    } else {
+      // Update existing user
+      await setDoc(userRef, {
+        ...userDoc.data(),
+        ...userData,
+        updatedAt: Timestamp.now()
+      }, { merge: true });
+    }
   } catch (error) {
     handleFirestoreError(error as FirestoreError, 'updateUser');
   }
@@ -123,7 +144,7 @@ export const getUserOrders = async (userId: string) => {
       ...doc.data()
     })) as Order[];
   } catch (error) {
-    handleFirestoreError(error as FirestoreError, 'getUserOrders');
+    console.warn('No orders found for user:', userId);
     return [];
   }
 };
@@ -132,17 +153,16 @@ export const updateOrder = async (orderId: string, orderData: Partial<Order>) =>
   try {
     const database = getDB();
     const orderRef = doc(database, 'orders', orderId);
-    const now = Timestamp.now();
+    const orderDoc = await getDoc(orderRef);
 
-    // Get existing order data
-    const orderSnap = await getDoc(orderRef);
-    const existingData = orderSnap.exists() ? orderSnap.data() : {};
+    if (!orderDoc.exists()) {
+      throw new Error('Order not found');
+    }
 
-    // Merge existing data with updates
     await setDoc(orderRef, {
-      ...existingData,
+      ...orderDoc.data(),
       ...orderData,
-      updatedAt: now
+      updatedAt: Timestamp.now()
     }, { merge: true });
   } catch (error) {
     handleFirestoreError(error as FirestoreError, 'updateOrder');

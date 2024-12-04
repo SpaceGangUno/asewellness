@@ -1,3 +1,5 @@
+import { Timestamp } from 'firebase/firestore';
+
 export interface User {
   id: string;
   email: string;
@@ -5,8 +7,8 @@ export interface User {
   phone?: string;
   address?: string;
   points: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | Timestamp;
+  updatedAt: Date | Timestamp;
 }
 
 export interface Order {
@@ -15,10 +17,10 @@ export interface Order {
   items: OrderItem[];
   total: number;
   status: 'pending' | 'processing' | 'delivered' | 'cancelled';
-  deliveryDate?: Date;
+  deliveryDate?: Date | Timestamp;
   deliveryTime?: string;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | Timestamp;
+  updatedAt: Date | Timestamp;
 }
 
 export interface OrderItem {
@@ -45,6 +47,6 @@ export interface Product {
   };
   tags: string[];
   inStock: boolean;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: Date | Timestamp;
+  updatedAt: Date | Timestamp;
 }

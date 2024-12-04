@@ -5,7 +5,7 @@ import { useAuth } from '../../context/AuthContext';
 
 export default function PointsDisplay() {
   const { user } = useAuth();
-  const { points, nextAchievement, loading, hasOrders } = usePoints(user?.uid || '');
+  const { points, nextAchievement, loading, hasOrders, progress, pointsToNext } = usePoints(user?.uid);
 
   if (loading) {
     return (
@@ -15,7 +15,21 @@ export default function PointsDisplay() {
     );
   }
 
-  // Don't show anything if user has no orders
+  // Show a message for unverified users
+  if (!user?.emailVerified) {
+    return (
+      <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 lg:p-6 shadow-lg">
+        <div className="text-center text-gray-600">
+          <Award className="h-12 w-12 mx-auto mb-3 text-gray-400" />
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Reward Points</h3>
+          <p>Please verify your email to start earning reward points!</p>
+          <p className="text-sm mt-2">Check your inbox for the verification link.</p>
+        </div>
+      </div>
+    );
+  }
+
+  // Show a message for users with no orders
   if (!hasOrders) {
     return (
       <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 lg:p-6 shadow-lg">
@@ -28,8 +42,6 @@ export default function PointsDisplay() {
       </div>
     );
   }
-
-  const progress = (points / nextAchievement.pointsRequired) * 100;
 
   return (
     <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 lg:p-6 shadow-lg">
@@ -49,6 +61,7 @@ export default function PointsDisplay() {
         <div className="text-left sm:text-right">
           <p className="text-sm text-gray-600">Next Achievement</p>
           <p className="font-medium text-emerald-600">{nextAchievement.name}</p>
+          <p className="text-sm text-gray-500">{pointsToNext} points to go</p>
         </div>
       </div>
 
