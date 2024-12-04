@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Mail, Phone, MapPin, Bell, Shield, CreditCard } from 'lucide-react';
+import { User, Mail, Phone, MapPin, Bell, Shield } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useUserData } from '../../hooks/useFirestore';
 import * as firestoreService from '../../services/firestore';
@@ -190,19 +190,6 @@ export default function Profile() {
                 ></div>
               </div>
               <p className="text-sm text-gray-600 mt-2">Next reward at 1,000 points</p>
-            </div>
-          </div>
-
-          <div className="bg-emerald-50 rounded-xl p-6">
-            <h3 className="text-lg font-semibold text-emerald-900 mb-4">Payment Method</h3>
-            <div className="bg-white rounded-lg p-4 border border-emerald-100">
-              <div className="flex items-center space-x-3 mb-4">
-                <CreditCard className="h-5 w-5 text-gray-400" />
-                <span className="text-gray-900">•••• 4242</span>
-              </div>
-              <button className="w-full bg-emerald-100 text-emerald-700 py-2 rounded-lg hover:bg-emerald-200 transition-colors text-sm">
-                Update Payment Method
-              </button>
             </div>
           </div>
         </div>
