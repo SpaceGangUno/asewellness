@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { User, Mail, Phone, MapPin, Bell, Shield, CreditCard } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useUserData } from '../../hooks/useFirestore';
@@ -8,24 +8,50 @@ export default function Profile() {
   const { user } = useAuth();
   const { userData, loading } = useUserData();
   const [isSaving, setIsSaving] = useState(false);
+  const [error, setError] = useState('');
   const [profile, setProfile] = useState({
-    name: userData?.name || '',
-    email: userData?.email || '',
-    phone: userData?.phone || '',
-    address: userData?.address || ''
+    name: '',
+    email: '',
+    phone: '',
+    address: ''
   });
+
+  // Update profile state when userData changes
+  useEffect(() => {
+    if (userData) {
+      setProfile({
+        name: userData.name || '',
+        email: userData.email || '',
+        phone: userData.phone || '',
+        address: userData.address || ''
+      });
+    }
+  }, [userData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) return;
 
     setIsSaving(true);
+    setError('');
+
     try {
-      await firestoreService.updateUser(user.uid, profile);
-      alert('Profile updated successfully!');
+      // Preserve existing user data and only update the fields that are in the form
+      const updatedUserData = {
+        ...userData,
+        name: profile.name,
+        email: profile.email,
+        phone: profile.phone,
+        address: profile.address,
+      };
+
+      await firestoreService.updateUser(user.uid, updatedUserData);
+      
+      // Force a refresh of the userData
+      window.location.reload();
     } catch (error) {
       console.error('Error updating profile:', error);
-      alert('Failed to update profile. Please try again.');
+      setError('Failed to update profile. Please try again.');
     } finally {
       setIsSaving(false);
     }
@@ -55,6 +81,12 @@ export default function Profile() {
 
       <div className="grid md:grid-cols-3 gap-8">
         <div className="md:col-span-2">
+          {error && (
+            <div className="mb-4 p-4 bg-red-50 border border-red-200 text-red-600 rounded-xl">
+              {error}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="grid md:grid-cols-2 gap-6">
               <div>
