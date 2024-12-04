@@ -91,9 +91,9 @@ export default function DetoxQuiz() {
       </button>
 
       {isOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
           <div className="absolute inset-0 bg-black" onClick={resetQuiz} />
-          <div className="relative w-[90%] max-w-[600px] mx-auto">
+          <div className="relative w-[90%] max-w-[500px] mx-auto max-h-[90vh] flex flex-col">
             <button
               onClick={resetQuiz}
               className="absolute -top-2 -right-2 w-8 h-8 flex items-center justify-center text-emerald-400/60 hover:text-emerald-400/80 transition z-10"
@@ -101,26 +101,28 @@ export default function DetoxQuiz() {
               <X className="h-5 w-5" />
             </button>
             
-            <div className="bg-black rounded-lg p-6">
-              <h3 className="text-2xl text-white mb-6">
-                {questions[currentQuestion].question}
-              </h3>
-              
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {questions[currentQuestion].options.map((option) => {
-                  const Icon = option.icon;
-                  return (
-                    <button
-                      key={option.text}
-                      onClick={() => handleAnswer(option.text)}
-                      className="relative h-[110px] sm:h-[130px] flex flex-col items-center justify-center bg-emerald-950/30 hover:bg-emerald-900/30 rounded-lg transition group"
-                    >
-                      <Icon className="h-8 w-8 sm:h-10 sm:w-10 text-emerald-400 mb-3" />
-                      <span className="text-white text-base sm:text-lg">{option.text}</span>
-                      <div className="absolute top-3 right-3 w-1.5 h-1.5 rounded-full bg-emerald-400/60 opacity-0 group-hover:opacity-100 transition-opacity" />
-                    </button>
-                  );
-                })}
+            <div className="bg-black rounded-lg overflow-auto">
+              <div className="p-5">
+                <h3 className="text-xl sm:text-2xl text-white mb-5">
+                  {questions[currentQuestion].question}
+                </h3>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  {questions[currentQuestion].options.map((option) => {
+                    const Icon = option.icon;
+                    return (
+                      <button
+                        key={option.text}
+                        onClick={() => handleAnswer(option.text)}
+                        className="relative h-[100px] flex flex-col items-center justify-center bg-emerald-950/30 hover:bg-emerald-900/30 rounded-lg transition group"
+                      >
+                        <Icon className="h-8 w-8 text-emerald-400 mb-2" />
+                        <span className="text-white text-base px-2 text-center">{option.text}</span>
+                        <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full bg-emerald-400/60 opacity-0 group-hover:opacity-100 transition-opacity" />
+                      </button>
+                    );
+                  })}
+                </div>
               </div>
             </div>
           </div>
