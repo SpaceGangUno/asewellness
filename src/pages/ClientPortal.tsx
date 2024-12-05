@@ -5,6 +5,10 @@ import AdminDashboard from '../components/portal/AdminDashboard';
 import Login from '../components/portal/Login';
 import { useAuth } from '../context/AuthContext';
 
+// Admin credentials:
+// Email: hello@asejuices.com
+// Password: Admin123!
+
 export default function ClientPortal() {
   const { user, loading } = useAuth();
 
@@ -16,7 +20,7 @@ export default function ClientPortal() {
     );
   }
 
-  // Check if user is admin (hello@asejuices.com)
+  // Check if user is admin
   const isAdmin = user?.email === 'hello@asejuices.com';
 
   return (
