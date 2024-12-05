@@ -229,4 +229,165 @@ const lifestylePrograms = {
   }
 };
 
-// ... (keep the rest of the file the same)
+const Detox: React.FC = () => {
+  const { addToCart } = useCart();
+  const [searchParams] = useSearchParams();
+  const programRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const [activeTab, setActiveTab] = useState<TabType>('experience');
+  
+  useEffect(() => {
+    const program = searchParams.get('program');
+    if (program && programRefs.current[program]) {
+      setTimeout(() => {
+        programRefs.current[program]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }, 100);
+    }
+  }, [searchParams]);
+
+  const handleAddToCart = (products: any[]) => {
+    products.forEach((product) => {
+      addToCart({ name: product.name, price: product.price, quantity: 1 });
+    });
+  };
+
+  const renderProgram = (program: any) => (
+    <div
+      key={program.id}
+      ref={el => programRefs.current[program.id] = el}
+      className="relative bg-gradient-to-br from-cyan-900/95 via-blue-900/95 to-blue-950/95 rounded-2xl overflow-hidden transition-all duration-300 group"
+    >
+      <div className="absolute inset-0 overflow-hidden">
+        <img 
+          src={program.image} 
+          alt={program.name}
+          className="w-full h-full object-cover opacity-20 group-hover:opacity-25 transition-opacity duration-300"
+        />
+      </div>
+      
+      <div className="relative p-8">
+        <div className="flex items-start space-x-4 mb-6">
+          <program.icon className="h-10 w-10 text-cyan-400 flex-shrink-0 mt-1" />
+          <div>
+            <h2 className="text-3xl font-bold text-white mb-1">
+              {program.name}
+            </h2>
+            <p className="text-cyan-400 text-lg mb-2">
+              {program.subtitle}
+            </p>
+            <p className="text-cyan-100">
+              {program.description}
+            </p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+          <div className="bg-cyan-900/30 backdrop-blur-sm rounded-xl p-6">
+            <h3 className="text-lg font-semibold text-cyan-400 mb-3">Who It's For</h3>
+            <p className="text-cyan-100">{program.forWhom}</p>
+          </div>
+          <div className="bg-cyan-900/30 backdrop-blur-sm rounded-xl p-6">
+            <h3 className="text-lg font-semibold text-cyan-400 mb-3">Program Focus</h3>
+            <p className="text-cyan-100">{program.focus}</p>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          {program.products.map((product: any) => (
+            <div key={product.name} className="bg-cyan-900/30 backdrop-blur-sm rounded-xl overflow-hidden group">
+              <div className="relative h-48 overflow-hidden">
+                <img 
+                  src={product.image} 
+                  alt={product.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+                <div className="absolute bottom-4 left-4 right-4">
+                  <div className="flex justify-between items-end">
+                    <span className="font-semibold text-white text-lg">{product.name}</span>
+                    <span className="font-bold text-cyan-400 text-lg">${product.price.toFixed(2)}</span>
+                  </div>
+                </div>
+              </div>
+              <div className="p-4">
+                <p className="text-cyan-100 text-sm">{product.description}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        {program.duration && (
+          <div className="flex items-center justify-between mb-8 bg-cyan-900/30 backdrop-blur-sm rounded-xl p-6">
+            <div>
+              <h3 className="text-lg font-semibold text-cyan-400 mb-1">Program Duration</h3>
+              <p className="text-cyan-100">{program.duration}</p>
+            </div>
+            <div className="text-right">
+              <h3 className="text-lg font-semibold text-cyan-400 mb-1">Package Price</h3>
+              <p className="text-3xl font-bold text-white">${program.price.toFixed(2)}</p>
+            </div>
+          </div>
+        )}
+
+        <div className="flex justify-center">
+          <button
+            onClick={() => handleAddToCart(program.products)}
+            style={{
+              backgroundImage: 'linear-gradient(135deg, rgb(52 211 153) 0%, rgb(45 212 191) 25%, rgb(56 189 248) 75%, rgb(59 130 246) 100%)'
+            }}
+            className="text-white px-8 py-3 rounded-full hover:opacity-90 transition flex items-center space-x-3"
+          >
+            <ShoppingCart className="h-5 w-5" />
+            <span>Add Program to Cart</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-cyan-900/90 via-blue-900/90 to-blue-950/90">
+      <div className="container mx-auto px-4 py-16">
+        <h1 className="text-5xl font-bold text-white mb-4 text-center">
+          Our Detox Programs
+        </h1>
+        <p className="text-cyan-400 text-xl mb-12 text-center max-w-2xl mx-auto">
+          Discover the perfect detox program tailored to your wellness journey
+        </p>
+
+        <div className="flex justify-center mb-12">
+          <div className="inline-flex rounded-lg border border-cyan-900/30 p-1 bg-cyan-900/30 backdrop-blur-sm">
+            <button
+              onClick={() => setActiveTab('experience')}
+              className={`px-6 py-2.5 rounded-md text-sm font-medium transition ${
+                activeTab === 'experience'
+                  ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white'
+                  : 'text-cyan-400 hover:text-cyan-300'
+              }`}
+            >
+              By Experience Level
+            </button>
+            <button
+              onClick={() => setActiveTab('lifestyle')}
+              className={`px-6 py-2.5 rounded-md text-sm font-medium transition ${
+                activeTab === 'lifestyle'
+                  ? 'bg-gradient-to-r from-cyan-500 to-blue-500 text-white'
+                  : 'text-cyan-400 hover:text-cyan-300'
+              }`}
+            >
+              By Lifestyle
+            </button>
+          </div>
+        </div>
+
+        <div className="space-y-24">
+          {activeTab === 'experience'
+            ? Object.values(experienceLevelPrograms).map(renderProgram)
+            : Object.values(lifestylePrograms).map(renderProgram)
+          }
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Detox;
