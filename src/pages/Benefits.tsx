@@ -1,5 +1,5 @@
-import React from 'react';
-import { Heart, Brain, Battery, Shield, Leaf, Sparkles, Scale, Sun, ArrowRight, Check, Star, Quote } from 'lucide-react';
+import React, { useRef, useState, useEffect } from 'react';
+import { Heart, Brain, Battery, Shield, Leaf, Sparkles, Scale, Sun, ArrowRight, Check, Star, Quote, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Benefits.module.css';
 
@@ -84,6 +84,50 @@ const stats = [
 
 export default function Benefits() {
   const navigate = useNavigate();
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
+  const [activeCardIndex, setActiveCardIndex] = useState(0);
+  const [showLeftArrow, setShowLeftArrow] = useState(false);
+  const [showRightArrow, setShowRightArrow] = useState(true);
+
+  const handleScroll = () => {
+    if (!scrollContainerRef.current) return;
+    
+    const container = scrollContainerRef.current;
+    const scrollLeft = container.scrollLeft;
+    const maxScroll = container.scrollWidth - container.clientWidth;
+    
+    setShowLeftArrow(scrollLeft > 0);
+    setShowRightArrow(scrollLeft < maxScroll - 5);
+
+    const cardWidth = 280 + 16; // card width + gap
+    const currentIndex = Math.round(scrollLeft / cardWidth);
+    setActiveCardIndex(currentIndex);
+  };
+
+  const scrollTo = (direction: 'left' | 'right') => {
+    if (!scrollContainerRef.current) return;
+    
+    const container = scrollContainerRef.current;
+    const cardWidth = 280 + 16; // card width + gap
+    const currentScroll = container.scrollLeft;
+    const targetScroll = direction === 'left' 
+      ? currentScroll - cardWidth
+      : currentScroll + cardWidth;
+
+    container.scrollTo({
+      left: targetScroll,
+      behavior: 'smooth'
+    });
+  };
+
+  useEffect(() => {
+    const container = scrollContainerRef.current;
+    if (container) {
+      container.addEventListener('scroll', handleScroll);
+      handleScroll(); // Initial check
+      return () => container.removeEventListener('scroll', handleScroll);
+    }
+  }, []);
 
   const handleProductsClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -132,34 +176,62 @@ export default function Benefits() {
               to deliver maximum health benefits and exceptional taste.
             </p>
           </div>
-          <div className={styles.scrollContainer}>
-            {benefits.map((benefit) => {
-              const Icon = benefit.icon;
-              return (
-                <div
-                  key={benefit.title}
-                  className={`${styles.card} p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 bg-white/80 backdrop-blur-sm border border-white/20 group hover:-translate-y-1`}
-                >
-                  <div className={`${benefit.bgColor} p-4 rounded-full w-fit mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                    <Icon className={`h-8 w-8 ${benefit.color}`} />
+          <div className={styles.scrollWrapper}>
+            {showLeftArrow && (
+              <button 
+                className={`${styles.scrollButton} ${styles.left}`}
+                onClick={() => scrollTo('left')}
+                aria-label="Scroll left"
+              >
+                <ChevronLeft className="w-6 h-6 text-cyan-600" />
+              </button>
+            )}
+            {showRightArrow && (
+              <button 
+                className={`${styles.scrollButton} ${styles.right}`}
+                onClick={() => scrollTo('right')}
+                aria-label="Scroll right"
+              >
+                <ChevronRight className="w-6 h-6 text-cyan-600" />
+              </button>
+            )}
+            <div ref={scrollContainerRef} className={styles.scrollContainer}>
+              {benefits.map((benefit, index) => {
+                const Icon = benefit.icon;
+                return (
+                  <div
+                    key={benefit.title}
+                    className={`${styles.card} p-6 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 bg-white/80 backdrop-blur-sm border border-white/20 group hover:-translate-y-1`}
+                  >
+                    <div className={`${benefit.bgColor} p-4 rounded-full w-fit mb-4 group-hover:scale-110 transition-transform duration-300`}>
+                      <Icon className={`h-6 w-6 ${benefit.color}`} />
+                    </div>
+                    <h3 className="text-xl font-semibold text-cyan-900 mb-2">
+                      {benefit.title}
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      {benefit.description}
+                    </p>
+                    <ul className="space-y-2">
+                      {benefit.features.map((feature) => (
+                        <li key={feature} className="flex items-center text-sm text-gray-700">
+                          <Check className="h-4 w-4 text-cyan-500 mr-2 flex-shrink-0" />
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
                   </div>
-                  <h3 className="text-2xl font-semibold text-cyan-900 mb-4">
-                    {benefit.title}
-                  </h3>
-                  <p className="text-gray-600 mb-6">
-                    {benefit.description}
-                  </p>
-                  <ul className="space-y-3">
-                    {benefit.features.map((feature) => (
-                      <li key={feature} className="flex items-center text-gray-700">
-                        <Check className="h-5 w-5 text-cyan-500 mr-2" />
-                        {feature}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              );
-            })}
+                );
+              })}
+            </div>
+            <div className={styles.scrollIndicator}>
+              {benefits.map((_, index) => (
+                <div
+                  key={index}
+                  className={`${styles.dot} ${index === activeCardIndex ? styles.active : ''}`}
+                />
+              ))}
+            </div>
           </div>
         </div>
       </section>
