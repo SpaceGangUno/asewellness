@@ -1,5 +1,6 @@
 import React from 'react';
 import { Leaf, Droplets, ThermometerSun, Timer } from 'lucide-react';
+import styles from './Process.module.css';
 
 const steps = [
   {
@@ -45,24 +46,22 @@ const ProcessCard = ({ step }: { step: typeof steps[0] }) => {
 
 export default function Process() {
   return (
-    <section id="process" className="relative py-12 bg-gradient-brand-reverse">
-      <div className="absolute inset-0 backdrop-blur-sm bg-black/20" />
+    <section id="process" className="relative py-12 bg-gradient-brand">
+      <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" />
       <div className="max-w-7xl mx-auto px-4 relative">
         <h2 className="text-3xl font-bold text-white text-center mb-6">
           Our Cold Press Process
         </h2>
-        <div className="relative overflow-hidden">
-          <div className="pause-on-hover">
-            <div className="flex gap-4 animate-scroll">
-              {/* First set of cards */}
-              {steps.map((step, index) => (
-                <ProcessCard key={`${step.title}-1`} step={step} />
-              ))}
-              {/* Duplicate set for seamless loop */}
-              {steps.map((step, index) => (
-                <ProcessCard key={`${step.title}-2`} step={step} />
-              ))}
-            </div>
+        <div className={styles.wrapper}>
+          <div className={styles.scrollContainer}>
+            {/* First set of cards */}
+            {steps.map((step, index) => (
+              <ProcessCard key={`${step.title}-1`} step={step} />
+            ))}
+            {/* Duplicate set for seamless loop */}
+            {steps.map((step, index) => (
+              <ProcessCard key={`${step.title}-2`} step={step} />
+            ))}
           </div>
         </div>
       </div>
