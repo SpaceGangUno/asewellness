@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Heart, Brain, Battery, Shield, Leaf, Droplets, ThermometerSun, Timer, Sparkles, Scale, Sun, ArrowRight, Check, Star, Quote, ChevronLeft, ChevronRight, ShieldCheck, Award, Zap } from 'lucide-react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import styles from './About.module.css';
 
 interface Stat {
@@ -27,6 +27,20 @@ interface QualityStep {
   icon: React.FC<{ className?: string }>;
   title: string;
   description: string;
+}
+
+interface ScrollableSectionProps {
+  title: string;
+  description: string;
+  items: any[];
+  scrollRef: React.RefObject<HTMLDivElement>;
+  showLeft: boolean;
+  showRight: boolean;
+  activeIndex: number;
+  bgColor?: string;
+  textColor?: string;
+  cardStyle?: string;
+  bgImage?: string;
 }
 
 const stats: Stat[] = [
@@ -133,18 +147,7 @@ const qualityAssurance: QualityStep[] = [
   }
 ];
 
-const ScrollableSection: React.FC<{
-  title: string;
-  description: string;
-  items: any[];
-  scrollRef: React.RefObject<HTMLDivElement>;
-  showLeft: boolean;
-  showRight: boolean;
-  activeIndex: number;
-  bgColor?: string;
-  textColor?: string;
-  cardStyle?: string;
-}> = ({
+const ScrollableSection: React.FC<ScrollableSectionProps> = ({
   title,
   description,
   items,
@@ -154,10 +157,20 @@ const ScrollableSection: React.FC<{
   activeIndex,
   bgColor = "bg-gradient-to-br from-cyan-50 via-emerald-50 to-blue-50",
   textColor = "text-cyan-900",
-  cardStyle = "bg-white/80"
+  cardStyle = "bg-white/80",
+  bgImage
 }) => (
-  <section className={`py-16 sm:py-20 ${bgColor}`}>
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section className={`relative py-16 sm:py-20 ${bgColor} overflow-hidden`}>
+    {bgImage && (
+      <div className="absolute inset-0 overflow-hidden">
+        <img
+          src={bgImage}
+          alt="Section background"
+          className="w-full h-full object-cover opacity-20"
+        />
+      </div>
+    )}
+    <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div className="text-center mb-12">
         <h2 className={`text-4xl font-bold ${textColor} mb-4`}>
           {title}
@@ -341,9 +354,10 @@ export default function About() {
         showLeft={showLeftArrows.benefits}
         showRight={showRightArrows.benefits}
         activeIndex={activeBenefitIndex}
+        bgImage="https://images.unsplash.com/photo-1601493700631-2b16ec4b4716?auto=format&fit=crop&q=80"
       />
 
-      {/* Process Section - Updated for better readability */}
+      {/* Process Section */}
       <ScrollableSection
         title="Our Cold Press Process"
         description="Experience the meticulous journey from farm to bottle, ensuring every sip delivers maximum nutrition and flavor."
@@ -355,6 +369,7 @@ export default function About() {
         bgColor="bg-gradient-to-br from-cyan-900/95 via-emerald-800/95 to-blue-900/95"
         textColor="text-white"
         cardStyle="bg-black/40 hover:bg-black/50"
+        bgImage="https://images.unsplash.com/photo-1589365278144-c9e705f843ba?auto=format&fit=crop&q=80"
       />
 
       {/* Quality Assurance Section */}
@@ -366,11 +381,19 @@ export default function About() {
         showLeft={showLeftArrows.quality}
         showRight={showRightArrows.quality}
         activeIndex={activeQualityIndex}
+        bgImage="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80"
       />
 
       {/* CTA Section */}
-      <section className="py-20 bg-gradient-to-br from-cyan-900/90 via-emerald-800/80 to-blue-900/90 text-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <section className="relative py-20 bg-gradient-to-br from-cyan-900/90 via-emerald-800/80 to-blue-900/90 text-white">
+        <div className="absolute inset-0 overflow-hidden">
+          <img
+            src="https://images.unsplash.com/photo-1589733955941-5eeaf752f6dd?auto=format&fit=crop&q=80"
+            alt="Juice bottles background"
+            className="w-full h-full object-cover opacity-20"
+          />
+        </div>
+        <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-4xl font-bold mb-8">Start Your Wellness Journey Today</h2>
           <p className="text-xl text-cyan-100 mb-12 max-w-2xl mx-auto">
             Experience the transformative power of our cold-pressed juices and feel the difference in your body and mind.
