@@ -37,7 +37,7 @@ export default function Hero() {
           alt="Fresh juices background"
           className="w-full h-full object-cover object-center scale-110"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-black/90 via-emerald-950/80 to-black/90" />
+        <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/90 via-emerald-800/80 to-blue-900/90" />
       </div>
       
       <div className="relative w-full px-4 min-h-[80vh] flex flex-col justify-center pt-16 pb-12">
@@ -49,12 +49,12 @@ export default function Hero() {
           >
             <h1 className="text-5xl font-bold tracking-tight leading-[1.1]">
               <span className="block text-white opacity-90">Start</span>
-              <span className="block bg-gradient-to-r from-emerald-200 via-emerald-100 to-emerald-200 text-transparent bg-clip-text">
+              <span className="block bg-gradient-to-r from-cyan-200 via-emerald-200 to-blue-200 text-transparent bg-clip-text">
                 your wellness
               </span>
-              <span className="block text-emerald-400">journey</span>
+              <span className="block text-cyan-400">journey</span>
             </h1>
-            <p className="text-lg text-gray-300 leading-relaxed font-light max-w-md">
+            <p className="text-lg text-gray-200 leading-relaxed font-light max-w-md">
               Experience the power of nature through our premium cold-pressed juices.
             </p>
           </div>
@@ -69,10 +69,10 @@ export default function Hero() {
               return (
                 <div 
                   key={benefit.text} 
-                  className="group relative flex items-center space-x-3 bg-black/30 backdrop-blur-sm rounded-xl p-3 transition-all duration-300 hover:bg-emerald-950/50 border border-emerald-900/30 touch-manipulation"
+                  className="group relative flex items-center space-x-3 bg-black/30 backdrop-blur-sm rounded-xl p-3 transition-all duration-300 hover:bg-cyan-900/50 border border-cyan-800/30 touch-manipulation"
                   style={{ transitionDelay: `${index * 100}ms` }}
                 >
-                  <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-emerald-500/20 text-emerald-300 group-hover:scale-110 transition-transform duration-300">
+                  <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-cyan-500/20 text-cyan-300 group-hover:scale-110 transition-transform duration-300">
                     <Icon className="h-4 w-4" />
                   </div>
                   <span className="text-base text-white font-medium">{benefit.text}</span>
@@ -88,7 +88,7 @@ export default function Hero() {
           >
             <button
               onClick={() => setIsQuizOpen(true)}
-              className="bg-white text-emerald-600 px-8 py-3 rounded-full hover:bg-emerald-50 transition flex items-center space-x-2"
+              className="bg-white text-cyan-600 px-8 py-3 rounded-full hover:bg-cyan-50 transition flex items-center space-x-2"
             >
               <Sparkles className="h-5 w-5" />
               <span>Find Your Perfect Detox</span>
@@ -100,8 +100,8 @@ export default function Hero() {
               }`}
             >
               <div className="flex flex-col items-center space-y-0.5">
-                <span className="text-xs font-medium text-emerald-300/80">Scroll to explore</span>
-                <ChevronDown className="w-4 h-4 text-emerald-300/80 animate-bounce" />
+                <span className="text-xs font-medium text-cyan-300/80">Scroll to explore</span>
+                <ChevronDown className="w-4 h-4 text-cyan-300/80 animate-bounce" />
               </div>
             </div>
           </div>
