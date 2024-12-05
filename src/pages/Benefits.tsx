@@ -158,11 +158,11 @@ export default function Benefits() {
           <p className="text-xl md:text-2xl text-cyan-100 max-w-3xl mx-auto mb-12">
             Experience the power of nature's finest ingredients, carefully crafted to enhance your wellbeing and vitality.
           </p>
-          <div className="grid grid-cols-2 md:flex md:justify-center gap-6 md:gap-8 max-w-lg mx-auto">
+          <div className="flex justify-center items-center -mx-4">
             {stats.map((stat) => (
-              <div key={stat.label} className="text-center px-2">
-                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 whitespace-nowrap">{stat.value}</div>
-                <div className="text-xs sm:text-sm text-cyan-100 whitespace-nowrap">{stat.label}</div>
+              <div key={stat.label} className="flex-1 px-4 min-w-[80px]">
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 mb-1">{stat.value}</div>
+                <div className="text-[10px] sm:text-xs md:text-sm text-cyan-100 leading-tight">{stat.label}</div>
               </div>
             ))}
           </div>
