@@ -242,7 +242,7 @@ const ScrollableSection: React.FC<ScrollableSectionProps> = ({
   </section>
 );
 
-export default function About() {
+const About: React.FC = () => {
   const navigate = useNavigate();
   const benefitsScrollRef = useRef<HTMLDivElement>(null);
   const processScrollRef = useRef<HTMLDivElement>(null);
@@ -381,7 +381,7 @@ export default function About() {
         showLeft={showLeftArrows.quality}
         showRight={showRightArrows.quality}
         activeIndex={activeQualityIndex}
-        bgImage="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&q=80"
+        bgImage="https://firebasestorage.googleapis.com/v0/b/ase-juices.firebasestorage.app/o/a-photo-of-a-woman-quality-checking-the-freshly-sq-DhYno_ICTm6ZIa8P76oIsQ-8o6zqXO6R-WzlicToiGhnw.png?alt=media&token=945513f4-fb07-48d7-ae13-fe267ac2d34e"
       />
 
       {/* CTA Section */}
@@ -412,4 +412,6 @@ export default function About() {
       </section>
     </main>
   );
-}
+};
+
+export default About;
