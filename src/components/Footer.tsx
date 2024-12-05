@@ -52,14 +52,12 @@ export default function Footer() {
           <div className="text-center sm:text-left">
             <h3 className="text-base sm:text-lg font-semibold mb-3 sm:mb-4">Contact</h3>
             <ul className="space-y-2.5 text-sm sm:text-base text-emerald-300">
-              <li className="py-1">7850 Melrose Ave</li>
-              <li className="py-1">Los Angeles, CA 90046</li>
               <li className="py-1">
                 <a 
-                  href="mailto:asejuices7@gmail.com" 
+                  href="mailto:hello@asejuices.com" 
                   className="hover:text-emerald-200 transition"
                 >
-                  asejuices7@gmail.com
+                  hello@asejuices.com
                 </a>
               </li>
               <li className="py-1">
