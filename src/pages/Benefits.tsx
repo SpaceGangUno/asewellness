@@ -1,5 +1,6 @@
 import React from 'react';
 import { Heart, Brain, Battery, Shield, Leaf, Sparkles, Scale, Sun, ArrowRight, Check, Star, Quote } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const benefits = [
   {
@@ -81,6 +82,13 @@ const stats = [
 ];
 
 export default function Benefits() {
+  const navigate = useNavigate();
+
+  const handleProductsClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    navigate('/products');
+  };
+
   return (
     <main className="flex-1">
       {/* Hero Section */}
@@ -199,13 +207,13 @@ export default function Benefits() {
           <p className="text-xl text-emerald-100 mb-12 max-w-2xl mx-auto">
             Experience the transformative power of our cold-pressed juices and feel the difference in your body and mind.
           </p>
-          <a
-            href="#products"
+          <button
+            onClick={handleProductsClick}
             className="inline-flex items-center px-8 py-4 bg-white text-emerald-900 rounded-full text-lg font-semibold hover:bg-emerald-50 transition-colors duration-300"
           >
             Explore Our Products
             <ArrowRight className="ml-2 h-5 w-5" />
-          </a>
+          </button>
         </div>
       </section>
     </main>
