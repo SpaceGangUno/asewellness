@@ -30,11 +30,11 @@ export default function Navbar() {
 
   return (
     <>
-      <nav className="fixed w-full bg-black/80 backdrop-blur-md z-50 border-b border-emerald-900/30">
+      <nav className="fixed w-full bg-black/40 backdrop-blur-sm z-50 border-b border-white/5">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
           <div className="flex items-center justify-between h-14">
             <Link to="/" className="flex items-center space-x-2">
-              <LotusIcon className="h-6 w-6 text-emerald-400" />
+              <LotusIcon className="h-6 w-6 text-cyan-400" />
               <span className="text-lg font-bold text-white">Asé Juices</span>
             </Link>
 
@@ -50,7 +50,7 @@ export default function Navbar() {
                 <Sparkles className="h-4 w-4" />
                 <span>Find Your Perfect Detox</span>
               </button>
-              <Link to="/portal" className="bg-emerald-600 text-white px-6 py-2 rounded-full hover:bg-emerald-500 transition flex items-center space-x-2">
+              <Link to="/portal" className="bg-cyan-600 text-white px-6 py-2 rounded-full hover:bg-cyan-500 transition flex items-center space-x-2">
                 <User className="h-4 w-4" />
                 <span>Client Portal</span>
               </Link>
@@ -61,14 +61,14 @@ export default function Navbar() {
                 >
                   <ShoppingCart className="h-6 w-6" />
                   {itemCount > 0 && (
-                    <span className="absolute -top-2 -right-2 bg-emerald-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                    <span className="absolute -top-2 -right-2 bg-cyan-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                       {itemCount}
                     </span>
                   )}
                 </button>
 
                 {isCartOpen && (
-                  <div className="absolute right-0 mt-2 w-80 bg-black/90 backdrop-blur-md rounded-lg shadow-lg p-4 animate-fade-in border border-emerald-900/30">
+                  <div className="absolute right-0 mt-2 w-80 bg-black/80 backdrop-blur-sm rounded-lg shadow-lg p-4 animate-fade-in border border-white/10">
                     <h3 className="text-lg font-semibold text-white mb-4">Shopping Cart</h3>
                     {items.length === 0 ? (
                       <p className="text-gray-400">Your cart is empty</p>
@@ -89,14 +89,14 @@ export default function Navbar() {
                             </div>
                           ))}
                         </div>
-                        <div className="border-t border-emerald-900/30 pt-3">
+                        <div className="border-t border-white/10 pt-3">
                           <div className="flex justify-between items-center font-semibold text-white">
                             <span>Total</span>
                             <span>${total.toFixed(2)}</span>
                           </div>
                           <button 
                             onClick={handleCheckout}
-                            className="w-full mt-4 bg-emerald-600 text-white px-4 py-2 rounded-full hover:bg-emerald-500 transition"
+                            className="w-full mt-4 bg-cyan-600 text-white px-4 py-2 rounded-full hover:bg-cyan-500 transition"
                           >
                             Checkout
                           </button>
@@ -122,7 +122,7 @@ export default function Navbar() {
               >
                 <ShoppingCart className="h-6 w-6" />
                 {itemCount > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-emerald-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-cyan-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                     {itemCount}
                   </span>
                 )}
@@ -142,7 +142,7 @@ export default function Navbar() {
 
           {/* Mobile Menu */}
           {isMobileMenuOpen && (
-            <div className="md:hidden fixed inset-x-0 top-14 h-[calc(100vh-3.5rem)] bg-black/90 backdrop-blur-md animate-fade-in overflow-y-auto border-t border-emerald-900/30">
+            <div className="md:hidden fixed inset-x-0 top-14 h-[calc(100vh-3.5rem)] bg-black/80 backdrop-blur-sm animate-fade-in overflow-y-auto border-t border-white/10">
               <div className="px-4 py-6 space-y-4">
                 <Link
                   to="/benefits"
@@ -178,7 +178,7 @@ export default function Navbar() {
 
           {/* Mobile Cart Popup */}
           {isCartOpen && (
-            <div className="md:hidden fixed inset-x-0 top-14 h-[calc(100vh-3.5rem)] bg-black/90 backdrop-blur-md animate-fade-in overflow-y-auto border-t border-emerald-900/30">
+            <div className="md:hidden fixed inset-x-0 top-14 h-[calc(100vh-3.5rem)] bg-black/80 backdrop-blur-sm animate-fade-in overflow-y-auto border-t border-white/10">
               <div className="p-4">
                 <h3 className="text-lg font-semibold text-white mb-4">Shopping Cart</h3>
                 {items.length === 0 ? (
@@ -200,14 +200,14 @@ export default function Navbar() {
                         </div>
                       ))}
                     </div>
-                    <div className="border-t border-emerald-900/30 pt-4 sticky bottom-0">
+                    <div className="border-t border-white/10 pt-4 sticky bottom-0">
                       <div className="flex justify-between items-center font-semibold text-white text-lg">
                         <span>Total</span>
                         <span>${total.toFixed(2)}</span>
                       </div>
                       <button 
                         onClick={handleCheckout}
-                        className="w-full mt-4 bg-emerald-600 text-white px-4 py-3 rounded-full hover:bg-emerald-500 transition text-lg font-medium"
+                        className="w-full mt-4 bg-cyan-600 text-white px-4 py-3 rounded-full hover:bg-cyan-500 transition text-lg font-medium"
                       >
                         Checkout
                       </button>
