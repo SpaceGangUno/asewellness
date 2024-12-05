@@ -162,7 +162,7 @@ const ScrollableSection: React.FC<{
         <h2 className={`text-4xl font-bold ${textColor} mb-4`}>
           {title}
         </h2>
-        <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+        <p className={`text-xl ${textColor === 'text-white' ? 'text-gray-200' : 'text-gray-600'} max-w-3xl mx-auto`}>
           {description}
         </p>
       </div>
@@ -199,13 +199,13 @@ const ScrollableSection: React.FC<{
                 <h3 className={`text-xl font-semibold ${textColor} mb-2`}>
                   {item.title}
                 </h3>
-                <p className="text-sm text-gray-600 mb-4">
+                <p className={`text-sm ${textColor === 'text-white' ? 'text-gray-200' : 'text-gray-600'} mb-4`}>
                   {item.description}
                 </p>
                 {item.features && (
                   <ul className="space-y-2">
                     {item.features.map((feature: string) => (
-                      <li key={feature} className="flex items-center text-sm text-gray-700">
+                      <li key={feature} className={`flex items-center text-sm ${textColor === 'text-white' ? 'text-gray-200' : 'text-gray-700'}`}>
                         <Check className="h-4 w-4 text-cyan-500 mr-2 flex-shrink-0" />
                         <span>{feature}</span>
                       </li>
@@ -229,7 +229,7 @@ const ScrollableSection: React.FC<{
   </section>
 );
 
-function About() {
+export default function About() {
   const navigate = useNavigate();
   const benefitsScrollRef = useRef<HTMLDivElement>(null);
   const processScrollRef = useRef<HTMLDivElement>(null);
@@ -302,11 +302,6 @@ function About() {
     }
   }, []);
 
-  const handleProductsClick = (e: React.MouseEvent) => {
-    e.preventDefault();
-    navigate('/products');
-  };
-
   return (
     <main className="flex-1">
       {/* Hero Section */}
@@ -348,7 +343,7 @@ function About() {
         activeIndex={activeBenefitIndex}
       />
 
-      {/* Process Section */}
+      {/* Process Section - Updated for better readability */}
       <ScrollableSection
         title="Our Cold Press Process"
         description="Experience the meticulous journey from farm to bottle, ensuring every sip delivers maximum nutrition and flavor."
@@ -357,9 +352,9 @@ function About() {
         showLeft={showLeftArrows.process}
         showRight={showRightArrows.process}
         activeIndex={activeProcessIndex}
-        bgColor="bg-gradient-to-br from-cyan-900/90 via-emerald-800/80 to-blue-900/90"
+        bgColor="bg-gradient-to-br from-cyan-900/95 via-emerald-800/95 to-blue-900/95"
         textColor="text-white"
-        cardStyle="bg-black/30"
+        cardStyle="bg-black/40 hover:bg-black/50"
       />
 
       {/* Quality Assurance Section */}
@@ -381,7 +376,7 @@ function About() {
             Experience the transformative power of our cold-pressed juices and feel the difference in your body and mind.
           </p>
           <button
-            onClick={handleProductsClick}
+            onClick={() => navigate('/products')}
             style={{
               backgroundImage: 'linear-gradient(135deg, rgb(52 211 153) 0%, rgb(45 212 191) 25%, rgb(56 189 248) 75%, rgb(59 130 246) 100%)'
             }}
@@ -395,5 +390,3 @@ function About() {
     </main>
   );
 }
-
-export default About;
