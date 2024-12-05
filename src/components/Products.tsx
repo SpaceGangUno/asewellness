@@ -71,10 +71,15 @@ export default function Products() {
                   <span className="text-lg font-bold text-emerald-600">${product.price.toFixed(2)}</span>
                   <button
                     onClick={() => handleAddToCart(product)}
-                    className={`w-full sm:w-auto flex items-center justify-center space-x-2 px-4 py-2.5 rounded-full text-sm sm:text-base font-medium transition-all duration-200 ${
+                    style={{
+                      backgroundImage: addedToCart[product.id]
+                        ? 'linear-gradient(to right, rgb(209 250 229), rgb(219 234 254))'
+                        : 'linear-gradient(135deg, rgb(52 211 153) 0%, rgb(45 212 191) 25%, rgb(56 189 248) 75%, rgb(59 130 246) 100%)'
+                    }}
+                    className={`w-full sm:w-auto flex items-center justify-center space-x-2 px-4 py-2.5 rounded-full text-sm sm:text-base font-medium transition-all duration-200 shadow-sm hover:shadow hover:opacity-90 active:opacity-100 ${
                       addedToCart[product.id]
-                        ? 'bg-gradient-to-r from-emerald-100 to-blue-100 text-emerald-800'
-                        : 'bg-gradient-to-r from-emerald-400 via-teal-400 to-blue-400 hover:from-emerald-300 hover:via-teal-300 hover:to-blue-300 active:from-emerald-500 active:via-teal-500 active:to-blue-500 text-white shadow-sm'
+                        ? 'text-emerald-800'
+                        : 'text-white'
                     }`}
                   >
                     {addedToCart[product.id] ? (
