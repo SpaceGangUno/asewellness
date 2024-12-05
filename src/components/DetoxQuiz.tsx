@@ -97,18 +97,7 @@ export default function DetoxQuiz({ isOpen, onClose }: DetoxQuizProps) {
   return (
     <div className="fixed inset-0 z-[60]">
       <div className="absolute inset-0 bg-black/80 backdrop-blur-sm" onClick={resetQuiz} />
-      <div className="absolute top-4 left-4 right-4 flex justify-between z-10">
-        {currentQuestion > 0 ? (
-          <button
-            onClick={handleBack}
-            className="text-emerald-400/60 hover:text-emerald-400/80 transition flex items-center space-x-2"
-          >
-            <ArrowLeft className="h-5 w-5" />
-            <span>Back</span>
-          </button>
-        ) : (
-          <div /> /* Empty div to maintain layout */
-        )}
+      <div className="absolute top-4 right-4 z-10">
         <button
           onClick={resetQuiz}
           className="text-emerald-400/60 hover:text-emerald-400/80 transition"
@@ -137,7 +126,7 @@ export default function DetoxQuiz({ isOpen, onClose }: DetoxQuizProps) {
           </h3>
         </div>
         
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-2 gap-4 mb-8">
           {questions[currentQuestion].options.map((option) => {
             const Icon = option.icon;
             const isSelected = answers[currentQuestion] === option.text;
@@ -162,6 +151,18 @@ export default function DetoxQuiz({ isOpen, onClose }: DetoxQuizProps) {
             );
           })}
         </div>
+
+        {currentQuestion > 0 && (
+          <div className="flex justify-center">
+            <button
+              onClick={handleBack}
+              className="flex items-center space-x-2 px-6 py-3 bg-emerald-900/50 hover:bg-emerald-800/50 rounded-full text-emerald-400 hover:text-emerald-300 transition-all duration-300"
+            >
+              <ArrowLeft className="h-5 w-5" />
+              <span>Previous Question</span>
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
