@@ -40,9 +40,8 @@ export default function Navbar() {
 
             {/* Desktop Navigation */}
             <div className="hidden md:flex items-center space-x-8">
-              <Link to="/benefits" className="text-gray-300 hover:text-white transition">Benefits</Link>
+              <Link to="/about" className="text-gray-300 hover:text-white transition">About</Link>
               <Link to="/products" className="text-gray-300 hover:text-white transition">Products</Link>
-              <Link to="/process" className="text-gray-300 hover:text-white transition">Our Process</Link>
               <button
                 onClick={() => setIsQuizOpen(true)}
                 className="text-gray-300 hover:text-white transition flex items-center space-x-2"
@@ -145,11 +144,11 @@ export default function Navbar() {
             <div className="md:hidden fixed inset-x-0 top-14 h-[calc(100vh-3.5rem)] bg-black/80 backdrop-blur-sm animate-fade-in overflow-y-auto border-t border-white/10">
               <div className="px-4 py-6 space-y-4">
                 <Link
-                  to="/benefits"
+                  to="/about"
                   className="block text-lg text-center text-gray-300 hover:text-white transition py-3"
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
-                  Benefits
+                  About
                 </Link>
                 <Link
                   to="/products"
@@ -157,13 +156,6 @@ export default function Navbar() {
                   onClick={() => setIsMobileMenuOpen(false)}
                 >
                   Products
-                </Link>
-                <Link
-                  to="/process"
-                  className="block text-lg text-center text-gray-300 hover:text-white transition py-3"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                >
-                  Our Process
                 </Link>
                 <Link
                   to="/portal"

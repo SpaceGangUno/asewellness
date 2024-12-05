@@ -1,10 +1,9 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import Products from './pages/Products';
-import Process from './pages/Process';
-import Benefits from './pages/Benefits';
+import About from './pages/About';
 import ClientPortal from './pages/ClientPortal';
 import Detox from './pages/Detox';
 import Footer from './components/Footer';
@@ -31,10 +30,12 @@ function App() {
                 <Routes>
                   <Route path="/" element={<Home />} />
                   <Route path="/products" element={<Products />} />
-                  <Route path="/process" element={<Process />} />
-                  <Route path="/benefits" element={<Benefits />} />
+                  <Route path="/about" element={<About />} />
                   <Route path="/portal/*" element={<ClientPortal />} />
                   <Route path="/detox" element={<Detox />} />
+                  {/* Redirect old routes to new About page */}
+                  <Route path="/benefits" element={<Navigate to="/about" replace />} />
+                  <Route path="/process" element={<Navigate to="/about" replace />} />
                 </Routes>
               </div>
               <Footer />
