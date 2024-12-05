@@ -1,6 +1,7 @@
 import React from 'react';
 import { Heart, Brain, Battery, Shield, Leaf, Sparkles, Scale, Sun, ArrowRight, Check, Star, Quote } from 'lucide-react';
 import { Link, useNavigate } from 'react-router-dom';
+import styles from './Benefits.module.css';
 
 const benefits = [
   {
@@ -131,13 +132,13 @@ export default function Benefits() {
               to deliver maximum health benefits and exceptional taste.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className={styles.scrollContainer}>
             {benefits.map((benefit) => {
               const Icon = benefit.icon;
               return (
                 <div
                   key={benefit.title}
-                  className="p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 bg-white/80 backdrop-blur-sm border border-white/20 group hover:-translate-y-1"
+                  className={`${styles.card} p-8 rounded-xl shadow-lg hover:shadow-2xl transition-all duration-300 bg-white/80 backdrop-blur-sm border border-white/20 group hover:-translate-y-1`}
                 >
                   <div className={`${benefit.bgColor} p-4 rounded-full w-fit mb-6 group-hover:scale-110 transition-transform duration-300`}>
                     <Icon className={`h-8 w-8 ${benefit.color}`} />

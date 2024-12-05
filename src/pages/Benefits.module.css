@@ -1,0 +1,39 @@
+.scrollContainer {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE and Edge */
+}
+
+.scrollContainer::-webkit-scrollbar {
+  display: none; /* Chrome, Safari and Opera */
+}
+
+.card {
+  scroll-snap-align: start;
+  min-width: 300px;
+  flex-shrink: 0;
+}
+
+@media (min-width: 768px) {
+  .scrollContainer {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    overflow-x: visible;
+    scroll-snap-type: none;
+  }
+  
+  .card {
+    min-width: auto;
+  }
+}
+
+@media (min-width: 1024px) {
+  .scrollContainer {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
