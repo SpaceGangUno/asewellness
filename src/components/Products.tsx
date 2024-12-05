@@ -74,7 +74,7 @@ export default function Products() {
                     className={`w-full sm:w-auto flex items-center justify-center space-x-2 px-4 py-2.5 rounded-full text-sm sm:text-base font-medium transition-all duration-200 ${
                       addedToCart[product.id]
                         ? 'bg-gradient-to-r from-emerald-100 to-blue-100 text-emerald-800'
-                        : 'bg-gradient-to-r from-emerald-600 via-teal-600 to-blue-600 hover:from-emerald-500 hover:via-teal-500 hover:to-blue-500 active:from-emerald-700 active:via-teal-700 active:to-blue-700 text-white'
+                        : 'bg-gradient-to-r from-emerald-400 via-teal-400 to-blue-400 hover:from-emerald-300 hover:via-teal-300 hover:to-blue-300 active:from-emerald-500 active:via-teal-500 active:to-blue-500 text-white shadow-sm'
                     }`}
                   >
                     {addedToCart[product.id] ? (
