@@ -3,6 +3,18 @@ import { Heart, Brain, Battery, Shield, Leaf, Sparkles, Scale, Sun, ArrowRight, 
 import { Link, useNavigate } from 'react-router-dom';
 import styles from './Benefits.module.css';
 
+interface Stat {
+  value: string;
+  label: string;
+}
+
+const stats: Stat[] = [
+  { value: "92%", label: "Customer Satisfaction" },
+  { value: "30+", label: "Natural Ingredients" },
+  { value: "24hrs", label: "Fresh Pressed" },
+  { value: "100%", label: "Organic Produce" }
+];
+
 const benefits = [
   {
     icon: Heart,
@@ -73,13 +85,6 @@ const testimonials = [
     quote: "My clients notice the difference in my energy and vitality. These juices are now an essential part of my daily routine!",
     rating: 5
   }
-];
-
-const stats = [
-  { value: "92%", label: "Customer Satisfaction" },
-  { value: "30+", label: "Natural Ingredients" },
-  { value: "24hrs", label: "Fresh Pressed" },
-  { value: "100%", label: "Organic Produce" }
 ];
 
 export default function Benefits() {
@@ -153,11 +158,11 @@ export default function Benefits() {
           <p className="text-xl md:text-2xl text-cyan-100 max-w-3xl mx-auto mb-12">
             Experience the power of nature's finest ingredients, carefully crafted to enhance your wellbeing and vitality.
           </p>
-          <div className="flex justify-center space-x-8">
+          <div className="grid grid-cols-2 md:flex md:justify-center gap-6 md:gap-8 max-w-lg mx-auto">
             {stats.map((stat) => (
-              <div key={stat.label} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-cyan-400">{stat.value}</div>
-                <div className="text-sm text-cyan-100">{stat.label}</div>
+              <div key={stat.label} className="text-center px-2">
+                <div className="text-2xl sm:text-3xl md:text-4xl font-bold text-cyan-400 whitespace-nowrap">{stat.value}</div>
+                <div className="text-xs sm:text-sm text-cyan-100 whitespace-nowrap">{stat.label}</div>
               </div>
             ))}
           </div>
