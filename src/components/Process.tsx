@@ -28,15 +28,15 @@ const steps = [
 const ProcessCard = ({ step }: { step: typeof steps[0] }) => {
   const Icon = step.icon;
   return (
-    <div className="flex-shrink-0 w-[280px] flex items-center space-x-3 bg-emerald-950/30 backdrop-blur-sm rounded-xl p-4 border border-emerald-400/20 hover:border-emerald-400/30 transition-colors">
-      <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-emerald-400/10">
-        <Icon className="h-6 w-6 text-emerald-300" />
+    <div className="flex-shrink-0 w-[280px] flex items-center space-x-3 bg-black/30 backdrop-blur-sm rounded-xl p-4 border border-white/10 hover:border-white/20 transition-colors">
+      <div className="flex-shrink-0 w-12 h-12 flex items-center justify-center rounded-lg bg-cyan-500/20">
+        <Icon className="h-6 w-6 text-cyan-300" />
       </div>
       <div className="min-w-0">
         <h3 className="text-lg font-semibold text-white truncate">
           {step.title}
         </h3>
-        <p className="text-sm text-emerald-100 line-clamp-2">
+        <p className="text-sm text-gray-200 line-clamp-2">
           {step.description}
         </p>
       </div>
@@ -46,7 +46,7 @@ const ProcessCard = ({ step }: { step: typeof steps[0] }) => {
 
 export default function Process() {
   return (
-    <section id="process" className="relative py-12 bg-gradient-brand">
+    <section id="process" className="relative py-12 bg-gradient-to-br from-cyan-900/90 via-emerald-800/80 to-blue-900/90">
       <div className="absolute inset-0 bg-black/20 backdrop-blur-sm" />
       <div className="max-w-7xl mx-auto px-4 relative">
         <h2 className="text-3xl font-bold text-white text-center mb-6">
