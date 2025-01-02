@@ -33,8 +33,8 @@ export default function Hero() {
         }}
       >
         <img
-          src="https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&q=80"
-          alt="Ocean waves background"
+          src="https://images.unsplash.com/photo-1621263764928-df1444c5e859?auto=format&fit=crop&q=80"
+          alt="Natural supplements and herbs"
           className="w-full h-full object-cover object-center scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/90 via-emerald-800/80 to-blue-900/90" />
