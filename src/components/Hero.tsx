@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Sparkles, Leaf, Battery, ChevronDown } from 'lucide-react';
+import { Sparkles, Heart, Brain, ChevronDown } from 'lucide-react';
 import DetoxQuiz from './DetoxQuiz';
 
 const benefits = [
-  { icon: Sparkles, text: "Total Body Reset" },
-  { icon: Leaf, text: "Raw Ingredients" },
-  { icon: Battery, text: "Boost Energy" },
+  { icon: Heart, text: "Rich in Minerals & Vitamins" },
+  { icon: Brain, text: "Supports Brain Health" },
+  { icon: Sparkles, text: "Boosts Immunity" },
 ];
 
 export default function Hero() {
@@ -33,8 +33,8 @@ export default function Hero() {
         }}
       >
         <img
-          src="https://images.unsplash.com/photo-1622597467836-f3285f2131b8?auto=format&fit=crop&q=80"
-          alt="Fresh juices background"
+          src="https://images.unsplash.com/photo-1596178065887-1198b6148b2b?auto=format&fit=crop&q=80"
+          alt="Ocean waves background"
           className="w-full h-full object-cover object-center scale-110"
         />
         <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/90 via-emerald-800/80 to-blue-900/90" />
@@ -48,14 +48,14 @@ export default function Hero() {
             }`}
           >
             <h1 className="text-5xl font-bold tracking-tight leading-[1.1]">
-              <span className="block text-white opacity-90">Start</span>
+              <span className="block text-white opacity-90">Discover</span>
               <span className="block bg-gradient-to-r from-cyan-200 via-emerald-200 to-blue-200 text-transparent bg-clip-text">
-                your wellness
+                Premium Seamoss
               </span>
-              <span className="block text-cyan-400">journey</span>
+              <span className="block text-cyan-400">Supplements</span>
             </h1>
             <p className="text-lg text-gray-200 leading-relaxed font-light max-w-md">
-              Experience the power of nature through our premium cold-pressed juices.
+              Harness the power of the ocean with our new premium-grade seamoss, packed with essential nutrients for optimal health.
             </p>
           </div>
           
@@ -91,7 +91,7 @@ export default function Hero() {
               className="bg-white text-cyan-600 px-8 py-3 rounded-full hover:bg-cyan-50 transition flex items-center space-x-2"
             >
               <Sparkles className="h-5 w-5" />
-              <span>Find Your Perfect Detox</span>
+              <span>Shop Seamoss Products</span>
             </button>
 
             <div 
