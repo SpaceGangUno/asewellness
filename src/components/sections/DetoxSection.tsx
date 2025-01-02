@@ -29,14 +29,27 @@ export default function DetoxSection() {
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJibGFjayIgc3Ryb2tlLW9wYWNpdHk9IjAuMDUiIHN0cm9rZS13aWR0aD0iMSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNncmlkKSIvPjwvc3ZnPg==')] opacity-50" />
 
       <div className="relative container mx-auto px-4">
-        <div className="max-w-3xl mx-auto text-center mb-20">
-          <h2 className="text-5xl font-bold text-gray-900 mb-6">
-            1-Day Detox Program
-          </h2>
-          <p className="text-xl text-gray-600">
-            Transform your health in just 24 hours with our specialized detox program,
-            designed to revitalize your body and mind.
-          </p>
+        <div className="grid md:grid-cols-2 gap-16 items-center mb-24">
+          <div>
+            <h2 className="text-5xl font-bold text-gray-900 mb-6">
+              1-Day Detox Program
+            </h2>
+            <p className="text-xl text-gray-600 mb-8">
+              Transform your health in just 24 hours with our specialized detox program,
+              designed to revitalize your body and mind.
+            </p>
+            <button className="bg-gradient-to-r from-emerald-600 to-cyan-600 text-white px-8 py-4 rounded-lg font-medium hover:from-emerald-700 hover:to-cyan-700 transition-all shadow-lg hover:shadow-xl">
+              Start Your Detox Journey
+            </button>
+          </div>
+          <div className="relative">
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-cyan-400/20 blur-2xl" />
+            <img 
+              src="https://images.unsplash.com/photo-1622483767028-3f66f32aef97?auto=format&fit=crop&q=80" 
+              alt="Detox juice ingredients" 
+              className="relative rounded-2xl shadow-2xl"
+            />
+          </div>
         </div>
 
         <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
@@ -64,10 +77,22 @@ export default function DetoxSection() {
           })}
         </div>
 
-        <div className="mt-16 text-center">
-          <button className="bg-gradient-to-r from-emerald-600 to-cyan-600 text-white px-8 py-4 rounded-lg font-medium hover:from-emerald-700 hover:to-cyan-700 transition-all shadow-lg hover:shadow-xl">
-            Start Your Detox Journey
-          </button>
+        <div className="mt-24 grid md:grid-cols-3 gap-6">
+          <img 
+            src="https://images.unsplash.com/photo-1610970881699-44a5587cabec?auto=format&fit=crop&q=80" 
+            alt="Fresh ingredients" 
+            className="rounded-2xl shadow-lg hover:shadow-xl transition-all"
+          />
+          <img 
+            src="https://images.unsplash.com/photo-1589365278144-c9e705f843ba?auto=format&fit=crop&q=80" 
+            alt="Juice preparation" 
+            className="rounded-2xl shadow-lg hover:shadow-xl transition-all"
+          />
+          <img 
+            src="https://images.unsplash.com/photo-1600718374662-0483d2b9da44?auto=format&fit=crop&q=80" 
+            alt="Healthy lifestyle" 
+            className="rounded-2xl shadow-lg hover:shadow-xl transition-all"
+          />
         </div>
       </div>
     </section>

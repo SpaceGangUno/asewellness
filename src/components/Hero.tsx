@@ -33,9 +33,9 @@ export default function Hero() {
 
       {/* Content */}
       <div className="relative container mx-auto px-4 pt-32 pb-20">
-        <div className="max-w-4xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-16 items-center">
           <div 
-            className={`space-y-6 text-center transition-all duration-1000 ${
+            className={`space-y-8 transition-all duration-1000 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
@@ -47,11 +47,11 @@ export default function Hero() {
               Supplements
             </h1>
             
-            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
+            <p className="text-xl text-gray-300 max-w-2xl">
               Harness the power of the ocean with our new premium-grade seamoss, packed with essential nutrients for optimal health.
             </p>
 
-            <div className="flex flex-wrap justify-center gap-4 pt-4">
+            <div className="flex flex-wrap gap-4">
               <button className="bg-gradient-to-r from-emerald-400 to-cyan-400 text-white px-8 py-4 rounded-lg font-medium hover:from-emerald-500 hover:to-cyan-500 transition-all shadow-lg hover:shadow-xl">
                 Shop Seamoss Products
               </button>
@@ -59,32 +59,58 @@ export default function Hero() {
                 Learn More
               </button>
             </div>
+
+            <div className="grid grid-cols-1 gap-4">
+              {benefits.map((benefit, index) => {
+                const Icon = benefit.icon;
+                return (
+                  <div 
+                    key={index}
+                    className="relative group"
+                  >
+                    <div className={`absolute inset-0 rounded-xl bg-gradient-to-br ${benefit.color} blur-xl group-hover:blur-2xl transition-all`} />
+                    <div className="relative bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20 hover:border-white/30 transition-colors flex items-center space-x-4">
+                      <div className="w-10 h-10 rounded-lg bg-white/10 flex items-center justify-center">
+                        <Icon className="w-5 h-5 text-white" />
+                      </div>
+                      <p className="text-lg font-medium text-white">
+                        {benefit.text}
+                      </p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
           </div>
 
           <div 
-            className={`mt-20 grid md:grid-cols-3 gap-6 transition-all duration-1000 delay-300 ${
+            className={`relative transition-all duration-1000 delay-300 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            {benefits.map((benefit, index) => {
-              const Icon = benefit.icon;
-              return (
-                <div 
-                  key={index}
-                  className="relative group"
-                >
-                  <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${benefit.color} blur-xl group-hover:blur-2xl transition-all`} />
-                  <div className="relative bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:border-white/30 transition-colors">
-                    <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4">
-                      <Icon className="w-6 h-6 text-white" />
-                    </div>
-                    <p className="text-lg font-medium text-white">
-                      {benefit.text}
-                    </p>
-                  </div>
-                </div>
-              );
-            })}
+            <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-cyan-400/20 blur-2xl" />
+            <div className="relative grid grid-cols-2 gap-4">
+              <img 
+                src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80" 
+                alt="Seamoss product"
+                className="rounded-2xl shadow-2xl w-full h-64 object-cover transform hover:scale-105 transition-transform duration-500"
+              />
+              <img 
+                src="https://images.unsplash.com/photo-1621263764928-df1444c5e859?auto=format&fit=crop&q=80" 
+                alt="Natural ingredients"
+                className="rounded-2xl shadow-2xl w-full h-64 object-cover transform hover:scale-105 transition-transform duration-500"
+              />
+              <img 
+                src="https://images.unsplash.com/photo-1550547660-d9450f859349?auto=format&fit=crop&q=80" 
+                alt="Wellness lifestyle"
+                className="rounded-2xl shadow-2xl w-full h-64 object-cover transform hover:scale-105 transition-transform duration-500"
+              />
+              <img 
+                src="https://images.unsplash.com/photo-1621263764928-df1444c5e859?auto=format&fit=crop&q=80" 
+                alt="Product benefits"
+                className="rounded-2xl shadow-2xl w-full h-64 object-cover transform hover:scale-105 transition-transform duration-500"
+              />
+            </div>
           </div>
         </div>
       </div>
