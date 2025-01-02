@@ -1,66 +1,68 @@
 import React, { useEffect, useState } from 'react';
-import { Sparkles, Heart, Brain, ChevronDown } from 'lucide-react';
-import DetoxQuiz from './DetoxQuiz';
+import { Heart, Brain, Sparkles } from 'lucide-react';
 
 const benefits = [
-  { icon: Heart, text: "Rich in Minerals & Vitamins" },
-  { icon: Brain, text: "Supports Brain Health" },
-  { icon: Sparkles, text: "Boosts Immunity" },
+  { 
+    icon: Heart,
+    text: "Rich in Minerals & Vitamins",
+    color: "from-emerald-400/20 to-emerald-400/10"
+  },
+  { 
+    icon: Brain,
+    text: "Supports Brain Health",
+    color: "from-cyan-400/20 to-cyan-400/10"
+  },
+  { 
+    icon: Sparkles,
+    text: "Boosts Immunity",
+    color: "from-blue-400/20 to-blue-400/10"
+  }
 ];
 
 export default function Hero() {
   const [isVisible, setIsVisible] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-  const [isQuizOpen, setIsQuizOpen] = useState(false);
 
   useEffect(() => {
     setIsVisible(true);
-    
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   return (
-    <div className="relative min-h-[80vh] overflow-hidden">
-      <div 
-        className="absolute inset-0 transition-transform duration-[2s] ease-out"
-        style={{ 
-          transform: `scale(${isVisible ? '1' : '1.1'}) translateY(${scrollY * 0.5}px)`,
-        }}
-      >
-        <img
-          src="https://images.unsplash.com/photo-1621263764928-df1444c5e859?auto=format&fit=crop&q=80"
-          alt="Natural supplements and herbs"
-          className="w-full h-full object-cover object-center scale-110"
-        />
-        <div className="absolute inset-0 bg-gradient-to-br from-cyan-900/90 via-emerald-800/80 to-blue-900/90" />
-      </div>
-      
-      <div className="relative w-full px-4 min-h-[80vh] flex flex-col justify-center pt-16 pb-12">
-        <div className="w-full space-y-6">
+    <section className="relative min-h-screen bg-gradient-to-br from-emerald-900 via-cyan-900 to-blue-900 overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLW9wYWNpdHk9IjAuMSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-30" />
+
+      {/* Content */}
+      <div className="relative container mx-auto px-4 pt-32 pb-20">
+        <div className="max-w-4xl mx-auto">
           <div 
-            className={`space-y-3 transition-all duration-1000 delay-300 ${
+            className={`space-y-6 text-center transition-all duration-1000 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
-            <h1 className="text-5xl font-bold tracking-tight leading-[1.1]">
-              <span className="block text-white opacity-90">Discover</span>
-              <span className="block bg-gradient-to-r from-cyan-200 via-emerald-200 to-blue-200 text-transparent bg-clip-text">
+            <h1 className="text-6xl font-bold tracking-tight leading-[1.1] text-white">
+              Discover
+              <span className="block bg-gradient-to-r from-emerald-200 via-cyan-200 to-blue-200 bg-clip-text text-transparent">
                 Premium Seamoss
               </span>
-              <span className="block text-cyan-400">Supplements</span>
+              Supplements
             </h1>
-            <p className="text-lg text-gray-200 leading-relaxed font-light max-w-md">
+            
+            <p className="text-xl text-gray-300 max-w-2xl mx-auto">
               Harness the power of the ocean with our new premium-grade seamoss, packed with essential nutrients for optimal health.
             </p>
+
+            <div className="flex flex-wrap justify-center gap-4 pt-4">
+              <button className="bg-gradient-to-r from-emerald-400 to-cyan-400 text-white px-8 py-4 rounded-lg font-medium hover:from-emerald-500 hover:to-cyan-500 transition-all shadow-lg hover:shadow-xl">
+                Shop Seamoss Products
+              </button>
+              <button className="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-lg font-medium hover:bg-white/20 transition-all">
+                Learn More
+              </button>
+            </div>
           </div>
-          
+
           <div 
-            className={`grid grid-cols-1 gap-2 transition-all duration-1000 delay-500 ${
+            className={`mt-20 grid md:grid-cols-3 gap-6 transition-all duration-1000 delay-300 ${
               isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
             }`}
           >
@@ -68,47 +70,32 @@ export default function Hero() {
               const Icon = benefit.icon;
               return (
                 <div 
-                  key={benefit.text} 
-                  className="group relative flex items-center space-x-3 bg-black/30 backdrop-blur-sm rounded-xl p-3 transition-all duration-300 hover:bg-cyan-900/50 border border-cyan-800/30 touch-manipulation"
-                  style={{ transitionDelay: `${index * 100}ms` }}
+                  key={index}
+                  className="relative group"
                 >
-                  <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-lg bg-cyan-500/20 text-cyan-300 group-hover:scale-110 transition-transform duration-300">
-                    <Icon className="h-4 w-4" />
+                  <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${benefit.color} blur-xl group-hover:blur-2xl transition-all`} />
+                  <div className="relative bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 hover:border-white/30 transition-colors">
+                    <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-4">
+                      <Icon className="w-6 h-6 text-white" />
+                    </div>
+                    <p className="text-lg font-medium text-white">
+                      {benefit.text}
+                    </p>
                   </div>
-                  <span className="text-base text-white font-medium">{benefit.text}</span>
                 </div>
               );
             })}
           </div>
-
-          <div 
-            className={`flex flex-col items-center space-y-6 transition-all duration-1000 delay-700 ${
-              isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'
-            }`}
-          >
-            <button
-              onClick={() => setIsQuizOpen(true)}
-              className="bg-white text-cyan-600 px-8 py-3 rounded-full hover:bg-cyan-50 transition flex items-center space-x-2"
-            >
-              <Sparkles className="h-5 w-5" />
-              <span>Shop Seamoss Products</span>
-            </button>
-
-            <div 
-              className={`transition-all duration-500 ${
-                isVisible && scrollY < 100 ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-4 pointer-events-none'
-              }`}
-            >
-              <div className="flex flex-col items-center space-y-0.5">
-                <span className="text-xs font-medium text-cyan-300/80">Scroll to explore</span>
-                <ChevronDown className="w-4 h-4 text-cyan-300/80 animate-bounce" />
-              </div>
-            </div>
-          </div>
         </div>
       </div>
 
-      <DetoxQuiz isOpen={isQuizOpen} onClose={() => setIsQuizOpen(false)} />
-    </div>
+      {/* Scroll Indicator */}
+      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center space-y-2">
+        <span className="text-sm font-medium text-white/60">Scroll to explore</span>
+        <div className="w-1 h-12 rounded-full bg-white/20">
+          <div className="w-full h-1/2 bg-gradient-to-b from-white to-transparent rounded-full animate-pulse" />
+        </div>
+      </div>
+    </section>
   );
 }
